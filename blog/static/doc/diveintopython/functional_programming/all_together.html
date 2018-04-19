@@ -1,0 +1,251 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>16.7.&nbsp;全部放在一起</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;16&nbsp;章&nbsp;函数编程">
+      <link rel="previous" href="dynamic_import.html" title="16.6.&nbsp;动态导入模块">
+      <link rel="next" href="summary.html" title="16.8.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">函数编程</a>&nbsp;&gt;&nbsp;<span class="thispage">全部放在一起</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="dynamic_import.html" title="上一页: “动态导入模块”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="regression.alltogether"></a>16.7.&nbsp;全部放在一起
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你已经学习了足够的知识，现在来分析本章样例代码的前七行：读取一个目录并从中导入选定的模块。</p>
+         </div>
+         <div class="example"><a name="d0e36698"></a><h3 class="title">例&nbsp;16.16.&nbsp;<tt class="function">regressionTest</tt> 函数
+            </h3><pre class="programlisting"><span class='pykeyword'>
+def</span> regressionTest():
+    path = os.path.abspath(os.path.dirname(sys.argv[0]))   
+    files = os.listdir(path)                               
+    test = re.compile(<span class='pystring'>"test\.py$"</span>, re.IGNORECASE)          
+    files = filter(test.search, files)                     
+    filenameToModuleName = <span class='pykeyword'>lambda</span> f: os.path.splitext(f)[0]
+    moduleNames = map(filenameToModuleName, files)         
+    modules = map(__import__, moduleNames)                 
+load = unittest.defaultTestLoader.loadTestsFromModule  
+<span class='pykeyword'>return</span> unittest.TestSuite(map(load, modules))          
+</pre></div>
+         <p>让我们一行行交互地看。假定当前目录是 <tt class="filename">c:\diveintopython\py</tt>，其中有包含本章脚本在内的本书众多样例。正如在 <a href="finding_the_path.html" title="16.2.&nbsp;找到路径">第&nbsp;16.2&nbsp;节 “找到路径”</a> 中所见，脚本目录将存于 <tt class="varname">path</tt> 变量，因此让我们从这里开始以实打实的代码起步。
+         </p>
+         <div class="example"><a name="d0e36715"></a><h3 class="title">例&nbsp;16.17.&nbsp;步骤 1：获得所有文件</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> sys, os, re, unittest</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">path = r<span class='pystring'>'c:\diveintopython\py'</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">files = os.listdir(path)                               </span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">files</span> <a name="regression.alltogether.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">['BaseHTMLProcessor.py', 'LICENSE.txt', 'apihelper.py', 'apihelpertest.py',
+'argecho.py', 'autosize.py', 'builddialectexamples.py', 'dialect.py',
+'fileinfo.py', 'fullpath.py', 'kgptest.py', 'makerealworddoc.py',
+'odbchelper.py', 'odbchelpertest.py', 'parsephone.py', 'piglatin.py',
+'plural.py', 'pluraltest.py', 'pyfontify.py', 'regression.py', 'roman.py', 'romantest.py',
+'uncurly.py', 'unicode2koi8r.py', 'urllister.py', 'kgp', 'plural', 'roman',
+'colorize.py']</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">files</tt> 是由脚本所在目录的所有文件和目录构成的列表。(如果你已经运行了其中的一些样例，可能还会看到一些 <tt class="filename">.pyc</tt> 文件。)
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e36754"></a><h3 class="title">例&nbsp;16.18.&nbsp;步骤 2：找到你关注的多个文件</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">test = re.compile(<span class='pystring'>"test\.py$"</span>, re.IGNORECASE)          </span> <a name="regression.alltogether.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">files = filter(test.search, files)                     </span> <a name="regression.alltogether.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">files</span>                                                   <a name="regression.alltogether.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">['apihelpertest.py', 'kgptest.py', 'odbchelpertest.py', 'pluraltest.py', 'romantest.py']</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个正则表达式将匹配以 <tt class="literal">test.py</tt> 结尾的任意字符串。注意，你必须转义这个点号，因为正则表达式中的点号通常意味着 “<span class="quote">匹配任意单字符</span>”，但是你实际上想匹配的事一个真正的点号。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">被编译的正则表达式就像一个函数，因此你可以用它来过滤文件和目录构成的大列表，找寻符合正则表达式的所有元素。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">剩下的是一个单元测试脚本列表，因为只有它们是形如 <tt class="filename">SOMETHINGtest.py</tt> 的文件。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e36802"></a><h3 class="title">例&nbsp;16.19.&nbsp;步骤 3：映射文件名到模块名</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">filenameToModuleName = <span class='pykeyword'>lambda</span> f: os.path.splitext(f)[0]</span> <a name="regression.alltogether.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">filenameToModuleName(<span class='pystring'>'romantest.py'</span>)</span>                    <a name="regression.alltogether.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'romantest'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">filenameToModuleName(<span class='pystring'>'odchelpertest.py'</span>)</span>
+<span class="computeroutput">'odbchelpertest'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">moduleNames = map(filenameToModuleName, files)         </span> <a name="regression.alltogether.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">moduleNames</span>                                             <a name="regression.alltogether.3.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">['apihelpertest', 'kgptest', 'odbchelpertest', 'pluraltest', 'romantest']</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你在 <a href="../power_of_introspection/lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">第&nbsp;4.7&nbsp;节 “使用 lambda 函数”</a> 中所见，<tt class="literal">lambda</tt> 快餐式地创建内联单行函数。这里应用你在 <a href="../file_handling/os_module.html#splittingpathnames.example" title="例&nbsp;6.17.&nbsp;分割路径名">例&nbsp;6.17 “分割路径名”</a> 中已经见过的，标准库的 <tt class="function">os.path.splitext</tt> 将一个带有扩展名的文件名返回成只包含文件名称的那部分。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">filenameToModuleName</tt> 是一个函数。<tt class="literal">lambda</tt> 函数并不比你以 <tt class="literal">def</tt> 语句定义的普通函数神奇。你可以如其他函数一样地调用 <tt class="varname">filenameToModuleName</tt>，它也将如你所愿：从参数中剔除扩展名。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在你可以通过 <tt class="function">map</tt> 把这个函数应用于单元测试文件列表中的每一个文件。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">结果当然如你所愿：以指代模块的字符串构成的一个列表。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e36886"></a><h3 class="title">例&nbsp;16.20.&nbsp;步骤 4：映射模块名到模块</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">modules = map(__import__, moduleNames)                 </span> <a name="regression.alltogether.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">modules</span>                                                 <a name="regression.alltogether.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">[&lt;module 'apihelpertest' from 'apihelpertest.py'&gt;,
+&lt;module 'kgptest' from 'kgptest.py'&gt;,
+&lt;module 'odbchelpertest' from 'odbchelpertest.py'&gt;,
+&lt;module 'pluraltest' from 'pluraltest.py'&gt;,
+&lt;module 'romantest' from 'romantest.py'&gt;]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">modules[-1]</span>                                             <a name="regression.alltogether.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">&lt;module 'romantest' from 'romantest.py'&gt;</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你在 <a href="dynamic_import.html" title="16.6.&nbsp;动态导入模块">第&nbsp;16.6&nbsp;节 “动态导入模块”</a> 中所见，你可以通过 <tt class="function">map</tt> 和 <tt class="function">__import__</tt> 的协同工作，将模块名 (字符串) 映射到实际的模块 (像其他模块一样可以被调用和使用)。
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">modules</tt> 现在是一个模块列表，其中的模块和其他模块一样。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">该列表的最后一个模块<span class="emphasis"><em>是</em></span> <tt class="filename">romantest</tt> 模块，和通过 <tt class="literal">import romantest</tt> 导入的模块完全等价。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e36947"></a><h3 class="title">例&nbsp;16.21.&nbsp;步骤 5：将模块载入测试套件</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">load = unittest.defaultTestLoader.loadTestsFromModule  </span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">map(load, modules)</span>                     <a name="regression.alltogether.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">[&lt;unittest.TestSuite tests=[
+  &lt;unittest.TestSuite tests=[&lt;apihelpertest.BadInput testMethod=testNoObject&gt;]&gt;,
+  &lt;unittest.TestSuite tests=[&lt;apihelpertest.KnownValues testMethod=testApiHelper&gt;]&gt;,
+  &lt;unittest.TestSuite tests=[
+    &lt;apihelpertest.ParamChecks testMethod=testCollapse&gt;, 
+    &lt;apihelpertest.ParamChecks testMethod=testSpacing&gt;]&gt;, 
+    ...
+  ]
+]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">unittest.TestSuite(map(load, modules))</span> <a name="regression.alltogether.5.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">模块对象的存在，使你不但可以像其他模块一样地使用它们；通过类的实例化和函数的调用，你还可以内省模块，从而弄清楚已经有了那些类和函数。这正是 <tt class="function">loadTestsFromModule</tt> 方法的工作：内省每一个模块并为每个模块返回一个 <tt class="literal">unittest.TestSuite</tt> 对象。每个 <tt class="literal">TestSuite</tt> (测试套件) 对象都包含一个 <tt class="literal">TestCase</tt> 对象的列表，每个对象对应着你的模块中的一个测试方法。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.alltogether.5.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">最后，你将<tt class="literal">TestSuite</tt>列表封装成一个更大的测试套件。<tt class="filename">unittest</tt> 模块会很自如地遍历嵌套于测试套件中的树状结构，最后深入到独立测试方法，一个个加以运行并判断通过或是失败。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>自省过程是 <tt class="filename">unittest</tt> 模块经常为我们做的一项工作。还记得我们的独立测试模块仅仅调用了看似神奇的 <tt class="literal">unittest.main()</tt> 函数就大刀阔斧地完成了全部工作吗？<tt class="function">unittest.main()</tt> 实际上创建了一个 <tt class="literal">unittest.TestProgram</tt> 的实例，而这个实例实际上创建了一个 <tt class="literal">unittest.defaultTestLoader</tt> 的实例并以调用它的模块启动它。 (如果你不给出，如何知道调用它的模块是哪一个？通过使用同样神奇的 <tt class="literal">__import__('__main__')</tt> 命令，动态导入正在运行的模块。我可以就 <tt class="filename">unittest</tt> 模块中使用的所有技巧和技术写一本书，但那样我就没法写完这本了。)
+         </p>
+         <div class="example"><a name="d0e37022"></a><h3 class="title">例&nbsp;16.22.&nbsp;步骤 6：告知 <tt class="filename">unittest</tt> 使用你的测试套件
+            </h3><pre class="programlisting"><span class='pykeyword'>
+if</span> __name__ == <span class='pystring'>"__main__"</span>:                   
+    unittest.main(defaultTest=<span class='pystring'>"regressionTest"</span>) <a name="regression.alltogether.6.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+</pre></div>
+         <div class="calloutlist">
+            <table border="0" summary="Callout list">
+               <tr>
+                  <td width="12" valign="top" align="left"><a href="#regression.alltogether.6.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                  </td>
+                  <td valign="top" align="left">在不使用 <tt class="filename">unittest</tt> 模块来为我们做这一切的神奇工作的情况下，你实际上已自己做到了。你已经创建了一个自己就能导入模块、调用 <tt class="literal">unittest.defaultTestLoader</tt> 并封装于一个测试套件的 <tt class="function">regressionTest</tt> 函数。现在你所要做的不是去寻找测试并以通用的方法构建一个测试套件，而是告诉 <tt class="filename">unittest</tt> 前面那些，它将调用 <tt class="function">regressionTest</tt> 函数，而它会返回可以直接使用的 <tt class="literal">TestSuite</tt>。
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="dynamic_import.html">&lt;&lt;&nbsp;动态导入模块</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#regression.divein" title="16.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="finding_the_path.html" title="16.2.&nbsp;找到路径">2</a> <span class="divider">|</span> <a href="filtering_lists.html" title="16.3.&nbsp;重识列表过滤">3</a> <span class="divider">|</span> <a href="mapping_lists.html" title="16.4.&nbsp;重识列表映射">4</a> <span class="divider">|</span> <a href="data_centric.html" title="16.5.&nbsp;数据中心思想编程">5</a> <span class="divider">|</span> <a href="dynamic_import.html" title="16.6.&nbsp;动态导入模块">6</a> <span class="divider">|</span> <span class="thispage">7</span> <span class="divider">|</span> <a href="summary.html" title="16.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

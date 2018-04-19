@@ -1,0 +1,112 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>15.5.&nbsp;小结</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;15&nbsp;章&nbsp;重构">
+      <link rel="previous" href="postscript.html" title="15.4.&nbsp;后记">
+      <link rel="next" href="../functional_programming/index.html" title="第&nbsp;16&nbsp;章&nbsp;函数编程">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">重构</a>&nbsp;&gt;&nbsp;<span class="thispage">小结</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="postscript.html" title="上一页: “后记”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="../functional_programming/index.html" title="下一页: “函数编程”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="roman.summary"></a>15.5.&nbsp;小结
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>单元测试是一个强大的概念，使用得当的话既可以减少维护成本又可以增加长期项目的灵活性。同样重要的是要意识到单元测试并不是“灵丹妙药”，也不是“银弹”。编写好的测试用例很困难，保持其更新更需要磨练 (特别是当顾客对修复严重的 Bug 大呼小叫之时)。单元测试不是其它形式测试的替代品，比如说功能性测试、集成测试以及可用性测试。但它切实可行且功效明显，一旦相识，你会反问为什么以往没有应用它。</p>
+         </div>
+         <p>这一章涵盖了很多内容，有很多都不是 <span class="application">Python</span> 所特有的。很多语言都有单元测试框架，都要求你理解相同的基本概念：
+         </p>
+         <div class="highlights">
+            <div class="itemizedlist">
+               <ul>
+                  <li>测试用例的设计方针是目的单一、可以自动运行、互不干扰。</li>
+                  <li>在被测试代码编写<span class="emphasis"><em>之前</em></span> 编写测试用例。
+                  </li>
+                  <li>编写测试<a href="../unit_testing/testing_for_success.html" title="13.4.&nbsp;正面测试 (Testing for success)">有效输入的测试用例</a>并检查正确的结果。
+                  </li>
+                  <li>编写测试<a href="../unit_testing/testing_for_failure.html" title="13.5.&nbsp;负面测试 (Testing for failure)">无效输入的测试用例</a>并检查正确的失败。
+                  </li>
+                  <li>为<a href="index.html#roman.bugs" title="15.1.&nbsp;处理 bugs">描述 Bug</a> 或<a href="handling_changing_requirements.html" title="15.2.&nbsp;应对需求变化">反映新需求</a>而编写和升级测试用例。
+                  </li>
+                  <li>为改进性能、可伸缩性、可读性、可维护性和任何缺少的特性而无情地<a href="refactoring.html" title="15.3.&nbsp;重构">重构</a>。
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <p>另外，你应该能够自如地做到如下 <span class="application">Python</span> 的特有工作：
+         </p>
+         <div class="highlights">
+            <div class="itemizedlist">
+               <ul>
+                  <li>继承 <a href="../unit_testing/testing_for_success.html#roman.testtoromanknownvalues.example" title="例&nbsp;13.2.&nbsp;testToRomanKnownValues"> <tt class="literal">unittest.TestCase</tt></a> 生成子类并为每个单独的测试用例编写方法。
+                  </li>
+                  <li>使用 <a href="../unit_testing/testing_for_success.html#roman.testtoromanknownvalues.example" title="例&nbsp;13.2.&nbsp;testToRomanKnownValues"><tt class="function">assertEqual</tt></a> 检查已知结果的返回。
+                  </li>
+                  <li>使用 <a href="../unit_testing/testing_for_failure.html#roman.tobadinput.example" title="例&nbsp;13.3.&nbsp;测试 toRoman 的无效输入"><tt class="function">assertRaises</tt></a> 检查函数是否引发已知异常。
+                  </li>
+                  <li>在 <tt class="literal">if __name__</tt> 子句中调用 <a href="../unit_testing/stage_1.html#roman.stage1.output" title="例&nbsp;14.2.&nbsp;以 romantest1.py 测试 roman1.py 的输出"><tt class="literal">unittest.main()</tt></a> 来一次性运行所有测试用例。
+                  </li>
+                  <li>以<a href="../unit_testing/stage_1.html#roman.stage1.output" title="例&nbsp;14.2.&nbsp;以 romantest1.py 测试 roman1.py 的输出">详细 (verbose) </a>或者<a href="refactoring.html#roman.stage8.1.output" title="例&nbsp;15.12.&nbsp;用 romantest81.py 测试 roman81.py 的结果">普通 (regular) </a>模式运行单元测试
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li><a href="http://www.xprogramming.com/">XProgramming.com</a> 有多种语言的 <a href="http://www.xprogramming.com/software.htm">单元测试框架</a> 的下载链接。
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="postscript.html">&lt;&lt;&nbsp;后记</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#roman.bugs" title="15.1.&nbsp;处理 bugs">1</a> <span class="divider">|</span> <a href="handling_changing_requirements.html" title="15.2.&nbsp;应对需求变化">2</a> <span class="divider">|</span> <a href="refactoring.html" title="15.3.&nbsp;重构">3</a> <span class="divider">|</span> <a href="postscript.html" title="15.4.&nbsp;后记">4</a> <span class="divider">|</span> <span class="thispage">5</span>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="../functional_programming/index.html">函数编程&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

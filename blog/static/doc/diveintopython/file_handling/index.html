@@ -1,0 +1,262 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;6&nbsp;章&nbsp;异常和文件处理</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../object_oriented_framework/summary.html" title="5.10.&nbsp;小结">
+      <link rel="next" href="file_objects.html" title="6.2.&nbsp;与文件对象共事">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">异常和文件处理</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../object_oriented_framework/summary.html" title="上一页: “小结”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="file_objects.html" title="下一页: “与文件对象共事”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="filehandling"></a>第&nbsp;6&nbsp;章&nbsp;异常和文件处理
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#fileinfo.exception">6.1. 异常处理</a></span><ul>
+                     <li><span class="section"><a href="index.html#d0e14544">6.1.1. 为其他用途使用异常</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="section"><a href="file_objects.html">6.2. 与文件对象共事</a></span><ul>
+                     <li><span class="section"><a href="file_objects.html#d0e14868">6.2.1. 读取文件</a></span></li>
+                     <li><span class="section"><a href="file_objects.html#d0e14995">6.2.2. 关闭文件</a></span></li>
+                     <li><span class="section"><a href="file_objects.html#d0e15122">6.2.3. 处理 I/O 错误</a></span></li>
+                     <li><span class="section"><a href="file_objects.html#d0e15243">6.2.4. 写入文件</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="section"><a href="for_loops.html">6.3. for 循环</a></span></li>
+               <li><span class="section"><a href="more_on_modules.html">6.4. 使用 sys.modules</a></span></li>
+               <li><span class="section"><a href="os_module.html">6.5. 与目录共事</a></span></li>
+               <li><span class="section"><a href="all_together.html">6.6. 全部放在一起</a></span></li>
+               <li><span class="section"><a href="summary.html">6.7. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>在本章中，将研究异常、文件对象、<tt class="literal">for</tt> 循环、<tt class="filename">os</tt> 和 <tt class="filename">sys</tt> 模块等内容。如果你已经在其它编程语言中使用过异常，你可以简单看看第一部分来了解 <span class="application">Python</span> 的语法。但是本章其它的内容仍需仔细研读。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="fileinfo.exception"></a>6.1.&nbsp;异常处理
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="toc">
+               <ul>
+                  <li><span class="section"><a href="index.html#d0e14544">6.1.1. 为其他用途使用异常</a></span></li>
+               </ul>
+            </div>
+            <div class="abstract">
+               <p>与许多面向对象语言一样，<span class="application">Python</span> 具有异常处理，通过使用 <tt class="literal">try...except</tt> 块来实现。
+               </p>
+            </div><a name="compare.exceptions.java"></a><table class="note" border="0" summary="">
+               <tr>
+                  <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+               </tr>
+               <tr>
+                  <td colspan="2" align="left" valign="top" width="99%"><span class="application">Python</span> 使用 <tt class="literal">try...except</tt> 来处理异常，使用 <tt class="literal">raise</tt> 来引发异常。<span class="application">Java</span> 和 <span class="application"><span class="acronym">C++</span></span> 使用 <tt class="literal">try...catch</tt> 来处理异常，使用 <tt class="literal">throw</tt> 来引发异常。
+                  </td>
+               </tr>
+            </table>
+            <p>异常在 <span class="application">Python</span> 中无处不在；实际上在标准 <span class="application">Python</span> 库中的每个模块都使用了它们，并且 <span class="application">Python</span> 自已会在许多不同的情况下引发它们。在整本书中你已经再三看到它们了。
+            </p>
+            <div class="itemizedlist">
+               <ul>
+                  <li><a href="../native_data_types/index.html#odbchelper.dict.define" title="例&nbsp;3.1.&nbsp;定义 Dictionary">使用不存在的字典关键字</a>将引发 <tt class="errorcode">KeyError</tt> 异常。
+                  </li>
+                  <li><a href="../native_data_types/lists.html#odbchelper.list.search" title="例&nbsp;3.12.&nbsp;搜索 list">搜索列表中不存在的值</a>将引发 <tt class="errorcode">ValueError</tt> 异常。
+                  </li>
+                  <li><a href="../native_data_types/tuples.html#odbchelper.tuplemethods" title="例&nbsp;3.16.&nbsp;Tuple 没有方法">调用不存在的方法</a>将引发 <tt class="errorcode">AttributeError</tt> 异常。
+                  </li>
+                  <li><a href="../native_data_types/declaring_variables.html#odbchelper.unboundvariable" title="例&nbsp;3.18.&nbsp;引用未赋值的变量">引用不存在的变量</a>将引发 <tt class="errorcode">NameError</tt> 异常。
+                  </li>
+                  <li><a href="../native_data_types/formatting_strings.html#odbchelper.stringformatting.coerce" title="例&nbsp;3.22.&nbsp;字符串格式化与字符串连接的比较">未强制转换就混用数据类型</a>将引发 <tt class="errorcode">TypeError</tt> 异常。
+                  </li>
+               </ul>
+            </div>
+            <p>在这些情况下，我们都在简单地使用 <span class="application">Python</span> <span class="acronym">IDE</span>：一个错误发生了，异常被打印出来 (取决于你的 <span class="acronym">IDE</span>，可能会有意地以一种刺眼的红色形式表示)，这便是。这叫做<span class="emphasis"><em>未处理</em></span> 异常；当异常被引发时，没有代码来明确地关注和处理它，所以异常被传给置在 <span class="application">Python</span> 中的缺省的处理，它会输出一些调试信息并且终止运行。在 <span class="acronym">IDE</span> 中，这不是什么大事，但是如果发生在你真正的 <span class="application">Python</span> 程序运行的时候，整个程序将会终止。
+            </p>
+            <p>然而，一个异常不一定会引起程序的完全崩溃。当异常引发时，可以被<span class="emphasis"><em>处理</em></span> 掉。有时候一个异常实际是因为代码中的 bug (比如使用一个不存在的变量)，但是许多时候，一个异常是可以预见的。如果你打开一个文件，它可能不存在。如果你连接一个数据库，它可能不可连接或没有访问所需的正确的安全证书。如果知道一行代码可能会引发异常，你应该使用一个
+               <tt class="literal">try...except</tt> 块来处理异常。
+            </p>
+            <div class="example"><a name="d0e14443"></a><h3 class="title">例&nbsp;6.1.&nbsp;打开一个不存在的文件</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">fsock = open(<span class='pystring'>"/notthere"</span>, <span class='pystring'>"r"</span>)</span>      <a name="fileinfo.exceptions.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="traceback">Traceback (innermost last):
+  File "&lt;interactive input&gt;", line 1, in ?
+IOError: [Errno 2] No such file or directory: '/notthere'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>try</span>:</span>
+<tt class="prompt">...     </tt><span class="userinput">fsock = open(<span class='pystring'>"/notthere"</span>)</span>       <a name="fileinfo.exceptions.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">... </tt><span class="userinput"><span class='pykeyword'>except</span> IOError:</span>                     <a name="fileinfo.exceptions.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"The file does not exist, exiting gracefully"</span></span>
+<tt class="prompt">... </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"This line will always print"</span></span> <a name="fileinfo.exceptions.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">The file does not exist, exiting gracefully
+This line will always print</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.exceptions.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">使用内置 <tt class="function">open</tt> 函数，我们可以试着打开一个文件来读取 (在下一节有关于 <tt class="function">open</tt> 的更多内容)。但是那个文件不存在，所以这样就引发 <tt class="errorcode">IOError</tt> 异常。因为我们没有提供任何显式的对 <tt class="errorcode">IOError</tt> 异常的检查，<span class="application">Python</span> 仅仅打印出某个关于发生了什么的调试信息，然后终止。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.exceptions.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">我们试图打开同样不存在的文件，但是这次我们在一个 <tt class="literal">try...except</tt> 内来执行它。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.exceptions.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">当 <tt class="function">open</tt> 方法引发 <tt class="errorcode">IOError</tt> 异常时，我们已经准备好处理它了。<tt class="literal">except IOError:</tt> 行捕捉异常，接着执行我们自已的代码块，这个代码块在本例中只是打印出更令人愉快的错误信息。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.exceptions.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">一旦异常被处理了，处理通常在 <tt class="literal">try...except</tt> 块之后的第一行继续进行。注意这一行将总是打印出来，无论异常是否发生。如果在你的根目录下确实有一个叫 <tt class="filename">notthere</tt> 的文件，对 <tt class="function">open</tt> 的调用将成功，<tt class="literal">except</tt> 子句将忽略，并且最后一行仍将执行。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>异常可能看上去不友好 (毕竟，如果你不捕捉异常，整个程序将崩溃)，但是考虑一下别的方法。你该不会希望获得一个指向不存在的文件的对象吧？不管怎么样你都得检查它的有效性，而且如果你忘记了，你的程序将会在下面某个地方给出奇怪的错误，这样你将不得不追溯到源程序。我确信你做过这种事；这可并不有趣。使用异常，一发生错误，你就可以在问题的源头通过标准的方法来处理它们。</p>
+            <div class="section" lang="zh_cn">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="d0e14544"></a>6.1.1.&nbsp;为其他用途使用异常
+                        </h3>
+                     </div>
+                  </div>
+                  <div></div>
+               </div>
+               <p>除了处理实际的错误条件之外，对于异常还有许多其它的用处。在标准 <span class="application">Python</span> 库中一个普通的用法就是试着导入一个模块，然后检查是否它能使用。导入一个并不存在的模块将引发一个 <tt class="errorcode">ImportError</tt> 异常。你可以使用这种方法来定义多级别的功能――依靠在运行时哪个模块是有效的，或支持多种平台 (即平台特定代码被分离到不同的模块中)。
+               </p>
+               <p>你也能通过创建一个从内置的 <tt class="classname">Exception</tt> 类继承的类定义你自己的异常，然后使用 <tt class="function">raise</tt> 命令引发你的异常。如果你对此感兴趣，请看进一步阅读的部分。
+               </p>
+               <p>下面的例子演示了如何使用异常支持特定平台功能。代码来自 <tt class="filename">getpass</tt> 模块，一个从用户获得口令的封装模块。获得口令在 <span class="acronym">UNIX</span>、Windows 和 <span class="abbrev">Mac</span> <span class="acronym">OS</span> 平台上的实现是不同的，但是这个代码封装了所有的不同之处。
+               </p>
+               <div class="example"><a name="crossplatform.example"></a><h3 class="title">例&nbsp;6.2.&nbsp;支持特定平台功能</h3><pre class="programlisting">
+  <span class='pycomment'># Bind the name getpass to the appropriate function</span>
+  <span class='pykeyword'>try</span>:
+      <span class='pykeyword'>import</span> termios, TERMIOS                     <a name="fileinfo.exceptions.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+  <span class='pykeyword'>except</span> ImportError:
+      <span class='pykeyword'>try</span>:
+          <span class='pykeyword'>import</span> msvcrt                           <a name="fileinfo.exceptions.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+      <span class='pykeyword'>except</span> ImportError:
+          <span class='pykeyword'>try</span>:
+              <span class='pykeyword'>from</span> EasyDialogs <span class='pykeyword'>import</span> AskPassword <a name="fileinfo.exceptions.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+          <span class='pykeyword'>except</span> ImportError:
+              getpass = default_getpass           <a name="fileinfo.exceptions.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+          <span class='pykeyword'>else</span>:                                   <a name="fileinfo.exceptions.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+              getpass = AskPassword
+      <span class='pykeyword'>else</span>:
+          getpass = win_getpass
+  <span class='pykeyword'>else</span>:
+      getpass = unix_getpass</pre><div class="calloutlist">
+                     <table border="0" summary="Callout list">
+                        <tr>
+                           <td width="12" valign="top" align="left"><a href="#fileinfo.exceptions.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                           </td>
+                           <td valign="top" align="left"><tt class="filename">termios</tt> 是 <span class="acronym">UNIX</span> 独有的一个模块，它提供了对于输入终端的底层控制。如果这个模块无效 (因为它不在你的系统上，或你的系统不支持它)，则导入失败，<span class="application">Python</span> 引发我们捕捉的 <tt class="errorcode">ImportError</tt> 异常。
+                           </td>
+                        </tr>
+                        <tr>
+                           <td width="12" valign="top" align="left"><a href="#fileinfo.exceptions.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                           </td>
+                           <td valign="top" align="left">OK，我们没有 <tt class="filename">termios</tt>，所以让我们试试 <tt class="filename">msvcrt</tt>，它是 Windows 独有的一个模块，可以提供在 Microsoft <span class="application">Visual C++</span> 运行服务中的许多有用的函数的一个<span class="acronym">API</span>。如果导入失败，<span class="application">Python</span> 会引发我们捕捉的 <tt class="errorcode">ImportError</tt> 异常。
+                           </td>
+                        </tr>
+                        <tr>
+                           <td width="12" valign="top" align="left"><a href="#fileinfo.exceptions.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                           </td>
+                           <td valign="top" align="left">如果前两个不能工作，我们试着从 <tt class="filename">EasyDialogs</tt> 导入一个函数，它是 <span class="abbrev">Mac</span> <span class="acronym">OS</span> 独有的一个模块，提供了各种各样类型的弹出对话框。再一次，如果导入失败，<span class="application">Python</span> 会引发一个我们捕捉的 <tt class="errorcode">ImportError</tt> 异常。
+                           </td>
+                        </tr>
+                        <tr>
+                           <td width="12" valign="top" align="left"><a href="#fileinfo.exceptions.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                           </td>
+                           <td valign="top" align="left">这些平台特定的模块没有一个有效 (有可能，因为 <span class="application">Python</span> 已经移植到了许多不同的平台上了)，所以我们需要回头使用一个缺省口令输入函数 (这个函数定义在 <tt class="filename">getpass</tt> 模块中的别的地方)。注意我们在这里所做的：我们将函数 <tt class="function">default_getpass</tt> 赋给变量 <tt class="varname">getpass</tt>。如果你读了官方 <tt class="filename">getpass</tt> 文档，它会告诉你 <tt class="filename">getpass</tt> 模块定义了一个 <tt class="function">getpass</tt> 函数。它是这样做的：通过绑定 <tt class="varname">getpass</tt> 到正确的函数来适应你的平台。然后当你调用 <tt class="function">getpass</tt> 函数时，你实际上调用了平台特定的函数，是这段代码已经为你设置好的。你不需要知道或关心你的代码正运行在何种平台上；只要调用 <tt class="function">getpass</tt>，则它总能正确处理。
+                           </td>
+                        </tr>
+                        <tr>
+                           <td width="12" valign="top" align="left"><a href="#fileinfo.exceptions.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                           </td>
+                           <td valign="top" align="left">一个 <tt class="literal">try...except</tt> 块可以有一条 <tt class="literal">else</tt> 子句，就像 <tt class="literal">if</tt> 语句。如果在 <tt class="literal">try</tt> 块中没有异常引发，然后 <tt class="literal">else</tt> 子句被执行。在本例中，那就意味着如果 <tt class="literal">from EasyDialogs import AskPassword</tt> 导入可工作，所以我们应该绑定 <tt class="varname">getpass</tt> 到 <tt class="function">AskPassword</tt> 函数。其它每个 <tt class="literal">try...except</tt> 块有着相似的 <tt class="literal">else</tt> 子句，当我们发现一个 <tt class="literal">import</tt> 可用时，就绑定 <tt class="varname">getpass</tt> 到适合的函数。
+                           </td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+               <div class="furtherreading">
+                  <h3>进一步阅读</h3>
+                  <ul>
+                     <li><a href="http://www.python.org/doc/current/tut/tut.html"><i class="citetitle"><span class="application">Python</span> Tutorial</i></a> 讨论了异常，包括<a href="http://www.python.org/doc/current/tut/node10.html#SECTION0010400000000000000000">定义和引发你自已的异常，以及一次处理多个异常</a>。
+                     </li>
+                     <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 总结了<a href="http://www.python.org/doc/current/lib/module-exceptions.html">所有内置异常</a>。
+                     </li>
+                     <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 提供了 <a href="http://www.python.org/doc/current/lib/module-getpass.html">getpass</a> 模块的文档。
+                     </li>
+                     <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 提供了 <a href="http://www.python.org/doc/current/lib/module-traceback.html"><tt class="filename">traceback</tt> 模块</a> 的文档，这个模块在异常引发之后，提供了底层的对异常属性的处理。
+                     </li>
+                     <li><a href="http://www.python.org/doc/current/ref/"><i class="citetitle"><span class="application">Python</span> Reference Manual</i></a> 讨论了 <a href="http://www.python.org/doc/current/ref/try.html"><tt class="literal">try...except</tt> 块</a> 的内部工作方式。
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../object_oriented_framework/summary.html">&lt;&lt;&nbsp;小结</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="file_objects.html" title="6.2.&nbsp;与文件对象共事">2</a> <span class="divider">|</span> <a href="for_loops.html" title="6.3.&nbsp;for 循环">3</a> <span class="divider">|</span> <a href="more_on_modules.html" title="6.4.&nbsp;使用 sys.modules">4</a> <span class="divider">|</span> <a href="os_module.html" title="6.5.&nbsp;与目录共事">5</a> <span class="divider">|</span> <a href="all_together.html" title="6.6.&nbsp;全部放在一起">6</a> <span class="divider">|</span> <a href="summary.html" title="6.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="file_objects.html">与文件对象共事&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

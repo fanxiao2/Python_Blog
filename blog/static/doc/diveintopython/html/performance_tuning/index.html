@@ -1,0 +1,214 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;18&nbsp;章&nbsp;性能优化</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../dynamic_functions/summary.html" title="17.8.&nbsp;小结">
+      <link rel="next" href="timeit.html" title="18.2.&nbsp;使用 timeit 模块">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">性能优化</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../dynamic_functions/summary.html" title="上一页: “小结”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="timeit.html" title="下一页: “使用 timeit 模块”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="soundex"></a>第&nbsp;18&nbsp;章&nbsp;性能优化
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#soundex.divein">18.1. 概览</a></span></li>
+               <li><span class="section"><a href="timeit.html">18.2. 使用 timeit 模块</a></span></li>
+               <li><span class="section"><a href="regular_expressions.html">18.3. 优化正则表达式</a></span></li>
+               <li><span class="section"><a href="dictionary_lookups.html">18.4. 优化字典查找</a></span></li>
+               <li><span class="section"><a href="list_operations.html">18.5. 优化列表操作</a></span></li>
+               <li><span class="section"><a href="string_manipulation.html">18.6. 优化字符串操作</a></span></li>
+               <li><span class="section"><a href="summary.html">18.7. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>性能优化 (Performance tuning) 是一件多姿多彩的事情。<span class="application">Python</span> 是一种解释性语言并不表示你不应该担心代码优化。但也不必<span class="emphasis"><em>太</em></span> 担心。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="soundex.divein"></a>18.1.&nbsp;概览
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="abstract">
+               <p>由于代码优化过程中存在太多的不明确因素，以至于你很难清楚该从何入手。</p>
+            </div>
+            <p>让我们从这里开始：<span class="emphasis"><em>你真的确信你要这样做吗？</em></span>  你的代码真的那么差吗？值得花时间去优化它吗？在你的应用程序的生命周期中，与花费在等待一个远程数据库服务器，或是等待用户输入相比，运行这段代码将花费多少时间？
+            </p>
+            <p>第二，<span class="emphasis"><em>你确信已经完成代码编写了吗？</em></span> 过早的优化就像是在一块半生不熟的蛋糕上撒糖霜。你花费了几小时、几天 (或更长) 时间来优化你的代码以提高性能，却发现它不能完成你希望它做的工作。那是浪费时间。
+            </p>
+            <p>这并不是说代码优化毫无用处，但是你需要检查一下整个系统，并且确定把时间花在这上面是值得的。在优化代码上每花费一分钟，就意味着你少了增加新功能、编写文档或者陪你的孩子玩或者编写单元测试的一分钟。</p>
+            <p>哦，是的，单元测试。不必我说，在开始性能优化之前你需要一个完全的单元测试集。你最不需要的就是在乱动你的算法时引入新的问题。</p>
+            <p>谨记着这些忠告，让我们来看一些优化 <span class="application">Python</span> 代码的技术。我们要研究的代码是 Soundex 算法的实现。Soundex 是一种 20 世纪在美国人口普查中归档姓氏的方法。它把听起来相似的姓氏归在一起，使得在即便错误拼写的情况下调查者仍能查找到。Soundex 今天仍然因差不多的原因被应用着，当然现在用计算机数据库服务器了。大部分的数据库服务器都有
+               Soundex 函数。
+            </p>
+            <p>Soundex 算法有几个差别不大的变化版本。这是本章使用的：</p>
+            <div class="orderedlist">
+               <ol type="1">
+                  <li>名字的第一个字母不变。</li>
+                  <li>根据特定的对照表，将剩下的字母转换为数字：
+                     <div class="itemizedlist">
+                        <ul>
+                           <li>B、 F、 P 和 V 转换为 1。</li>
+                           <li>C、 G、 J、 K、 Q、 S、 X 和 Z 转换为 2。</li>
+                           <li>D 和 T 转换为 3。</li>
+                           <li>L 转换为 4。</li>
+                           <li>M 和 N 转换为 5。</li>
+                           <li>R 转换为 6。</li>
+                           <li>所有其他字母转换为 9。</li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>去除连续重复。</li>
+                  <li>去除所有 9。</li>
+                  <li>如果结果都少于四个字符 (第一个字母加上后面的三位字符)，就以零补齐。</li>
+                  <li>如果结果超过四个字符，丢弃掉四位之后的字符。</li>
+               </ol>
+            </div>
+            <p>比如，我的名字 <tt class="literal">Pilgrim</tt> 被转换为 P942695。没有连续重复，所以这一步不需要做。然后是去除 9，剩下 P4265。太长了，所以你把超出的字符丢弃，剩下 P426。
+            </p>
+            <p>另一个例子：<tt class="literal">Woo</tt> 被转换为 W99，变成 W9，变成 W，然后以补零成为 W000。
+            </p>
+            <p>这是 Soundex 函数的第一次尝试：</p>
+            <div class="example"><a name="d0e39037"></a><h3 class="title">例&nbsp;18.1.&nbsp;<tt class="filename">soundex/stage1/soundex1a.py</tt></h3>
+               <p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+               </p><pre class="programlisting"><span class='pykeyword'>
+import</span> string, re
+
+charToSoundex = {<span class='pystring'>"A"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"B"</span>: <span class='pystring'>"1"</span>,
+                 <span class='pystring'>"C"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"D"</span>: <span class='pystring'>"3"</span>,
+                 <span class='pystring'>"E"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"F"</span>: <span class='pystring'>"1"</span>,
+                 <span class='pystring'>"G"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"H"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"I"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"J"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"K"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"L"</span>: <span class='pystring'>"4"</span>,
+                 <span class='pystring'>"M"</span>: <span class='pystring'>"5"</span>,
+                 <span class='pystring'>"N"</span>: <span class='pystring'>"5"</span>,
+                 <span class='pystring'>"O"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"P"</span>: <span class='pystring'>"1"</span>,
+                 <span class='pystring'>"Q"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"R"</span>: <span class='pystring'>"6"</span>,
+                 <span class='pystring'>"S"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"T"</span>: <span class='pystring'>"3"</span>,
+                 <span class='pystring'>"U"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"V"</span>: <span class='pystring'>"1"</span>,
+                 <span class='pystring'>"W"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"X"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"Y"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"Z"</span>: <span class='pystring'>"2"</span>}
+
+<span class='pykeyword'>def</span><span class='pyclass'> soundex</span>(source):
+    <span class='pystring'>"convert string to Soundex equivalent"</span>
+
+    <span class='pycomment'># Soundex requirements:</span>
+    <span class='pycomment'># source string must be at least 1 character</span>
+    <span class='pycomment'># and must consist entirely of letters</span>
+    allChars = string.uppercase + string.lowercase
+    <span class='pykeyword'>if</span> <span class='pykeyword'>not</span> re.search(<span class='pystring'>'^[%s]+$'</span> % allChars, source):
+        <span class='pykeyword'>return</span> <span class='pystring'>"0000"</span>
+
+    <span class='pycomment'># Soundex algorithm:</span>
+    <span class='pycomment'># 1. make first character uppercase</span>
+    source = source[0].upper() + source[1:]
+    
+    <span class='pycomment'># 2. translate all other characters to Soundex digits</span>
+    digits = source[0]
+    <span class='pykeyword'>for</span> s <span class='pykeyword'>in</span> source[1:]:
+        s = s.upper()
+        digits += charToSoundex[s]
+
+    <span class='pycomment'># 3. remove consecutive duplicates</span>
+    digits2 = digits[0]
+    <span class='pykeyword'>for</span> d <span class='pykeyword'>in</span> digits[1:]:
+        <span class='pykeyword'>if</span> digits2[-1] != d:
+            digits2 += d
+        
+    <span class='pycomment'># 4. remove all "9"s</span>
+    digits3 = re.sub(<span class='pystring'>'9'</span>, <span class='pystring'>''</span>, digits2)
+    
+    <span class='pycomment'># 5. pad end with "0"s to 4 characters</span>
+    <span class='pykeyword'>while</span> len(digits3) &lt; 4:
+        digits3 += <span class='pystring'>"0"</span>
+        
+    <span class='pycomment'># 6. return first 4 characters</span>
+    <span class='pykeyword'>return</span> digits3[:4]
+
+<span class='pykeyword'>if</span> __name__ == <span class='pystring'>'__main__'</span>:
+    <span class='pykeyword'>from</span> timeit <span class='pykeyword'>import</span> Timer
+    names = (<span class='pystring'>'Woo'</span>, <span class='pystring'>'Pilgrim'</span>, <span class='pystring'>'Flingjingwaller'</span>)
+    <span class='pykeyword'>for</span> name <span class='pykeyword'>in</span> names:
+        statement = <span class='pystring'>"soundex('%s')"</span> % name
+        t = Timer(statement, <span class='pystring'>"from __main__ import soundex"</span>)
+        <span class='pykeyword'>print</span> name.ljust(15), soundex(name), min(t.repeat())
+</pre></div>
+            <div class="furtherreading">
+               <h3>进一步阅读</h3>
+               <ul>
+                  <li><a href="http://www.avotaynu.com/soundex.html">Soundexing and Genealogy</a> 给出了 Soundex 发展的年代表以及地域变化。
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../dynamic_functions/summary.html">&lt;&lt;&nbsp;小结</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="timeit.html" title="18.2.&nbsp;使用 timeit 模块">2</a> <span class="divider">|</span> <a href="regular_expressions.html" title="18.3.&nbsp;优化正则表达式">3</a> <span class="divider">|</span> <a href="dictionary_lookups.html" title="18.4.&nbsp;优化字典查找">4</a> <span class="divider">|</span> <a href="list_operations.html" title="18.5.&nbsp;优化列表操作">5</a> <span class="divider">|</span> <a href="string_manipulation.html" title="18.6.&nbsp;优化字符串操作">6</a> <span class="divider">|</span> <a href="summary.html" title="18.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="timeit.html">使用 timeit 模块&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

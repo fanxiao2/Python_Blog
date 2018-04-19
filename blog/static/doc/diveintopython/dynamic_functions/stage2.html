@@ -1,0 +1,153 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>17.3.&nbsp;plural.py, 第 2 阶段</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;17&nbsp;章&nbsp;动态函数">
+      <link rel="previous" href="stage1.html" title="17.2.&nbsp;plural.py, 第 1 阶段">
+      <link rel="next" href="stage3.html" title="17.4.&nbsp;plural.py, 第 3 阶段">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">动态函数</a>&nbsp;&gt;&nbsp;<span class="thispage">plural.py, 第 2 阶段</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="stage1.html" title="上一页: “plural.py, 第 1 阶段”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="stage3.html" title="下一页: “plural.py, 第 3 阶段”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="plural.stage2"></a>17.3.&nbsp;<tt class="filename">plural.py</tt>, 第 2 阶段
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>现在你将增加一个抽象过程。你从定义一个规则列表开始：如果这样，就做那个，否则判断下一规则。让我们暂时将程序一部分复杂化以便使另一部分简单化。</p>
+         </div>
+         <div class="example"><a name="d0e37780"></a><h3 class="title">例&nbsp;17.6.&nbsp;<tt class="filename">plural2.py</tt></h3><pre class="programlisting"><span class='pykeyword'>
+import</span> re
+
+<span class='pykeyword'>def</span><span class='pyclass'> match_sxz</span>(noun):                          
+    <span class='pykeyword'>return</span> re.search(<span class='pystring'>'[sxz]$'</span>, noun)          
+
+<span class='pykeyword'>def</span><span class='pyclass'> apply_sxz</span>(noun):                          
+    <span class='pykeyword'>return</span> re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, noun)            
+
+<span class='pykeyword'>def</span><span class='pyclass'> match_h</span>(noun):                            
+    <span class='pykeyword'>return</span> re.search(<span class='pystring'>'[^aeioudgkprt]h$'</span>, noun)
+
+<span class='pykeyword'>def</span><span class='pyclass'> apply_h</span>(noun):                            
+    <span class='pykeyword'>return</span> re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, noun)            
+
+<span class='pykeyword'>def</span><span class='pyclass'> match_y</span>(noun):                            
+    <span class='pykeyword'>return</span> re.search(<span class='pystring'>'[^aeiou]y$'</span>, noun)      
+        
+<span class='pykeyword'>def</span><span class='pyclass'> apply_y</span>(noun):                            
+    <span class='pykeyword'>return</span> re.sub(<span class='pystring'>'y$'</span>, <span class='pystring'>'ies'</span>, noun)          
+
+<span class='pykeyword'>def</span><span class='pyclass'> match_default</span>(noun):                      
+    <span class='pykeyword'>return</span> 1                                  
+        
+<span class='pykeyword'>def</span><span class='pyclass'> apply_default</span>(noun):                      
+    <span class='pykeyword'>return</span> noun + <span class='pystring'>'s'</span>                         
+
+rules = ((match_sxz, apply_sxz),
+         (match_h, apply_h),
+         (match_y, apply_y),
+         (match_default, apply_default)
+         )                                     <a name="plural.stage2.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+
+<span class='pykeyword'>def</span><span class='pyclass'> plural</span>(noun):                             
+    <span class='pykeyword'>for</span> matchesRule, applyRule <span class='pykeyword'>in</span> rules:       <a name="plural.stage2.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> matchesRule(noun):                  <a name="plural.stage2.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+            <span class='pykeyword'>return</span> applyRule(noun)             <a name="plural.stage2.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage2.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个版本看起来更加复杂 (至少是长了)，但做的工作没有变化：试图顺序匹配四种不同规则，并在匹配时应用恰当的正则表达式。不同之处在于，每个独立的匹配和应用规则都在自己的函数中定义，并且这些函数列于 <tt class="varname">rules</tt> 变量这个元组的元组之中。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage2.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用一个 <tt class="literal">for</tt> 循环，你可以根据 <tt class="varname">rules</tt> 元组一次性进行匹配和应用规则两项工作 (一个匹配和一个应用)。<tt class="literal">for</tt> 循环第一轮中，<tt class="varname">matchesRule</tt> 将使用 <tt class="function">match_sxz</tt>，<tt class="varname">applyRule</tt> 将使用 <tt class="function">apply_sxz</tt>；在第二轮中 (假设真走到了这么远)，<tt class="varname">matchesRule</tt> 将被赋予 <tt class="function">match_h</tt>，<tt class="varname">applyRule</tt> 将被赋予 <tt class="function">apply_h</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage2.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">记住 <a href="../getting_to_know_python/everything_is_an_object.html" title="2.4.&nbsp;万物皆对象"><span class="application">Python</span> 中的一切都是对象</a>，包括函数。<tt class="varname">rules</tt> 包含函数；不是指函数名，而是指函数本身。当 <tt class="varname">matchesRule</tt> 和 <tt class="varname">applyRule</tt> 在 <tt class="literal">for</tt> 循环中被赋值后，它们就成了你可以调用的真正函数。因此，在 <tt class="literal">for</tt> 循环第一轮中，这就相当于调用 <tt class="function">matches_sxz(noun)</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage2.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在 <tt class="literal">for</tt> 循环第一轮中，这就相当于调用 <tt class="function">apply_sxz(noun)</tt>，等等。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>这个抽象过程有些令人迷惑，试着剖析函数看看实际的等价内容。这个 <tt class="literal">for</tt> 循环相当于：
+         </p>
+         <div class="example"><a name="d0e37877"></a><h3 class="title">例&nbsp;17.7.&nbsp;剖析 <tt class="function">plural</tt> 函数
+            </h3><pre class="programlisting"><span class='pykeyword'>
+def</span> plural(noun):
+    <span class='pykeyword'>if</span> match_sxz(noun):
+        <span class='pykeyword'>return</span> apply_sxz(noun)
+    <span class='pykeyword'>if</span> match_h(noun):
+        <span class='pykeyword'>return</span> apply_h(noun)
+    <span class='pykeyword'>if</span> match_y(noun):
+        <span class='pykeyword'>return</span> apply_y(noun)
+    <span class='pykeyword'>if</span> match_default(noun):
+        <span class='pykeyword'>return</span> apply_default(noun)
+</pre></div>
+         <p>这里的好处在于 <tt class="function">plural</tt> 函数现在被简化了。它以普通的方法反复使用其它地方定义的规则。获得一个匹配规则，匹配吗？调用并应用规则。规则可以在任意地方以任意方法定义，<tt class="function">plural</tt> 函数对此并不关心。
+         </p>
+         <p>现在，添加这个抽象过程值得吗？嗯……还不值。让我们看看如何向函数添加一个新的规则。啊哈，在先前的范例中，需要向 <tt class="function">plural</tt> 函数添加一个 <tt class="literal">if</tt> 语句；在这个例子中，需要增加两个函数：<tt class="function">match_foo</tt> 和 <tt class="function">apply_foo</tt>，然后更新 <tt class="varname">rules</tt> 列表指定在什么相对位置调用这个新匹配和新规则应用。
+         </p>
+         <p>这其实不过是步入下一节的一个基石。让我们继续。</p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="stage1.html">&lt;&lt;&nbsp;plural.py, 第 1 阶段</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#plural.divein" title="17.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="stage1.html" title="17.2.&nbsp;plural.py, 第 1 阶段">2</a> <span class="divider">|</span> <span class="thispage">3</span> <span class="divider">|</span> <a href="stage3.html" title="17.4.&nbsp;plural.py, 第 3 阶段">4</a> <span class="divider">|</span> <a href="stage4.html" title="17.5.&nbsp;plural.py, 第 4 阶段">5</a> <span class="divider">|</span> <a href="stage5.html" title="17.6.&nbsp;plural.py, 第 5 阶段">6</a> <span class="divider">|</span> <a href="stage6.html" title="17.7.&nbsp;plural.py, 第 6 阶段">7</a> <span class="divider">|</span> <a href="summary.html" title="17.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="stage3.html">plural.py, 第 3 阶段&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

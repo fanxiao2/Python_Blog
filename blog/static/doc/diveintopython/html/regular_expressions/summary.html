@@ -1,0 +1,112 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>7.7.&nbsp;小结</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;7&nbsp;章&nbsp;正则表达式">
+      <link rel="previous" href="phone_numbers.html" title="7.6.&nbsp;个案研究：解析电话号码">
+      <link rel="next" href="../html_processing/index.html" title="第&nbsp;8&nbsp;章&nbsp;HTML 处理">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">正则表达式</a>&nbsp;&gt;&nbsp;<span class="thispage">小结</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="phone_numbers.html" title="上一页: “个案研究：解析电话号码”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="../html_processing/index.html" title="下一页: “HTML 处理”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="re.summary"></a>7.7.&nbsp;小结
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>这只是正则表达式能够完成工作的很少一部分。换句话说，即使你现在备受打击，相信我，你也不是什么也没见过了。</p>
+         </div>
+         <p>现在，你应该熟悉下列技巧：</p>
+         <div class="itemizedlist">
+            <ul>
+               <li><tt class="literal">^</tt> 匹配字符串的开始。
+               </li>
+               <li><tt class="literal">$</tt> 匹配字符串的结尾。
+               </li>
+               <li><tt class="literal">\b</tt> 匹配一个单词的边界。
+               </li>
+               <li><tt class="literal">\d</tt> 匹配任意数字。
+               </li>
+               <li><tt class="literal">\D</tt> 匹配任意非数字字符。
+               </li>
+               <li><tt class="literal">x?</tt> 匹配一个可选的 <tt class="literal">x</tt> 字符 (换言之，它匹配 1 次或者 0 次 <tt class="literal">x</tt> 字符)。
+               </li>
+               <li><tt class="literal">x*</tt> 匹配0次或者多次 <tt class="literal">x</tt> 字符。
+               </li>
+               <li><tt class="literal">x+</tt> 匹配1次或者多次 <tt class="literal">x</tt> 字符。
+               </li>
+               <li><tt class="literal">x{n,m}</tt> 匹配 <tt class="literal">x</tt> 字符，至少 <tt class="literal">n</tt> 次，至多 <tt class="literal">m</tt> 次。
+               </li>
+               <li><tt class="literal">(a|b|c)</tt> 要么匹配 <tt class="literal">a</tt>，要么匹配 <tt class="literal">b</tt>，要么匹配 <tt class="literal">c</tt>。
+               </li>
+               <li><tt class="literal">(x)</tt> 一般情况下表示一个<span class="emphasis"><em>记忆组 (remembered group)</em></span>。你可以利用 <tt class="function">re.search</tt> 函数返回对象的 <tt class="function">groups()</tt> 函数获取它的值。
+               </li>
+            </ul>
+         </div>
+         <p>正则表达式非常强大，但是它并不能为每一个问题提供正确的解决方案。你应该学习足够多的知识，以辨别什么时候它们是合适的，什么时候它们会解决你的问题，什么时候它们产生的问题比要解决的问题还要多。</p>
+         <div class="blockquote">
+            <table border="0" width="100%" cellspacing="0" cellpadding="0" class="blockquote" summary="Block quote">
+               <tr>
+                  <td width="10%" valign="top">&nbsp;</td>
+                  <td width="80%" valign="top">
+                     <p>一些人，遇到一个问题时就想：“<span class="quote">我知道，我将使用正则表达式。</span>”现在他有两个问题了。
+                     </p>
+                  </td>
+                  <td width="10%" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="2" align="right" valign="top">--<span class="attribution">Jamie Zawinski, <a href="http://groups.google.com/groups?selm=33F0C496.370D7C45%40netscape.com">in comp.emacs.xemacs</a></span></td>
+                  <td width="10%" valign="top">&nbsp;</td>
+               </tr>
+            </table>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="phone_numbers.html">&lt;&lt;&nbsp;个案研究：解析电话号码</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#re.intro" title="7.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="street_addresses.html" title="7.2.&nbsp;个案研究：街道地址">2</a> <span class="divider">|</span> <a href="roman_numerals.html" title="7.3.&nbsp;个案研究：罗马字母">3</a> <span class="divider">|</span> <a href="n_m_syntax.html" title="7.4.&nbsp;使用 {n,m} 语法">4</a> <span class="divider">|</span> <a href="verbose.html" title="7.5.&nbsp;松散正则表达式">5</a> <span class="divider">|</span> <a href="phone_numbers.html" title="7.6.&nbsp;个案研究：解析电话号码">6</a> <span class="divider">|</span> <span class="thispage">7</span>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="../html_processing/index.html">HTML 处理&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

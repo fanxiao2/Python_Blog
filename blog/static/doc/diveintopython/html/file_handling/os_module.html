@@ -1,0 +1,313 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>6.5.&nbsp;与目录共事</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;6&nbsp;章&nbsp;异常和文件处理">
+      <link rel="previous" href="more_on_modules.html" title="6.4.&nbsp;使用 sys.modules">
+      <link rel="next" href="all_together.html" title="6.6.&nbsp;全部放在一起">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">异常和文件处理</a>&nbsp;&gt;&nbsp;<span class="thispage">与目录共事</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="more_on_modules.html" title="上一页: “使用 sys.modules”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="all_together.html" title="下一页: “全部放在一起”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="fileinfo.os"></a>6.5.&nbsp;与目录共事
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><tt class="filename">os.path</tt> 模块有几个操作文件和目录的函数。这里，我们看看如何操作路径名和列出一个目录的内容。
+            </p>
+         </div>
+         <div class="example"><a name="fileinfo.os.path.join.example"></a><h3 class="title">例&nbsp;6.16.&nbsp;构造路径名</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> os</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">os.path.join(<span class='pystring'>"c:\\music\\ap\\"</span>, <span class='pystring'>"mahadeva.mp3"</span>)</span> <a name="fileinfo.os.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"> <a name="fileinfo.os.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'c:\\music\\ap\\mahadeva.mp3'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">os.path.join(<span class='pystring'>"c:\\music\\ap"</span>, <span class='pystring'>"mahadeva.mp3"</span>)</span>   <a name="fileinfo.os.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'c:\\music\\ap\\mahadeva.mp3'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">os.path.expanduser(<span class='pystring'>"~"</span>)</span>                         <a name="fileinfo.os.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">'c:\\Documents and Settings\\mpilgrim\\My Documents'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">os.path.join(os.path.expanduser(<span class='pystring'>"~"</span>), <span class='pystring'>"Python"</span>)</span> <a name="fileinfo.os.1.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="computeroutput">'c:\\Documents and Settings\\mpilgrim\\My Documents\\Python'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">os.path</tt> 是一个模块的引用；使用哪一个模块要看你正运行在哪种平台上。就像 <a href="index.html#crossplatform.example" title="例&nbsp;6.2.&nbsp;支持特定平台功能"><tt class="filename">getpass</tt></a> 通过将 <tt class="varname">getpass</tt> 设置为一个与平台相关的函数从而封装了平台之间的不同。<tt class="filename">os</tt> 通过设置 <tt class="varname">path</tt> 封装不同的相关平台模块。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">os.path</tt> 的 <tt class="function">join</tt> 函数把一个或多个部分路径名连接成一个路径名。在这个简单的例子中，它只是将字符串进行连接。(请注意在 Windows 下处理路径名是一个麻烦的事，因为反斜线字符必须被转义。)
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在这个几乎没有价值的例子中，在将路径名加到文件名上之前，<tt class="function">join</tt> 将在路径名后添加额外的反斜线。当发现这一点时我高兴极了，因为当用一种新的语言创建我自已的工具包时，<tt class="function">addSlashIfNecessary</tt> 总是我必须要写的那些愚蠢的小函数之一。在 <span class="application">Python</span> 中<span class="emphasis"><em>不要</em></span> 写这样的愚蠢的小函数，聪明的人已经为你考虑到了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">expanduser</tt> 将对使用 <tt class="literal">~</tt> 来表示当前用户根目录的路径名进行扩展。在任何平台上，只要用户拥有一个根目录，它就会有效，像 Windows、<span class="acronym">UNIX</span> 和 <span class="abbrev">Mac</span> <span class="acronym">OS</span> X，但在 <span class="abbrev">Mac</span> <span class="acronym">OS</span> 上无效。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.1.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">将这些技术组合在一起，你可以容易地为在用户根目录下的目录和文件构造出路径名。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="splittingpathnames.example"></a><h3 class="title">例&nbsp;6.17.&nbsp;分割路径名</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">os.path.split(<span class='pystring'>"c:\\music\\ap\\mahadeva.mp3"</span>)</span>                        <a name="fileinfo.os.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">('c:\\music\\ap', 'mahadeva.mp3')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">(filepath, filename) = os.path.split(<span class='pystring'>"c:\\music\\ap\\mahadeva.mp3"</span>)</span> <a name="fileinfo.os.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">filepath</span>                                                            <a name="fileinfo.os.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'c:\\music\\ap'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">filename</span>                                                            <a name="fileinfo.os.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">'mahadeva.mp3'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">(shortname, extension) = os.path.splitext(filename)</span>                 <a name="fileinfo.os.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">shortname</span>
+<span class="computeroutput">'mahadeva'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">extension</span>
+<span class="computeroutput">'.mp3'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">split</tt> 函数对一个全路径名进行分割，返回一个包含路径和文件名的 tuple。还记得我说过你可以使用<a href="../native_data_types/declaring_variables.html#odbchelper.multiassign" title="3.4.2.&nbsp;一次赋多值">多变量赋值</a>从一个函数返回多个值吗？对，<tt class="function">split</tt> 就是这样一个函数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我们将 <tt class="function">split</tt> 函数的返回值赋值给一个两个变量的 tuple。每个变量接收到返回 tuple 相对应的元素值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">第一个变量，<tt class="varname">filepath</tt>，接收到从 <tt class="function">split</tt> 返回 tuple 的第一个元素的值，文件路径。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">第二个变量，<tt class="varname">filename</tt>，接收到从 <tt class="function">split</tt> 返回 tuple 的第二个元素的值，文件名。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">os.path</tt> 也包含了一个 <tt class="function">splitext</tt> 函数，可以用来对文件名进行分割，并且返回一个包含了文件名和文件扩展名的 tuple。我们使用相同的技术来将它们赋值给独立的变量。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="fileinfo.listdir.example"></a><h3 class="title">例&nbsp;6.18.&nbsp;列出目录</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">os.listdir(<span class='pystring'>"c:\\music\\_singles\\"</span>)</span>              <a name="fileinfo.os.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">['a_time_long_forgotten_con.mp3', 'hellraiser.mp3',
+'kairo.mp3', 'long_way_home1.mp3', 'sidewinder.mp3', 
+'spinning.mp3']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">dirname = <span class='pystring'>"c:\\"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">os.listdir(dirname)</span>                              <a name="fileinfo.os.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">['AUTOEXEC.BAT', 'boot.ini', 'CONFIG.SYS', 'cygwin',
+'docbook', 'Documents and Settings', 'Incoming', 'Inetpub', 'IO.SYS',
+'MSDOS.SYS', 'Music', 'NTDETECT.COM', 'ntldr', 'pagefile.sys',
+'Program Files', 'Python20', 'RECYCLER',
+'System Volume Information', 'TEMP', 'WINNT']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[f <span class='pykeyword'>for</span> f <span class='pykeyword'>in</span> os.listdir(dirname)</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>if</span> os.path.isfile(os.path.join(dirname, f))]</span> <a name="fileinfo.os.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">['AUTOEXEC.BAT', 'boot.ini', 'CONFIG.SYS', 'IO.SYS', 'MSDOS.SYS',
+'NTDETECT.COM', 'ntldr', 'pagefile.sys']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[f <span class='pykeyword'>for</span> f <span class='pykeyword'>in</span> os.listdir(dirname)</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>if</span> os.path.isdir(os.path.join(dirname, f))]</span>  <a name="fileinfo.os.3.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">['cygwin', 'docbook', 'Documents and Settings', 'Incoming',
+'Inetpub', 'Music', 'Program Files', 'Python20', 'RECYCLER',
+'System Volume Information', 'TEMP', 'WINNT']</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">listdir</tt> 函数接收一个路径名，并返回那个目录的内容的 list。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">listdir</tt> 同时返回文件和文件夹，并不指出哪个是文件，哪个是文件夹。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以使用<a href="../power_of_introspection/filtering_lists.html" title="4.5.&nbsp;过滤列表">过滤列表</a>和 <tt class="filename">os.path</tt> 模块的 <tt class="function">isfile</tt> 函数，从文件夹中将文件分离出来。<tt class="function">isfile</tt> 接收一个路径名，如果路径表示一个文件，则返回 1，否则为 0。在这里，我们使用 <tt class="literal"><tt class="filename">os.path</tt>.<tt class="function">join</tt></tt> 来确保得到一个全路径名，但 <tt class="function">isfile</tt> 对部分路径 (相对于当前目录) 也是有效的。你可以使用 <tt class="literal">os.getcwd()</tt> 来得到当前目录。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">os.path</tt> 还有一个 <tt class="function">isdir</tt> 函数，当路径表示一个目录，则返回 1，否则为 0。你可以使用它来得到一个目录下的子目录列表。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e16563"></a><h3 class="title">例&nbsp;6.19.&nbsp;在 <tt class="filename">fileinfo.py</tt> 中列出目录
+            </h3><pre class="programlisting"><span class='pykeyword'>
+def</span> listDirectory(directory, fileExtList):                                        
+    <span class='pystring'>"get list of file info objects for files of particular extensions"</span> 
+    fileList = [os.path.normcase(f)
+                <span class='pykeyword'>for</span> f <span class='pykeyword'>in</span> os.listdir(directory)]            <a name="fileinfo.os.3a.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"> <a name="fileinfo.os.3a.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    fileList = [os.path.join(directory, f) 
+               <span class='pykeyword'>for</span> f <span class='pykeyword'>in</span> fileList
+                <span class='pykeyword'>if</span> os.path.splitext(f)[1] <span class='pykeyword'>in</span> fileExtList]  <a name="fileinfo.os.3a.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"> <a name="fileinfo.os.3a.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"> <a name="fileinfo.os.3a.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.3a.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">os.listdir(directory)</tt> 返回在 <tt class="varname">directory</tt> 中所有文件和文件夹的一个 list。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.3a.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用 <tt class="varname">f</tt> 对 list 进行遍历，我们使用 <tt class="literal">os.path.normcase(f)</tt> 根据操作系统的缺省值对大小写进行标准化处理。<tt class="function">normcase</tt> 是一个有用的函数，用于对大小写不敏感操作系统的一个补充。这种操作系统认为 <tt class="filename">mahadeva.mp3</tt> 和 <tt class="filename">mahadeva.MP3</tt> 是同一个文件名。例如，在 Windows 和 <span class="abbrev">Mac</span> <span class="acronym">OS</span> 下，<tt class="function">normcase</tt> 将把整个文件名转换为小写字母；而在 <span class="acronym">UNIX</span> 兼容的系统下，它将返回未作修改的文件名。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.3a.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">再次用 <tt class="varname">f</tt> 对标准化后的 list 进行遍历，我们使用 <tt class="literal">os.path.splitext(f)</tt> 将每个文件名分割为名字和扩展名。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.3a.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">对每个文件，我们查看扩展名是否在我们关心的文件扩展名 list 中 (<tt class="varname">fileExtList</tt>，被传递给 <tt class="function">listDirectory</tt> 函数)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.3a.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">对每个我们所关心的文件，我们使用 <tt class="literal">os.path.join(directory, f)</tt> 来构造这个文件的全路径名，接着返回这个全路径名的 list。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="tip.os"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">只要有可能，你就应该使用在 <tt class="filename">os</tt> 和 <tt class="filename">os.path</tt> 中的函数进行文件、目录和路径的操作。这些模块是对平台相关模块的封装模块，所以像 <tt class="function">os.path.split</tt> 这样的函数可以工作在 <span class="acronym">UNIX</span>、Windows、<span class="abbrev">Mac</span> <span class="acronym">OS</span> 和 <span class="application">Python</span> 所支持的任一种平台上。
+               </td>
+            </tr>
+         </table>
+         <p>还有一种获得目录内容的方法。它非常强大，并使用了一些你在命令行上工作时可能已经熟悉的通配符。</p>
+         <div class="example"><a name="fileinfo.os.glob.example"></a><h3 class="title">例&nbsp;6.20.&nbsp;使用 <tt class="filename">glob</tt> 列出目录
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">os.listdir(<span class='pystring'>"c:\\music\\_singles\\"</span>)</span>               <a name="fileinfo.os.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">['a_time_long_forgotten_con.mp3', 'hellraiser.mp3',
+'kairo.mp3', 'long_way_home1.mp3', 'sidewinder.mp3',
+'spinning.mp3']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> glob</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">glob.glob(<span class='pystring'>'c:\\music\\_singles\\*.mp3'</span>)</span>           <a name="fileinfo.os.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">['c:\\music\\_singles\\a_time_long_forgotten_con.mp3',
+'c:\\music\\_singles\\hellraiser.mp3',
+'c:\\music\\_singles\\kairo.mp3',
+'c:\\music\\_singles\\long_way_home1.mp3',
+'c:\\music\\_singles\\sidewinder.mp3',
+'c:\\music\\_singles\\spinning.mp3']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">glob.glob(<span class='pystring'>'c:\\music\\_singles\\s*.mp3'</span>)</span>          <a name="fileinfo.os.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">['c:\\music\\_singles\\sidewinder.mp3',
+'c:\\music\\_singles\\spinning.mp3']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">glob.glob(<span class='pystring'>'c:\\music\\*\\*.mp3'</span>)</span>                  <a name="fileinfo.os.4.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你前面看到的，<tt class="function">os.listdir</tt> 简单地取一个目录路径，返回目录中的所有文件和子目录。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">glob</tt> 模块，另一方面，接受一个通配符并且返回文件的或目录的完整路径与之匹配。这个通配符是一个目录路径加上“*.mp3”，它将匹配所有的 <tt class="filename">.mp3</tt> 文件。注意返回列表的每一个元素已经包含了文件的完整路径。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果你要查找指定目录中所有以“s”开头并以“.mp3”结尾的文件，也可以这么做。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.os.4.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在考查这种情况：你有一个 <tt class="filename">music</tt> 目录，它包含几个子目录，子目录中包含一些 <tt class="filename">.mp3</tt> 文件。使用两个通配符，仅仅调用 <tt class="filename">glob</tt> 一次就可以立刻获得所有这些文件的一个 list。一个通配符是 <tt class="literal">"*.mp3"</tt> (用于匹配 <tt class="filename">.mp3</tt> 文件)，另一个通配符是<span class="emphasis"><em>子目录名本身</em></span>，用于匹配 <tt class="filename">c:\music</tt> 中的所有子目录。这看上去很简单，但它蕴含了强大的功能。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li><a href="http://www.faqts.com/knowledge-base/index.phtml/fid/199/"><span class="application">Python</span> Knowledge Base</a> 回答了<a href="http://www.faqts.com/knowledge-base/index.phtml/fid/240">关于 <tt class="filename">os</tt> 模块的问题</a>。
+               </li>
+               <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 提供了 <a href="http://www.python.org/doc/current/lib/module-os.html"><tt class="filename">os</tt></a> 模块和 <a href="http://www.python.org/doc/current/lib/module-os.path.html"><tt class="filename">os.path</tt></a> 模块的文档。
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="more_on_modules.html">&lt;&lt;&nbsp;使用 sys.modules</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#fileinfo.exception" title="6.1.&nbsp;异常处理">1</a> <span class="divider">|</span> <a href="file_objects.html" title="6.2.&nbsp;与文件对象共事">2</a> <span class="divider">|</span> <a href="for_loops.html" title="6.3.&nbsp;for 循环">3</a> <span class="divider">|</span> <a href="more_on_modules.html" title="6.4.&nbsp;使用 sys.modules">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="all_together.html" title="6.6.&nbsp;全部放在一起">6</a> <span class="divider">|</span> <a href="summary.html" title="6.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="all_together.html">全部放在一起&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

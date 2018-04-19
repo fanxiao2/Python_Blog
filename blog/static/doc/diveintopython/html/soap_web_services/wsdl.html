@@ -1,0 +1,95 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>12.5.&nbsp;WSDL 介绍</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;12&nbsp;章&nbsp;SOAP Web 服务">
+      <link rel="previous" href="debugging.html" title="12.4.&nbsp; SOAP 网络服务查错">
+      <link rel="next" href="introspection.html" title="12.6.&nbsp;以 WSDL 进行 SOAP 内省">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">SOAP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">WSDL 介绍</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="debugging.html" title="上一页: “ SOAP 网络服务查错”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="introspection.html" title="下一页: “以 WSDL 进行 SOAP 内省”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="soap.wsdl"></a>12.5.&nbsp;<span class="acronym">WSDL</span> 介绍
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><tt class="classname">SOAPProxy</tt> 类本地方法调用并透明地转向到远程 <span class="acronym">SOAP</span> 方法。正如你所看到的，这是很多的工作，<tt class="classname">SOAPProxy</tt> 快速和透明地完成他们。它没有做到的是提供方法自省的手段。
+            </p>
+         </div>
+         <p>考虑一下：前面两部分所展现的调用只有一个参数和返回的简单远程 <span class="acronym">SOAP</span> 方法。服务 <span class="acronym">URL</span> 和一系列参数及它们的数据类型需要被知道并跟踪。任何的缺失或错误都会导致整体的失败。
+         </p>
+         <p>这并没有什么可惊讶的。如果我要调用一个本地函数，我需要知道函数所在的包和模块名 (与之对应的则是服务 <span class="acronym">URL</span> 和命名空间)。我还需要知道正确的函数名以及其函数个数。<span class="application">Python</span> 精妙地不需明示类型，但我还是需要知道有多少个参数需要传递，多少个值将被返回。
+         </p>
+         <p>最大的区别就在于内省。就像你在 <a href="../power_of_introspection/index.html">第 4 章</a> 看到的那样，<span class="application">Python</span> 擅长于让你实时地去探索模块和函数的情况。你可以对一个模块中的所有函数进行列表，并不费吹灰之力地明了函数的声明和参数情况。
+         </p>
+         <p><span class="acronym">WSDL</span> 允许你对 <span class="acronym">SOAP</span> 网络服务做相同的事情。<span class="acronym">WSDL</span> 是 “<span class="quote">网络服务描述语言 (Web Services Description Language)</span>”的缩写。它尽管是为自如地表述多种类型的网络服务而设定，却也经常用于描述 <span class="acronym">SOAP</span> 网络服务。
+         </p>
+         <p>一个 <span class="acronym">WSDL</span> 文件不过就是一个文件。更具体地讲，是一个 XML 文件。通常存储于你所访问的 <span class="acronym">SOAP</span> 网络服务这个被描述对象所在的服务器上，并没有什么特殊之处。在本章稍后的位置，我们将下载 Google API 的 <span class="acronym">WSDL</span> 文件并在本地使用它。这并不意味着本地调用 Google，这个 <span class="acronym">WSDL</span> 文件所描述的仍旧是 Google 服务器上的远程函数。
+         </p>
+         <p>在 <span class="acronym">WSDL</span> 文件中描述了调用相应的 <span class="acronym">SOAP</span> 网络服务的一切：
+         </p>
+         <div class="itemizedlist">
+            <ul>
+               <li>服务 <span class="acronym">URL</span> 和命名空间
+               </li>
+               <li>网络服务的类型 (可能是 <span class="acronym">SOAP</span> 的函数调用，但我说过，<span class="acronym">WSDL</span> 足够自如地去描述网络服务的广泛内容)
+               </li>
+               <li>有效函数列表</li>
+               <li>每个函数的参数</li>
+               <li>每个参数的类型</li>
+               <li>每个函数的返回值及其数据类型</li>
+            </ul>
+         </div>
+         <p>换言之，一个 <span class="acronym">WSDL</span> 文件告诉你调用 <span class="acronym">SOAP</span> 所需要知道的一切。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="debugging.html">&lt;&lt;&nbsp; SOAP 网络服务查错</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#soap.divein" title="12.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="install.html" title="12.2.&nbsp;安装 SOAP 库">2</a> <span class="divider">|</span> <a href="first_steps.html" title="12.3.&nbsp;步入 SOAP">3</a> <span class="divider">|</span> <a href="debugging.html" title="12.4.&nbsp; SOAP 网络服务查错">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="introspection.html" title="12.6.&nbsp;以 WSDL 进行 SOAP 内省">6</a> <span class="divider">|</span> <a href="google.html" title="12.7.&nbsp;搜索 Google">7</a> <span class="divider">|</span> <a href="troubleshooting.html" title="12.8.&nbsp; SOAP 网络服务故障排除">8</a> <span class="divider">|</span> <a href="summary.html" title="12.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="introspection.html">以 WSDL 进行 SOAP 内省&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

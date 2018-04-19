@@ -1,0 +1,115 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>17.4.&nbsp;plural.py, 第 3 阶段</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;17&nbsp;章&nbsp;动态函数">
+      <link rel="previous" href="stage2.html" title="17.3.&nbsp;plural.py, 第 2 阶段">
+      <link rel="next" href="stage4.html" title="17.5.&nbsp;plural.py, 第 4 阶段">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">动态函数</a>&nbsp;&gt;&nbsp;<span class="thispage">plural.py, 第 3 阶段</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="stage2.html" title="上一页: “plural.py, 第 2 阶段”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="stage4.html" title="下一页: “plural.py, 第 4 阶段”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="plural.stage3"></a>17.4.&nbsp;<tt class="filename">plural.py</tt>, 第 3 阶段
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>将每个匹配和规则应用分别制作成函数没有必要。你从来不会直接调用它们：你把它们定义于 <tt class="varname">rules</tt> 列表之中并从那里调用它们。让我们隐去它们的函数名而抓住规则定义的主线。
+            </p>
+         </div>
+         <div class="example"><a name="d0e37925"></a><h3 class="title">例&nbsp;17.8.&nbsp;<tt class="filename">plural3.py</tt></h3><pre class="programlisting"><span class='pykeyword'>
+import</span> re
+
+rules = \
+  (
+    (
+     <span class='pykeyword'>lambda</span> word: re.search(<span class='pystring'>'[sxz]$'</span>, word),
+     <span class='pykeyword'>lambda</span> word: re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, word)
+    ),
+    (
+     <span class='pykeyword'>lambda</span> word: re.search(<span class='pystring'>'[^aeioudgkprt]h$'</span>, word),
+     <span class='pykeyword'>lambda</span> word: re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, word)
+    ),
+    (
+     <span class='pykeyword'>lambda</span> word: re.search(<span class='pystring'>'[^aeiou]y$'</span>, word),
+     <span class='pykeyword'>lambda</span> word: re.sub(<span class='pystring'>'y$'</span>, <span class='pystring'>'ies'</span>, word)
+    ),
+    (
+     <span class='pykeyword'>lambda</span> word: re.search(<span class='pystring'>'$'</span>, word),
+     <span class='pykeyword'>lambda</span> word: re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'s'</span>, word)
+    )
+   )                                           <a name="plural.stage3.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+
+<span class='pykeyword'>def</span><span class='pyclass'> plural</span>(noun):                             
+    <span class='pykeyword'>for</span> matchesRule, applyRule <span class='pykeyword'>in</span> rules:       <a name="plural.stage3.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> matchesRule(noun):                 
+            <span class='pykeyword'>return</span> applyRule(noun)            
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage3.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这与第 2 阶段定义的规则是一样的。惟一的区别是不再定义 <tt class="function">match_sxz</tt> 和 <tt class="function">apply_sxz</tt> 之类的函数，而是以 <a href="../power_of_introspection/lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">lambda 函数</a> 法将这些函数的内容直接 “<span class="quote">嵌入</span>” <tt class="varname">rules</tt> 列表本身。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage3.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">注意 <tt class="function">plural</tt> 函数完全没有变化，还是反复于一系列的规则函数，检查第一个匹配规则，如果返回真则调用第二个应用规则并返回值。和前面一样，给定单词返回单词。唯一的区别是规则函数被内嵌定义，化名作 lambda 函数。但是 <tt class="function">plural</tt> 函数并不在乎它们是如何定义的，只是拿到规则列表，闭着眼睛干活。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>现在添加一条新的规则，所有你要做的就是直接在 <tt class="varname">rules</tt> 列表之中定义函数：一个匹配规则，一个应用规则。这样内嵌的规则函数定义方法使得没必要的重复很容易被发现。你有四对函数，它们采用相同的模式。匹配函数就是调用 <tt class="function">re.search</tt>，应用函数就是调用 <tt class="function">re.sub</tt>。让我们提炼出这些共同点。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="stage2.html">&lt;&lt;&nbsp;plural.py, 第 2 阶段</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#plural.divein" title="17.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="stage1.html" title="17.2.&nbsp;plural.py, 第 1 阶段">2</a> <span class="divider">|</span> <a href="stage2.html" title="17.3.&nbsp;plural.py, 第 2 阶段">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="stage4.html" title="17.5.&nbsp;plural.py, 第 4 阶段">5</a> <span class="divider">|</span> <a href="stage5.html" title="17.6.&nbsp;plural.py, 第 5 阶段">6</a> <span class="divider">|</span> <a href="stage6.html" title="17.7.&nbsp;plural.py, 第 6 阶段">7</a> <span class="divider">|</span> <a href="summary.html" title="17.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="stage4.html">plural.py, 第 4 阶段&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,110 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>3.8.&nbsp;小结</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;3&nbsp;章&nbsp;内置数据类型">
+      <link rel="previous" href="joining_lists.html" title="3.7.&nbsp;连接 list 与分割字符串">
+      <link rel="next" href="../power_of_introspection/index.html" title="第&nbsp;4&nbsp;章&nbsp;自省的威力">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">内置数据类型</a>&nbsp;&gt;&nbsp;<span class="thispage">小结</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="joining_lists.html" title="上一页: “连接 list 与分割字符串”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="../power_of_introspection/index.html" title="下一页: “自省的威力”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="odbchelper.summary"></a>3.8.&nbsp;小结
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>现在 <tt class="filename">odbchelper.py</tt> 程序和它的输出结果都应该非常清楚了。
+            </p>
+         </div>
+         <div class="informalexample"><pre class="programlisting"><span class='pykeyword'>
+def</span> buildConnectionString(params):
+    <span class='pystring'>"""Build a connection string from a dictionary of parameters.
+
+    Returns string."""</span>
+    <span class='pykeyword'>return</span> <span class='pystring'>";"</span>.join([<span class='pystring'>"%s=%s"</span> % (k, v) <span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> params.items()])
+
+<span class='pykeyword'>if</span> __name__ == <span class='pystring'>"__main__"</span>:
+    myParams = {<span class='pystring'>"server"</span>:<span class='pystring'>"mpilgrim"</span>, \
+                <span class='pystring'>"database"</span>:<span class='pystring'>"master"</span>, \
+                <span class='pystring'>"uid"</span>:<span class='pystring'>"sa"</span>, \
+                <span class='pystring'>"pwd"</span>:<span class='pystring'>"secret"</span> \
+                }
+    <span class='pykeyword'>print</span> buildConnectionString(myParams)</pre></div>
+         <div class="informalexample">
+            <p>下面是 <tt class="filename">odbchelper.py</tt> 的输出结果：
+            </p><pre class="screen"><span class="computeroutput">server=mpilgrim;uid=sa;database=master;pwd=secret</span></pre></div>
+         <div class="highlights">
+            <p>在深入下一章学习之前，确保您可以无阻碍地完成下面的事情：</p>
+            <div class="itemizedlist">
+               <ul>
+                  <li>使用 <span class="application">Python</span> <span class="acronym">IDE</span> 来交互式地测试表达式
+                  </li>
+                  <li>编写 <span class="application">Python</span> 程序并且<a href="../getting_to_know_python/testing_modules.html" title="2.6.&nbsp;测试模块">从 <span class="acronym">IDE</span> 运行</a>，或者从命令行运行
+                  </li>
+                  <li><a href="../getting_to_know_python/everything_is_an_object.html#odbchelper.import" title="例&nbsp;2.3.&nbsp;访问 buildConnectionString 函数的 doc string">导入模块</a>及调用它们的函数
+                  </li>
+                  <li><a href="../getting_to_know_python/declaring_functions.html" title="2.2.&nbsp;函数声明">声明函数</a>以及 <a href="../getting_to_know_python/documenting_functions.html" title="2.3.&nbsp;文档化函数"><tt class="literal">doc string</tt></a>、<a href="declaring_variables.html" title="3.4.&nbsp;变量声明">局部变量</a>和<a href="../getting_to_know_python/indenting_code.html" title="2.5.&nbsp;代码缩进">适当的缩进</a>的使用
+                  </li>
+                  <li>定义 <a href="index.html#odbchelper.dict" title="3.1.&nbsp;Dictionary 介绍">dictionary</a>、<a href="tuples.html" title="3.3.&nbsp;Tuple 介绍">tuple</a> 和 <a href="lists.html" title="3.2.&nbsp;List 介绍">list</a></li>
+                  <li><a href="../getting_to_know_python/everything_is_an_object.html" title="2.4.&nbsp;万物皆对象">任意一个对象</a>的访问方法，包括：字符串、list、dictionary、函数和模块
+                  </li>
+                  <li>通过<a href="formatting_strings.html" title="3.5.&nbsp;格式化字符串">字符串格式化</a>连接值
+                  </li>
+                  <li>使用 list 解析<a href="mapping_lists.html" title="3.6.&nbsp;映射 list">映射 list</a> 为其他的 list
+                  </li>
+                  <li><a href="joining_lists.html" title="3.7.&nbsp;连接 list 与分割字符串">把字符串分割为 list</a> 和把 list 连接为字符串
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="joining_lists.html">&lt;&lt;&nbsp;连接 list 与分割字符串</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#odbchelper.dict" title="3.1.&nbsp;Dictionary 介绍">1</a> <span class="divider">|</span> <a href="lists.html" title="3.2.&nbsp;List 介绍">2</a> <span class="divider">|</span> <a href="tuples.html" title="3.3.&nbsp;Tuple 介绍">3</a> <span class="divider">|</span> <a href="declaring_variables.html" title="3.4.&nbsp;变量声明">4</a> <span class="divider">|</span> <a href="formatting_strings.html" title="3.5.&nbsp;格式化字符串">5</a> <span class="divider">|</span> <a href="mapping_lists.html" title="3.6.&nbsp;映射 list">6</a> <span class="divider">|</span> <a href="joining_lists.html" title="3.7.&nbsp;连接 list 与分割字符串">7</a> <span class="divider">|</span> <span class="thispage">8</span>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="../power_of_introspection/index.html">自省的威力&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

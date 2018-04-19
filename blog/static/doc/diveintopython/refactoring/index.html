@@ -1,0 +1,219 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;15&nbsp;章&nbsp;重构</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../unit_testing/stage_5.html" title="14.5.&nbsp;roman.py, 第 5 阶段">
+      <link rel="next" href="handling_changing_requirements.html" title="15.2.&nbsp;应对需求变化">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">重构</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../unit_testing/stage_5.html" title="上一页: “roman.py, 第 5 阶段”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="handling_changing_requirements.html" title="下一页: “应对需求变化”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="roman2"></a>第&nbsp;15&nbsp;章&nbsp;重构
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#roman.bugs">15.1. 处理 bugs</a></span></li>
+               <li><span class="section"><a href="handling_changing_requirements.html">15.2. 应对需求变化</a></span></li>
+               <li><span class="section"><a href="refactoring.html">15.3. 重构</a></span></li>
+               <li><span class="section"><a href="postscript.html">15.4. 后记</a></span></li>
+               <li><span class="section"><a href="summary.html">15.5. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="roman.bugs"></a>15.1.&nbsp;处理 bugs
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="abstract">
+               <p>尽管你很努力地编写全面的单元测试，但是 bug 还是会出现。我所说的 “<span class="quote">bug</span>” 是什么呢？Bug 是你还没有编写的测试用例。
+               </p>
+            </div>
+            <div class="example"><a name="d0e34327"></a><h3 class="title">例&nbsp;15.1.&nbsp;关于 Bug</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> roman5</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">roman5.fromRoman(<span class='pystring'>""</span>)</span> <a name="roman.bugs.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">0</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#roman.bugs.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">在前面的<a href="../unit_testing/stage_5.html" title="14.5.&nbsp;roman.py, 第 5 阶段">章节中</a>你注意到一个空字符串会匹配上那个检查罗马数字有效性的正则表达式了吗？对于最终版本中的正则表达式这一点仍然没有改变。这就是一个 Bug ，你希望空字符串能够像其他无效的罗马数字表示一样引发 <tt class="errorcode">InvalidRomanNumeralError</tt> 异常。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>在重现这个 Bug 并修改它之前你应该编写一个会失败的测试用例来说明它。</p>
+            <div class="example"><a name="d0e34357"></a><h3 class="title">例&nbsp;15.2.&nbsp;测试 bug (<tt class="filename">romantest61.py</tt>)
+               </h3><pre class="programlisting"><span class='pykeyword'>
+class</span> FromRomanBadInput(unittest.TestCase):                                      
+
+    <span class='pycomment'># previous test cases omitted for clarity (they haven't changed)</span>
+
+    <span class='pykeyword'>def</span><span class='pyclass'> testBlank</span>(self):
+        <span class='pystring'>"""fromRoman should fail with blank string"""</span>
+        self.assertRaises(roman.InvalidRomanNumeralError, roman.fromRoman, <span class='pystring'>""</span>) <a name="roman.bugs.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#roman.bugs.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">这里很简单。以空字符串调用 <tt class="function">fromRoman</tt> 并确保它会引发一个 <tt class="errorcode">InvalidRomanNumeralError</tt> 异常。难点在于找出 Bug，既然你已经知道它了，测试就简单了。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>因为你的代码存在一个 Bug，并且你编写了测试这个 Bug 的测试用例，所以测试用例将会失败：</p>
+            <div class="example"><a name="d0e34379"></a><h3 class="title">例&nbsp;15.3.&nbsp;用 <tt class="filename">romantest61.py</tt> 测试 <tt class="filename">roman61.py</tt> 的结果
+               </h3><pre class="screen"><span class="computeroutput">fromRoman should only accept uppercase input ... ok
+toRoman should always return uppercase ... ok
+fromRoman should fail with blank string ... FAIL
+fromRoman should fail with malformed antecedents ... ok
+fromRoman should fail with repeated pairs of numerals ... ok
+fromRoman should fail with too many repeated numerals ... ok
+fromRoman should give known result with known input ... ok
+toRoman should give known result with known input ... ok
+fromRoman(toRoman(n))==n for all n ... ok
+toRoman should fail with non-integer input ... ok
+toRoman should fail with negative input ... ok
+toRoman should fail with large input ... ok
+toRoman should fail with 0 input ... ok
+
+======================================================================
+FAIL: fromRoman should fail with blank string
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage6\romantest61.py", line 137, in testBlank
+    self.assertRaises(roman61.InvalidRomanNumeralError, roman61.fromRoman, "")
+  File "c:\python21\lib\unittest.py", line 266, in failUnlessRaises
+    raise self.failureException, excName
+AssertionError: InvalidRomanNumeralError</span><span class="computeroutput">
+----------------------------------------------------------------------
+Ran 13 tests in 2.864s
+
+FAILED (failures=1)</span></pre></div>
+            <p><span class="emphasis"><em>现在</em></span> 你可以修改这个 Bug了。
+            </p>
+            <div class="example"><a name="d0e34399"></a><h3 class="title">例&nbsp;15.4.&nbsp;修改 Bug (<tt class="filename">roman62.py</tt>)
+               </h3>
+               <p>这个文件可以在例子目录下的 <tt class="filename">py/roman/stage6/</tt> 目录中找到。
+               </p><pre class="programlisting"><span class='pykeyword'>
+def</span> fromRoman(s):
+    <span class='pystring'>"""convert Roman numeral to integer"""</span>
+    <span class='pykeyword'>if</span> <span class='pykeyword'>not</span> s: <a name="roman.bugs.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        <span class='pykeyword'>raise</span> InvalidRomanNumeralError, <span class='pystring'>'Input can not be blank'</span>
+    <span class='pykeyword'>if</span> <span class='pykeyword'>not</span> re.search(romanNumeralPattern, s):
+        <span class='pykeyword'>raise</span> InvalidRomanNumeralError, <span class='pystring'>'Invalid Roman numeral: %s'</span> % s
+
+    result = 0
+    index = 0
+    <span class='pykeyword'>for</span> numeral, integer <span class='pykeyword'>in</span> romanNumeralMap:
+        <span class='pykeyword'>while</span> s[index:index+len(numeral)] == numeral:
+            result += integer
+            index += len(numeral)
+    <span class='pykeyword'>return</span> result
+</pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#roman.bugs.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">只需要两行代码：一行直接检查空字符串和一行 <tt class="literal">raise</tt> 语句。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <div class="example"><a name="d0e34421"></a><h3 class="title">例&nbsp;15.5.&nbsp;用 <tt class="filename">romantest62.py</tt> 测试 <tt class="filename">roman62.py</tt> 的结果
+               </h3><pre class="screen"><span class="computeroutput">fromRoman should only accept uppercase input ... ok
+toRoman should always return uppercase ... ok
+fromRoman should fail with blank string ... ok </span><a name="roman.bugs.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"><span class="computeroutput">
+fromRoman should fail with malformed antecedents ... ok
+fromRoman should fail with repeated pairs of numerals ... ok
+fromRoman should fail with too many repeated numerals ... ok
+fromRoman should give known result with known input ... ok
+toRoman should give known result with known input ... ok
+fromRoman(toRoman(n))==n for all n ... ok
+toRoman should fail with non-integer input ... ok
+toRoman should fail with negative input ... ok
+toRoman should fail with large input ... ok
+toRoman should fail with 0 input ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 2.834s
+
+OK</span> <a name="roman.bugs.5.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#roman.bugs.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">空字符串测试用例现在通过了，说明 Bug 被修正了。</td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#roman.bugs.5.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">所有其他测试用例依然通过，证明这个 Bug 修正没有影响到其他部分。不需要再编程了。</td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>这样编程，并没有令 Bug 修正变得简单。简单的 Bug (就像这一个) 需要简单的测试用例，复杂 Bug 则需要复杂的测试用例。以测试为核心的氛围<span class="emphasis"><em>好像</em></span> 延长了修正 Bug 的时间，因为你需要先贴切地描述出 Bug (编写测试用例) 然后才去修正它。如果测试用例没能正确通过，你需要思量这个修改错了还是测试用例本身出现了 Bug。无论如何，从长远上讲，这样在测试代码和代码之间的反复是值得的，因为这样会使
+               Bug 在第一时间就被修正的可能性大大提高。而且不论如何更改，你都可以轻易地重新运行<span class="emphasis"><em>所有</em></span> 测试用例，新代码破坏老代码的机会也变得微乎其微。今天的单元测试就是明天的回归测试 (regression test)。
+            </p>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../unit_testing/stage_5.html">&lt;&lt;&nbsp;roman.py, 第 5 阶段</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="handling_changing_requirements.html" title="15.2.&nbsp;应对需求变化">2</a> <span class="divider">|</span> <a href="refactoring.html" title="15.3.&nbsp;重构">3</a> <span class="divider">|</span> <a href="postscript.html" title="15.4.&nbsp;后记">4</a> <span class="divider">|</span> <a href="summary.html" title="15.5.&nbsp;小结">5</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="handling_changing_requirements.html">应对需求变化&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

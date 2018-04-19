@@ -1,0 +1,174 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>8.2.&nbsp;sgmllib.py 介绍</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;8&nbsp;章&nbsp;HTML 处理">
+      <link rel="previous" href="index.html" title="第&nbsp;8&nbsp;章&nbsp;HTML 处理">
+      <link rel="next" href="extracting_data.html" title="8.3.&nbsp;从 HTML 文档中提取数据">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTML 处理</a>&nbsp;&gt;&nbsp;<span class="thispage">sgmllib.py 介绍</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="index.html" title="上一页: “HTML 处理”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="extracting_data.html" title="下一页: “从 HTML 文档中提取数据”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="dialect.sgmllib"></a>8.2.&nbsp;<tt class="filename">sgmllib.py</tt> 介绍
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><span class="acronym">HTML</span> 处理分成三步：将 <span class="acronym">HTML</span> 分解成它的组成片段，对片段进行加工，接着将片段再重新合成 HTML。第一步是通过 <tt class="filename">sgmllib.py</tt> 来完成的，它是标准 <span class="application">Python</span> 库的一部分。
+            </p>
+         </div>
+         <p>理解本章的关键是要知道 <span class="acronym">HTML</span> 不只是文本，更是结构化文本。这种结构来源于开始与结束标记的或多或少分级序列。通常您并不以这种方式处理 <span class="acronym">HTML</span> ，而是以<span class="emphasis"><em>文本方式</em></span> 在一个文本编辑中对其进行处理，或以<span class="emphasis"><em>可视的方式</em></span> 在一个浏览器中进行浏览或页面编辑工具中进行编辑。<tt class="filename">sgmllib.py</tt> 表现出了 <span class="acronym">HTML</span> 的<span class="emphasis"><em>结构</em></span>。
+         </p>
+         <p><tt class="filename">sgmllib.py</tt> 包含一个重要的类：<tt class="classname">SGMLParser</tt>。<tt class="classname">SGMLParser</tt>  将 <span class="acronym">HTML</span> 分解成有用的片段，比如开始标记和结束标记。在它成功地分解出某个数据为一个有用的片段后，它会根据所发现的数据，调用一个自身内部的方法。为了使用这个分析器，您需要子类化 <tt class="classname">SGMLParser</tt>  类，并且覆盖这些方法。这就是当我说它表示了 <span class="acronym">HTML</span> <span class="emphasis"><em>结构</em></span> 的意思：<span class="acronym">HTML</span> 的结构决定了方法调用的次序和传给每个方法的参数。
+         </p>
+         <p><tt class="classname">SGMLParser</tt> 将 <span class="acronym">HTML</span> 分析成 8 类数据，然后对每一类调用单独的方法：
+         </p>
+         <div class="variablelist">
+            <dl>
+               <dt><span class="term">开始标记 (Start tag)</span></dt>
+               <dd>是开始一个块的 <span class="acronym">HTML</span> 标记，像 <tt class="sgmltag-element">&lt;html&gt;</tt>、<tt class="sgmltag-element">&lt;head&gt;</tt>、<tt class="sgmltag-element">&lt;body&gt;</tt> 或 <tt class="sgmltag-element">&lt;pre&gt;</tt> 等，或是一个独一的标记，像 <tt class="sgmltag-element">&lt;br&gt;</tt> 或 <tt class="sgmltag-element">&lt;img&gt;</tt> 等。当它找到一个开始标记 <i class="replaceable"><tt>tagname</tt></i>，<tt class="classname">SGMLParser</tt>  将查找名为 <tt class="function">start_<i class="replaceable"><tt>tagname</tt></i></tt> 或 <tt class="function">do_<i class="replaceable"><tt>tagname</tt></i></tt> 的方法。例如，当它找到一个 <tt class="sgmltag-element">&lt;pre&gt;</tt> 标记，它将查找一个 <tt class="function">start_pre</tt> 或 <tt class="function">do_pre</tt> 的方法。如果找到了，<tt class="classname">SGMLParser</tt> 会使用这个标记的属性列表来调用这个方法；否则，它用这个标记的名字和属性列表来调用 <tt class="function">unknown_starttag</tt> 方法。
+               </dd>
+               <dt><span class="term">结束标记 (End tag)</span></dt>
+               <dd>是结束一个块的 <span class="acronym">HTML</span> 标记，像 <tt class="sgmltag-element">&lt;/html&gt;</tt>、<tt class="sgmltag-element">&lt;/head&gt;</tt>、<tt class="sgmltag-element">&lt;/body&gt;</tt> 或 <tt class="sgmltag-element">&lt;/pre&gt;</tt> 等。当找到一个结束标记时，<tt class="classname">SGMLParser</tt> 将查找名为 <tt class="function">end_<i class="replaceable"><tt>tagname</tt></i></tt> 的方法。如果找到，<tt class="classname">SGMLParser</tt>  调用这个方法，否则它使用标记的名字来调用 <tt class="function">unknown_endtag</tt> 。
+               </dd>
+               <dt><span class="term">字符引用 (Character reference)</span></dt>
+               <dd>用字符的十进制或等同的十六进制来表示的转义字符，像 <tt class="literal">&amp;#160;</tt>。当找到，<tt class="classname">SGMLParser</tt> 使用十进制或等同的十六进制字符文本来调用 <tt class="function">handle_charref</tt> 。
+               </dd>
+               <dt><span class="term">实体引用 (Entity reference)</span></dt>
+               <dd><span class="acronym">HTML</span> 实体，像 <tt class="literal">&amp;copy;</tt>。当找到，<tt class="classname">SGMLParser</tt> 使用 <span class="acronym">HTML</span> 实体的名字来调用 <tt class="function">handle_entityref</tt> 。
+               </dd>
+               <dt><span class="term">注释 (Comment)</span></dt>
+               <dd><span class="acronym">HTML</span> 注释，包括在 <tt class="literal">&lt;!-- ... --&gt;</tt>之间。当找到，<tt class="classname">SGMLParser</tt> 用注释内容来调用 <tt class="function">handle_comment</tt>。
+               </dd>
+               <dt><span class="term">处理指令 (Processing instruction)</span></dt>
+               <dd><span class="acronym">HTML</span> 处理指令，包括在 <tt class="literal">&lt;? ... &gt;</tt> 之间。当找到，<tt class="classname">SGMLParser</tt>  用处理指令内容来调用 <tt class="function">handle_pi</tt>。
+               </dd>
+               <dt><span class="term">声明 (Declaration)</span></dt>
+               <dd><span class="acronym">HTML</span> 声明，如 <tt class="sgmltag-element">DOCTYPE</tt>，包括在 <tt class="literal">&lt;! ... &gt;</tt>之间。当找到，<tt class="classname">SGMLParser</tt> 用声明内容来调用 <tt class="function">handle_decl</tt>。
+               </dd>
+               <dt><span class="term">文本数据 (Text data)</span></dt>
+               <dd>文本块。不满足其它 7 种类别的任何东西。当找到，<tt class="classname">SGMLParser</tt> 用文本来调用 <tt class="function">handle_data</tt>。
+               </dd>
+            </dl>
+         </div><a name="d0e20196"></a><table class="important" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/important.png" alt="重要" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%"><span class="application">Python</span> 2.0 存在一个 bug，即 <tt class="classname">SGMLParser</tt> 完全不能识别声明 (<tt class="function">handle_decl</tt> 永远不会调用)，这就意味着 <tt class="sgmltag-element">DOCTYPE</tt> 被静静地忽略掉了。这个错误在 <span class="application">Python</span> 2.1 中改正了。
+               </td>
+            </tr>
+         </table>
+         <p><tt class="filename">sgmllib.py</tt> 所附带的一个测试套件举例说明了这一点。您可以运行  <tt class="filename">sgmllib.py</tt>，在命令行下传入一个 <span class="acronym">HTML</span> 文件的名字，然后它会在分析标记和其它元素的同时将它们打印出来。它的实现是通过子类化 <tt class="classname">SGMLParser</tt> 类，然后定义 <tt class="function">unknown_starttag</tt>，<tt class="function">unknown_endtag</tt>，<tt class="function">handle_data</tt> 和其它方法来实现的。这些方法简单地打印出它们的参数。
+         </p><a name="tip.commandline.windows"></a><table class="tip" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/tip.png" alt="提示" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在 Windows 下的 <span class="application">ActivePython</span> <span class="acronym">IDE</span> 中，您可以在 “<span class="quote">Run script</span>” 对话框中指定命令行参数。用空格将多个参数分开。
+               </td>
+            </tr>
+         </table>
+         <div class="example"><a name="d0e20253"></a><h3 class="title">例&nbsp;8.4.&nbsp;<tt class="filename">sgmllib.py</tt> 的样例测试
+            </h3>
+            <p>下面是一个片段，来自本书的 <span class="acronym">HTML</span> 版本的目录，toc.html。当然，您的存储路径可能与我的有所不同。
+               (如果您还没有下载本书的 <span class="acronym">HTML</span> 版本，可以从 <a href="http://diveintopython.org/">http://diveintopython.org/</a> 下载。
+            </p><pre class="screen">
+<tt class="prompt">c:\python23\lib&gt;</tt> <span class="userinput">type <span class='pystring'>"c:\downloads\diveintopython\html\toc\index.html"</span></span>
+<tt class="literal">
+&lt;!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;
+&lt;html lang="en"&gt;
+   &lt;head&gt;
+      &lt;meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"&gt;
+   
+      &lt;title&gt;Dive Into Python&lt;/title&gt;
+      &lt;link rel="stylesheet" href="diveintopython.css" type="text/css"&gt;
+
+... 略 ...
+</tt></pre><p>通过 <tt class="filename">sgmllib.py</tt> 的测试套件来运行它，会得到如下的输出结果:
+            </p><pre class="screen">
+<tt class="prompt">c:\python23\lib&gt;</tt> <span class="userinput">python sgmllib.py <span class='pystring'>"c:\downloads\diveintopython\html\toc\index.html"</span></span>
+<span class="computeroutput">data: '\n\n'
+start tag: &lt;html lang="en" &gt;
+data: '\n   '
+start tag: &lt;head&gt;
+data: '\n      '
+start tag: &lt;meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" &gt;
+data: '\n   \n      '
+start tag: &lt;title&gt;
+data: 'Dive Into Python'
+end tag: &lt;/title&gt;
+data: '\n      '
+start tag: &lt;link rel="stylesheet" href="diveintopython.css" type="text/css" &gt;
+data: '\n      '
+
+... 略 ...
+</span></pre></div>
+         <p>下面是本章其它部分的路标：</p>
+         <div class="itemizedlist">
+            <ul>
+               <li>子类化 <tt class="classname">SGMLParser</tt> 来创建从 <span class="acronym">HTML</span> 文档中抽取感兴趣的数据的类。
+               </li>
+               <li>子类化 <tt class="classname">SGMLParser</tt> 来创建 <tt class="classname">BaseHTMLProcessor</tt>，它覆盖了所有8个处理方法，然后使用它们从片段中重建原始的 <span class="acronym">HTML</span>。
+               </li>
+               <li>子类化 <tt class="classname">BaseHTMLProcessor</tt> 来创建 <tt class="classname">Dialectizer</tt>，它增加了一些方法，专门用来处理指定的 <span class="acronym">HTML</span> 标记，然后覆盖了 <tt class="function">handle_data</tt> 方法，提供了用来处理 <span class="acronym">HTML</span> 标记之间文本块的框架。
+               </li>
+               <li>子类化 <tt class="classname">Dialectizer</tt> 来创建定义了文本处理规则的类。这些规则被 <tt class="function">Dialectizer.handle_data</tt> 使用。
+               </li>
+               <li>编写一个测试套件，它可以从 <tt class="systemitem">http://diveintopython.org/</tt> 处抓取一个真正的 web 页面，然后处理它。
+               </li>
+            </ul>
+         </div>
+         <p>继续阅读本章，您还可以学习到有关 <tt class="function">locals</tt>、<tt class="function">globals</tt> 和基于 dictionary 的字符串格式化的内容。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="index.html">&lt;&lt;&nbsp;HTML 处理</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#dialect.divein" title="8.1.&nbsp;概览">1</a> <span class="divider">|</span> <span class="thispage">2</span> <span class="divider">|</span> <a href="extracting_data.html" title="8.3.&nbsp;从 HTML 文档中提取数据">3</a> <span class="divider">|</span> <a href="basehtmlprocessor.html" title="8.4.&nbsp;BaseHTMLProcessor.py 介绍">4</a> <span class="divider">|</span> <a href="locals_and_globals.html" title="8.5.&nbsp;locals 和 globals">5</a> <span class="divider">|</span> <a href="dictionary_based_string_formatting.html" title="8.6.&nbsp;基于 dictionary 的字符串格式化">6</a> <span class="divider">|</span> <a href="quoting_attribute_values.html" title="8.7.&nbsp;给属性值加引号">7</a> <span class="divider">|</span> <a href="dialect.html" title="8.8.&nbsp;dialect.py 介绍">8</a> <span class="divider">|</span> <a href="all_together.html" title="8.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="8.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="extracting_data.html">从 HTML 文档中提取数据&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

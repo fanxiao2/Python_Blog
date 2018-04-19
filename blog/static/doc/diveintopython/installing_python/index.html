@@ -1,0 +1,108 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;1&nbsp;章&nbsp;安装 Python</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../toc/index.html" title="Dive Into Python">
+      <link rel="next" href="windows.html" title="1.2.&nbsp;Windows 上的 Python">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">安装 Python</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../toc/index.html" title="上一页: “Dive Into Python”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="windows.html" title="下一页: “Windows 上的 Python”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="install"></a>第&nbsp;1&nbsp;章&nbsp;安装 <span class="application">Python</span></h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#install.choosing">1.1. 哪一种 Python 适合您？</a></span></li>
+               <li><span class="section"><a href="windows.html">1.2. Windows 上的 Python</a></span></li>
+               <li><span class="section"><a href="macosx.html">1.3. Mac OS X 上的 Python </a></span></li>
+               <li><span class="section"><a href="macos9.html">1.4. Mac OS 9 上的 Python </a></span></li>
+               <li><span class="section"><a href="redhat.html">1.5. RedHat Linux 上的 Python </a></span></li>
+               <li><span class="section"><a href="debian.html">1.6. Debian GNU/Linux 上的 Python </a></span></li>
+               <li><span class="section"><a href="source.html">1.7. 从源代码安装 Python </a></span></li>
+               <li><span class="section"><a href="shell.html">1.8. 使用 Python 的交互 Shell</a></span></li>
+               <li><span class="section"><a href="summary.html">1.9. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>欢迎来到 <span class="application">Python</span> 世界，让我们开始吧。在本章中，将学习适合您的 <span class="application">Python</span> 安装。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="install.choosing"></a>1.1.&nbsp;哪一种 <span class="application">Python</span> 适合您？
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="abstract">
+               <p>学习 <span class="application">Python</span> 的第一件事就是安装，不是吗？
+               </p>
+            </div>
+            <p>如果您在公网的服务器上有个用户账号，那么您的 ISP 或许已经安装了 <span class="application">Python</span>。
+               大多数 Linux 发行版在默认安装的情况下就已经提供了 <span class="application">Python</span>。
+               虽然您可能希望在苹果机上安装一个拥有类 Mac 的图形操作界面，但在 <span class="abbrev">Mac</span> <span class="acronym">OS</span> X 10.2 或更高的版本上已经包含了一个 <span class="application">Python</span> 的命令行版本。
+            </p>
+            <p>Windows 环境默认不提供任何版本的 <span class="application">Python</span>，但是不要担心！本章将提供几种 Windows 环境下安装 <span class="application">Python</span> 的方法。
+            </p>
+            <p>正像您所看到的，<span class="application">Python</span> 可以运行于很多操作系统平台。包括 Windows、<span class="abbrev">Mac</span> <span class="acronym">OS</span>、<span class="abbrev">Mac</span> <span class="acronym">OS</span> X、所有免费的类 <span class="acronym">UNIX</span> 变种 (如 Linux)。也有运行于 Sun Solaris、AS/400、Amiga、OS/2、BeOS 的版本，甚至是您从来没听说过的其他操作系统平台。
+            </p>
+            <p>有太多的平台可以运行 <span class="application">Python</span> 了。在一种平台下编写的 <span class="application">Python</span> 程序稍作修改，就可以运行于<span class="emphasis"><em>任何</em></span> 其他支持的平台。例如，我通常在 Windows 平台上开发 <span class="application">Python</span> 程序，然后适当配置后使之能在 Linux 平台上运行。
+            </p>
+            <p>回到开始的问题，“<span class="quote">哪一种 <span class="application">Python</span> 适合您？</span>” 回答是：哪一个已经安装在您计算机上的均可。
+            </p>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../toc/index.html">&lt;&lt;&nbsp;Dive Into Python</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="windows.html" title="1.2.&nbsp;Windows 上的 Python">2</a> <span class="divider">|</span> <a href="macosx.html" title="1.3.&nbsp;Mac OS X 上的 Python ">3</a> <span class="divider">|</span> <a href="macos9.html" title="1.4.&nbsp;Mac OS 9 上的 Python ">4</a> <span class="divider">|</span> <a href="redhat.html" title="1.5.&nbsp;RedHat Linux 上的 Python ">5</a> <span class="divider">|</span> <a href="debian.html" title="1.6.&nbsp;Debian GNU/Linux 上的 Python ">6</a> <span class="divider">|</span> <a href="source.html" title="1.7.&nbsp;从源代码安装 Python ">7</a> <span class="divider">|</span> <a href="shell.html" title="1.8.&nbsp;使用 Python 的交互 Shell">8</a> <span class="divider">|</span> <a href="summary.html" title="1.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="windows.html">Windows 上的 Python&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

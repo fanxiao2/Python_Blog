@@ -1,0 +1,219 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>6.3.&nbsp;for 循环</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;6&nbsp;章&nbsp;异常和文件处理">
+      <link rel="previous" href="file_objects.html" title="6.2.&nbsp;与文件对象共事">
+      <link rel="next" href="more_on_modules.html" title="6.4.&nbsp;使用 sys.modules">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">异常和文件处理</a>&nbsp;&gt;&nbsp;<span class="thispage">for 循环</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="file_objects.html" title="上一页: “与文件对象共事”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="more_on_modules.html" title="下一页: “使用 sys.modules”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="fileinfo.for"></a>6.3.&nbsp;<tt class="literal">for</tt> 循环
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>与其它大多数语言一样，<span class="application">Python</span> 也拥有 <tt class="literal">for</tt> 循环。你到现在还未曾看到它们的唯一原因就是，<span class="application">Python</span> 在其它太多的方面表现出色，通常你不需要它们。
+            </p>
+         </div>
+         <p>其它大多数语言没有像 <span class="application">Python</span> 一样的强大的 list 数据类型，所以你需要亲自做很多事情，指定开始，结束和步长，来定义一定范围的整数或字符或其它可重复的实体。但是在 <span class="application">Python</span> 中，<tt class="literal">for</tt> 循环简单地在一个列表上循环，与 <a href="../native_data_types/mapping_lists.html" title="3.6.&nbsp;映射 list">list 解析</a>的工作方式相同。
+         </p>
+         <div class="example"><a name="d0e15442"></a><h3 class="title">例&nbsp;6.8.&nbsp;<tt class="literal">for</tt> 循环介绍
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = [<span class='pystring'>'a'</span>, <span class='pystring'>'b'</span>, <span class='pystring'>'e'</span>]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> s <span class='pykeyword'>in</span> li:</span>         <a name="fileinfo.for.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> s</span>          <a name="fileinfo.for.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">a
+b
+e</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"\n"</span>.join(li)</span>  <a name="fileinfo.for.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">a
+b
+e</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.for.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">for</tt> 循环的语法同 <a href="../native_data_types/mapping_lists.html" title="3.6.&nbsp;映射 list">list 解析</a>相似。<tt class="varname">li</tt> 是一个 list，而 <tt class="varname">s</tt> 将从第一个元素开始依次接收每个元素的值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.for.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">像 <tt class="literal">if</tt> 语句或其它任意<a href="../getting_to_know_python/indenting_code.html" title="2.5.&nbsp;代码缩进">缩进块</a>，<tt class="literal">for</tt> 循环可以包含任意数目的代码行。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.for.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这就是你以前没看到过 <tt class="literal">for</tt> 循环的原因：至今我们都不需要它。太令人吃惊了，当你想要的只是一个 <tt class="function">join</tt> 或是 list 解析时，在其它语言中常常需要使用 <tt class="literal">for</tt> 循环。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>要做一个 “<span class="quote">通常的</span>” (<span class="application">Visual Basic</span> 标准的) 计数 <tt class="literal">for</tt> 循环也非常简单。
+         </p>
+         <div class="example"><a name="fileinfo.for.counter"></a><h3 class="title">例&nbsp;6.9.&nbsp;简单计数</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> i <span class='pykeyword'>in</span> range(5):</span>             <a name="fileinfo.for.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> i</span>
+<span class="computeroutput">0
+1
+2
+3
+4</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = [<span class='pystring'>'a'</span>, <span class='pystring'>'b'</span>, <span class='pystring'>'c'</span>, <span class='pystring'>'d'</span>, <span class='pystring'>'e'</span>]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> i <span class='pykeyword'>in</span> range(len(li)):</span>       <a name="fileinfo.for.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> li[i]</span>
+<span class="computeroutput">a
+b
+c
+d
+e</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.for.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你在 <a href="../native_data_types/declaring_variables.html#odbchelper.multiassign.range" title="例&nbsp;3.20.&nbsp;连续值赋值">例&nbsp;3.20 “连续值赋值”</a> 所看到的，<tt class="function">range</tt> 生成一个整数的 list，通过它来控制循环。我知道它看上去有些奇怪，但是它对计数循环偶尔 (我只是说<span class="emphasis"><em>偶尔</em></span>) 会有用 。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.for.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我们从来没这么用过。这是 <span class="application">Visual Basic</span> 的思维风格。摆脱它吧。正确遍历 list 的方法是前面的例子所展示的。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p><tt class="literal">for</tt> 循环不仅仅用于简单计数。它们可以遍历任何类型的东西。下面的例子是一个用 <tt class="literal">for</tt> 循环遍历 dictionary 的例子。
+         </p>
+         <div class="example"><a name="dictionaryiter.example"></a><h3 class="title">例&nbsp;6.10.&nbsp;遍历 dictionary</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> os</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> os.environ.items():</span>      <a name="fileinfo.for.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"> <a name="fileinfo.for.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"%s=%s"</span> % (k, v)</span>
+<span class="computeroutput">USERPROFILE=C:\Documents and Settings\mpilgrim
+OS=Windows_NT
+COMPUTERNAME=MPILGRIM
+USERNAME=mpilgrim
+
+[...略...]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"\n"</span>.join([<span class='pystring'>"%s=%s"</span> % (k, v)</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> os.environ.items()])</span> <a name="fileinfo.for.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">USERPROFILE=C:\Documents and Settings\mpilgrim
+OS=Windows_NT
+COMPUTERNAME=MPILGRIM
+USERNAME=mpilgrim
+
+[...略...]</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.for.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">os.environ</tt> 是在你的系统上所定义的环境变量的 dictionary。在 Windows 下，这些变量是可以从 <span class="acronym">MS-DOS</span> 访问的用户和系统变量。在 <span class="acronym">UNIX</span> 下，它们是在你的 shell 启动脚本中所 export (输出) 的变量。在 <span class="abbrev">Mac</span> <span class="acronym">OS</span> 中，没有环境变量的概念，所以这个 dictionary 为空。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.for.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">os.environ.items()</tt> 返回一个 tuple 的 list：<tt class="literal">[(<i class="replaceable">key1</i>, <i class="replaceable">value1</i>), (<i class="replaceable">key2</i>, <i class="replaceable">value2</i>), ...]</tt>。<tt class="literal">for</tt> 循环对这个 list 进行遍历。第一轮，它将 <tt class="literal"><i class="replaceable">key1</i></tt> 赋给 <tt class="varname">k</tt> ，<tt class="literal"><i class="replaceable">value1</i></tt> 赋给 <tt class="varname">v</tt>，所以 <tt class="varname">k</tt> = <tt class="literal">USERPROFILE</tt>，<tt class="varname">v</tt> = <tt class="literal">C:\Documents and Settings\mpilgrim</tt>。第二轮，<tt class="varname">k</tt> 得到第二个键字 <tt class="literal">OS</tt>，<tt class="varname">v</tt> 得到相应的值 <tt class="literal">Windows_NT</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.for.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用<a href="../native_data_types/declaring_variables.html#odbchelper.multiassign" title="3.4.2.&nbsp;一次赋多值">多变量赋值</a>和 <a href="../native_data_types/mapping_lists.html" title="3.6.&nbsp;映射 list">list 解析</a>，你可以使用单行语句来替换整个 <tt class="literal">for</tt> 循环。在实际的编码中是否这样做只是个人风格问题；我喜欢它是因为，将一个 dictionary 映射到一个 list，然后将 list 合并成一个字符串，这一过程显得很清晰。其它的程序员宁愿将其写成一个 <tt class="literal">for</tt> 循环。请注意在两种情况下输出是一样的，然而这一版本稍微快一些，因为它只有一条 <tt class="function">print</tt> 语句而不是许多。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>现在我们来看看在 <a href="../object_oriented_framework/index.html">第 5 章</a> 介绍的样例程序 <tt class="filename">fileinfo.py</tt> 中 <tt class="classname">MP3FileInfo</tt> 的 <tt class="literal">for</tt> 循环 。
+         </p>
+         <div class="example"><a name="fileinfo.multiassign.for.example"></a><h3 class="title">例&nbsp;6.11.&nbsp;<tt class="classname">MP3FileInfo</tt> 中的 <tt class="literal">for</tt> 循环
+            </h3><pre class="programlisting">
+    tagDataMap = {<span class='pystring'>"title"</span>   : (  3,  33, stripnulls),
+                  <span class='pystring'>"artist"</span>  : ( 33,  63, stripnulls),
+                  <span class='pystring'>"album"</span>   : ( 63,  93, stripnulls),
+                  <span class='pystring'>"year"</span>    : ( 93,  97, stripnulls),
+                  <span class='pystring'>"comment"</span> : ( 97, 126, stripnulls),
+                  <span class='pystring'>"genre"</span>   : (127, 128, ord)}                               <a name="fileinfo.multiassign.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    .
+    .
+    .
+            <span class='pykeyword'>if</span> tagdata[:3] == <span class='pystring'>"TAG"</span>:
+                <span class='pykeyword'>for</span> tag, (start, end, parseFunc) <span class='pykeyword'>in</span> self.tagDataMap.items(): <a name="fileinfo.multiassign.5.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+                    self[tag] = parseFunc(tagdata[start:end])                <a name="fileinfo.multiassign.5.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.multiassign.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">tagDataMap</tt> 是一个<a href="../object_oriented_framework/class_attributes.html" title="5.8.&nbsp;类属性介绍">类属性</a>，它定义了我们正在一个 <span class="abbrev">MP3</span> 文件中搜索的标记。标记存储为定长字段，只要我们读出文件最后 128 个字节，那么第 3 到 32 字节总是歌曲的名字，33-62 总是歌手的名字，63-92 为专辑的名字，等等。请注意 <tt class="varname">tagDataMap</tt> 是一个 tuple 的 dictionary，每个 tuple 包含两个整数和一个函数引用。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.multiassign.5.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个看上去复杂一些，但其实并非如此。这里的 <tt class="literal">for</tt> 变量结构与 <tt class="function">items</tt> 所返回的 list 的元素的结构相匹配。记住，<tt class="function">items</tt> 返回一个形如 <tt class="literal">(<i class="replaceable">key</i>, <i class="replaceable">value</i>)</tt> 的 tuple 的 list。list 第一个元素是 <tt class="literal">("title", (3, 33, &lt;function stripnulls&gt;))</tt>，所以循环的第一轮，<tt class="varname">tag</tt> 为 <tt class="literal">"title"</tt>，<tt class="varname">start</tt> 为 <tt class="literal">3</tt>，<tt class="varname">end</tt> 为 <tt class="literal">33</tt>，<tt class="varname">parseFunc</tt> 为函数 <tt class="function">stripnulls</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.multiassign.5.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在我们已经从一个单个的 <span class="abbrev">MP3</span> 标记中提取出了所有的参数，将标记数据保存起来挺容易。我们从 <tt class="varname">start</tt> 到 <tt class="varname">end</tt> 对 <tt class="varname">tagdata</tt> 进行<a href="../native_data_types/lists.html#odbchelper.list.slice" title="例&nbsp;3.8.&nbsp;list 的分片 (slice)">分片</a>，从而得到这个标记的实际数据，调用 <tt class="varname">parseFunc</tt> 对数据进行后续的处理，接着将 <tt class="varname">parseFunc</tt> 的返回值作为值赋值给伪字典 <tt class="varname">self</tt> 中的键字 <tt class="varname">tag</tt>。在遍历完 <tt class="varname">tagDataMap</tt> 中所有元素之后，<tt class="varname">self</tt> 拥有了所有标记的值，<a href="../object_oriented_framework/special_class_methods.html#fileinfo.specialmethods.setname" title="例&nbsp;5.15.&nbsp;设置 MP3FileInfo 的 name">你知道看上去是什么样</a>。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="file_objects.html">&lt;&lt;&nbsp;与文件对象共事</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#fileinfo.exception" title="6.1.&nbsp;异常处理">1</a> <span class="divider">|</span> <a href="file_objects.html" title="6.2.&nbsp;与文件对象共事">2</a> <span class="divider">|</span> <span class="thispage">3</span> <span class="divider">|</span> <a href="more_on_modules.html" title="6.4.&nbsp;使用 sys.modules">4</a> <span class="divider">|</span> <a href="os_module.html" title="6.5.&nbsp;与目录共事">5</a> <span class="divider">|</span> <a href="all_together.html" title="6.6.&nbsp;全部放在一起">6</a> <span class="divider">|</span> <a href="summary.html" title="6.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="more_on_modules.html">使用 sys.modules&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

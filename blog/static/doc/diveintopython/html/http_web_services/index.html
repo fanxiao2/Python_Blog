@@ -1,0 +1,229 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../scripts_and_streams/summary.html" title="10.8.&nbsp;小结">
+      <link rel="next" href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">HTTP Web 服务</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../scripts_and_streams/summary.html" title="上一页: “小结”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="review.html" title="下一页: “避免通过 HTTP 重复地获取数据”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="oa"></a>第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#oa.divein">11.1. 概览</a></span></li>
+               <li><span class="section"><a href="review.html">11.2. 避免通过 HTTP 重复地获取数据</a></span></li>
+               <li><span class="section"><a href="http_features.html">11.3. HTTP 的特性</a></span><ul>
+                     <li><span class="section"><a href="http_features.html#d0e27782">11.3.1. 用户代理 (User-Agent)</a></span></li>
+                     <li><span class="section"><a href="http_features.html#d0e27806">11.3.2. 重定向 (Redirects)</a></span></li>
+                     <li><span class="section"><a href="http_features.html#d0e27880">11.3.3. Last-Modified/If-Modified-Since</a></span></li>
+                     <li><span class="section"><a href="http_features.html#d0e27915">11.3.4. ETag/If-None-Match</a></span></li>
+                     <li><span class="section"><a href="http_features.html#d0e27943">11.3.5. 压缩 (Compression)</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="section"><a href="debugging.html">11.4. 调试 HTTP web 服务</a></span></li>
+               <li><span class="section"><a href="user_agent.html">11.5. 设置 User-Agent</a></span></li>
+               <li><span class="section"><a href="etags.html">11.6. 处理 Last-Modified 和 ETag</a></span></li>
+               <li><span class="section"><a href="redirects.html">11.7. 处理重定向</a></span></li>
+               <li><span class="section"><a href="gzip_compression.html">11.8. 处理压缩数据</a></span></li>
+               <li><span class="section"><a href="alltogether.html">11.9. 全部放在一起</a></span></li>
+               <li><span class="section"><a href="summary.html">11.10. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="oa.divein"></a>11.1.&nbsp;概览
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="abstract">
+               <p> 在讲解<a href="../html_processing/extracting_data.html#dialect.extract.urllib" title="例&nbsp;8.5.&nbsp;urllib 介绍">如何下载 web 页</a>和<a href="../scripts_and_streams/index.html#kgp.openanything.urllib" title="例&nbsp;10.2.&nbsp;解析来自 URL 的 XML">如何从 URL 解析 XML</a>时，你已经学习了关于 <a href="../html_processing/index.html" title="第&nbsp;8&nbsp;章&nbsp;HTML 处理">HTML 处理</a>和 <a href="../xml_processing/index.html" title="第&nbsp;9&nbsp;章&nbsp;XML 处理">XML 处理</a>，接下来让我们来更全面地探讨有关 HTTP web 服务的主题。
+               </p>
+            </div>
+            <p>简单地讲，HTTP web 服务是指以编程的方式直接使用 HTTP 操作从远程服务器发送和接收数据。如果你要从服务器获取数据，直接使用 HTTP GET；如果您想发送新数据到服务器，使用 HTTP POST。(一些较高级的 HTTP web 服务
+               API 也定义了使用 HTTP PUT 和 HTTP DELETE 修改和删除现有数据的方法。) 换句话说，构建在 HTTP 协议中的 “<span class="quote">verbs (动作)</span>” (GET, POST, PUT 和 DELETE) 直接映射为接收、发送、修改和删除等应用级别的操作。
+            </p>
+            <p>这种方法的主要优点是简单，并且许多不同的站点充分印证了这样的简单性是受欢迎的。数据 (通常是 XML 数据) 能静态创建和存储，或通过服务器端脚本和所有主流计算机语言 (包括用于下载数据的 HTTP 库) 动态生成。调试也很简单，因为您可以在任意浏览器中调用网络服务来查看这些原始数据。现代浏览器甚至可以为您进行良好的格式化并漂亮地打印这些
+               XML 数据，以便让您快速地浏览。
+            </p>
+            <p>HTTP web 服务上的纯 XML 应用举例：</p>
+            <div class="itemizedlist">
+               <ul>
+                  <li><a href="http://www.amazon.com/webservices">Amazon API</a> 允许您从 Amazon.com 在线商店获取产品信息。
+                  </li>
+                  <li><a href="http://www.nws.noaa.gov/alerts/">National Weather Service</a> (美国) 和 <a href="http://demo.xml.weather.gov.hk/">Hong Kong Observatory</a> (香港) 通过 web 服务提供天气警报。
+                  </li>
+                  <li><a href="http://atomenabled.org/">Atom API</a> 用来管理基于 web 的内容。
+                  </li>
+                  <li><a href="http://syndic8.com/">Syndicated feeds</a> 应用于 weblogs 和新闻站点中带给您来自众多站点的最新消息。
+                  </li>
+               </ul>
+            </div>
+            <p>在后面的几章里，我们将探索使用 HTTP 进行数据发送和接收传输的 API，但是不会将应用语义映射到潜在的 HTTP 语义。(所有这些都是通过 HTTP POST 这个管道完成的。) 但是本章将关注使用 HTTP GET 从远程服务器获取数据，并且将探索几个由纯
+               HTTP web 服务带来最大利益的 HTTP 特性。
+            </p>
+            <p>如下所示为<a href="../scripts_and_streams/index.html" title="第&nbsp;10&nbsp;章&nbsp;脚本和流">上一章</a>曾经看到过的 <tt class="filename">openanything</tt> 模块的更高级版本：
+            </p>
+            <div class="example"><a name="d0e27701"></a><h3 class="title">例&nbsp;11.1.&nbsp;<tt class="filename">openanything.py</tt></h3>
+               <p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+               </p><pre class="programlisting"><span class='pykeyword'>
+import</span> urllib2, urlparse, gzip
+<span class='pykeyword'>from</span> StringIO <span class='pykeyword'>import</span> StringIO
+
+USER_AGENT = <span class='pystring'>'OpenAnything/1.0 +http://diveintopython.org/http_web_services/'</span>
+
+<span class='pykeyword'>class</span><span class='pyclass'> SmartRedirectHandler</span>(urllib2.HTTPRedirectHandler):    
+    <span class='pykeyword'>def</span><span class='pyclass'> http_error_301</span>(self, req, fp, code, msg, headers):  
+        result = urllib2.HTTPRedirectHandler.http_error_301(
+            self, req, fp, code, msg, headers)              
+        result.status = code                                
+        <span class='pykeyword'>return</span> result                                       
+
+    <span class='pykeyword'>def</span><span class='pyclass'> http_error_302</span>(self, req, fp, code, msg, headers):  
+        result = urllib2.HTTPRedirectHandler.http_error_302(
+            self, req, fp, code, msg, headers)              
+        result.status = code                                
+        <span class='pykeyword'>return</span> result                                       
+
+<span class='pykeyword'>class</span><span class='pyclass'> DefaultErrorHandler</span>(urllib2.HTTPDefaultErrorHandler):   
+    <span class='pykeyword'>def</span><span class='pyclass'> http_error_default</span>(self, req, fp, code, msg, headers):
+        result = urllib2.HTTPError(                           
+            req.get_full_url(), code, msg, headers, fp)       
+        result.status = code                                  
+        <span class='pykeyword'>return</span> result                                         
+
+<span class='pykeyword'>def</span><span class='pyclass'> openAnything</span>(source, etag=None, lastmodified=None, agent=USER_AGENT):
+    <span class='pystring'>'''URL, filename, or string --&gt; stream
+
+    This function lets you define parsers that take any input source
+    (URL, pathname to local or network file, or actual data as a string)
+    and deal with it in a uniform manner.  Returned object is guaranteed
+    to have all the basic stdio read methods (read, readline, readlines).
+    Just .close() the object when you're done with it.
+
+    If the etag argument is supplied, it will be used as the value of an
+    If-None-Match request header.
+
+    If the lastmodified argument is supplied, it must be a formatted
+    date/time string in GMT (as returned in the Last-Modified header of
+    a previous request).  The formatted date/time will be used
+    as the value of an If-Modified-Since request header.
+
+    If the agent argument is supplied, it will be used as the value of a
+    User-Agent request header.
+    '''</span>
+
+    <span class='pykeyword'>if</span> hasattr(source, <span class='pystring'>'read'</span>):
+        <span class='pykeyword'>return</span> source
+
+    <span class='pykeyword'>if</span> source == <span class='pystring'>'-'</span>:
+        <span class='pykeyword'>return</span> sys.stdin
+
+    <span class='pykeyword'>if</span> urlparse.urlparse(source)[0] == <span class='pystring'>'http'</span>:                                      
+        <span class='pycomment'># open URL with urllib2                                                     </span>
+        request = urllib2.Request(source)                                           
+        request.add_header(<span class='pystring'>'User-Agent'</span>, agent)                                     
+        <span class='pykeyword'>if</span> etag:                                                                    
+            request.add_header(<span class='pystring'>'If-None-Match'</span>, etag)                               
+        <span class='pykeyword'>if</span> lastmodified:                                                            
+            request.add_header(<span class='pystring'>'If-Modified-Since'</span>, lastmodified)                   
+        request.add_header(<span class='pystring'>'Accept-encoding'</span>, <span class='pystring'>'gzip'</span>)                               
+        opener = urllib2.build_opener(SmartRedirectHandler(), DefaultErrorHandler())
+        <span class='pykeyword'>return</span> opener.open(request)                                                 
+    
+    <span class='pycomment'># try to open with native open function (if source is a filename)</span>
+    <span class='pykeyword'>try</span>:
+        <span class='pykeyword'>return</span> open(source)
+    <span class='pykeyword'>except</span> (IOError, OSError):
+        <span class='pykeyword'>pass</span>
+
+    <span class='pycomment'># treat source as string</span>
+    <span class='pykeyword'>return</span> StringIO(str(source))
+
+<span class='pykeyword'>def</span><span class='pyclass'> fetch</span>(source, etag=None, last_modified=None, agent=USER_AGENT):  
+    <span class='pystring'>'''Fetch data and metadata from a URL, file, stream, or string'''</span>
+    result = {}                                                      
+    f = openAnything(source, etag, last_modified, agent)             
+    result[<span class='pystring'>'data'</span>] = f.read()                                        
+    <span class='pykeyword'>if</span> hasattr(f, <span class='pystring'>'headers'</span>):                                        
+        <span class='pycomment'># save ETag, if the server sent one                          </span>
+        result[<span class='pystring'>'etag'</span>] = f.headers.get(<span class='pystring'>'ETag'</span>)                       
+        <span class='pycomment'># save Last-Modified header, if the server sent one          </span>
+        result[<span class='pystring'>'lastmodified'</span>] = f.headers.get(<span class='pystring'>'Last-Modified'</span>)      
+        <span class='pykeyword'>if</span> f.headers.get(<span class='pystring'>'content-encoding'</span>, <span class='pystring'>''</span>) == <span class='pystring'>'gzip'</span>:          
+            <span class='pycomment'># data came back gzip-compressed, decompress it          </span>
+            result[<span class='pystring'>'data'</span>] = gzip.GzipFile(fileobj=StringIO(result[<span class='pystring'>'data'</span>]])).read()
+    <span class='pykeyword'>if</span> hasattr(f, <span class='pystring'>'url'</span>):                                            
+        result[<span class='pystring'>'url'</span>] = f.url                                        
+        result[<span class='pystring'>'status'</span>] = 200                                       
+    <span class='pykeyword'>if</span> hasattr(f, <span class='pystring'>'status'</span>):                                         
+        result[<span class='pystring'>'status'</span>] = f.status                                  
+    f.close()                                                        
+    <span class='pykeyword'>return</span> result                                                    
+</pre></div>
+            <div class="furtherreading">
+               <h3>进一步阅读</h3>
+               <ul>
+                  <li>Paul Prescod 认为<a href="http://webservices.xml.com/pub/a/ws/2002/02/06/rest.html">纯 HTTP web 服务是 Internet 的未来</a>。
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../scripts_and_streams/summary.html">&lt;&lt;&nbsp;小结</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">2</a> <span class="divider">|</span> <a href="http_features.html" title="11.3.&nbsp;HTTP 的特性">3</a> <span class="divider">|</span> <a href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">4</a> <span class="divider">|</span> <a href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">5</a> <span class="divider">|</span> <a href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">6</a> <span class="divider">|</span> <a href="redirects.html" title="11.7.&nbsp;处理重定向">7</a> <span class="divider">|</span> <a href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">8</a> <span class="divider">|</span> <a href="alltogether.html" title="11.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="11.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="review.html">避免通过 HTTP 重复地获取数据&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

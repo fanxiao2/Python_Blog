@@ -1,0 +1,179 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>10.5.&nbsp;根据节点类型创建不同的处理器</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;10&nbsp;章&nbsp;脚本和流">
+      <link rel="previous" href="child_nodes.html" title="10.4.&nbsp;查找节点的直接子节点">
+      <link rel="next" href="command_line_arguments.html" title="10.6.&nbsp;处理命令行参数">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">脚本和流</a>&nbsp;&gt;&nbsp;<span class="thispage">根据节点类型创建不同的处理器</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="child_nodes.html" title="上一页: “查找节点的直接子节点”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="command_line_arguments.html" title="下一页: “处理命令行参数”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="kgp.handler"></a>10.5.&nbsp;根据节点类型创建不同的处理器
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>第三个有用的 <span class="acronym">XML</span> 处理技巧是将你的代码基于节点类型和元素名称分散到逻辑函数中。解析后的 <span class="acronym">XML</span> 文档是由各种类型的节点组成的，每一个都是通过 <span class="application">Python</span> 对象表示的。文档本身的根层次通过一个 <tt class="classname">Document</tt> 对象表示。<tt class="classname">Document</tt> 还包含了一个或多个 <tt class="classname">Element</tt> 对象 (表示 <span class="acronym">XML</span> 标记)，其中的每一个可以包含其它的 <tt class="classname">Element</tt> 对象、<tt class="classname">Text</tt> 对象 (表示文本)，或者 <tt class="classname">Comment</tt> 对象 (表示内嵌注释)。使用 <span class="application">Python</span> 编写分离各个节点类型逻辑的分发器非常容易。
+            </p>
+         </div>
+         <div class="example"><a name="d0e26817"></a><h3 class="title">例&nbsp;10.17.&nbsp;已解析 <span class="acronym">XML</span> 对象的类名
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> xml.dom <span class='pykeyword'>import</span> minidom</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc = minidom.parse(<span class='pystring'>'kant.xml'</span>)</span> <a name="kgp.handler.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc</span>
+<span class="computeroutput">&lt;xml.dom.minidom.Document instance at 0x01359DE8&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc.__class__</span>                   <a name="kgp.handler.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">&lt;class xml.dom.minidom.Document at 0x01105D40&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc.__class__.__name__</span>          <a name="kgp.handler.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'Document'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">暂时假设 <tt class="filename">kant.xml</tt> 在当前目录中。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你在<a href="../xml_processing/packages.html" title="9.2.&nbsp;包">第&nbsp;9.2&nbsp;节 “包”</a>中看到的，解析 <span class="acronym">XML</span> 文档返回的对象是一个 <tt class="classname">Document</tt> 对象，就像在 <tt class="filename">xml.dom</tt> 包的 <tt class="filename">minidom.py</tt> 中定义的一样。又如你在<a href="../object_oriented_framework/instantiating_classes.html" title="5.4.&nbsp;类的实例化">第&nbsp;5.4&nbsp;节 “类的实例化”</a>中看到的，<tt class="literal">__class__</tt> 是每个 <span class="application">Python</span> 对象的一个内置属性。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">此外，<tt class="literal">__name__</tt> 是每个 <span class="application">Python</span> 类的内置属性，是一个字符串。这个字符串并不神秘；它和你在定义类时输入的类名相同。(参见<a href="../object_oriented_framework/defining_classes.html" title="5.3.&nbsp;类的定义">第&nbsp;5.3&nbsp;节 “类的定义”</a>。)
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>好，现在你能够得到任何给定 <span class="acronym">XML</span> 节点的类名了 (因为每个 <span class="acronym">XML</span> 节点都是以一个 <span class="application">Python</span> 对象表示的)。你怎样才能利用这点来分离解析每个节点类型的逻辑呢？答案就是 <tt class="function">getattr</tt>，你第一次见它是在<a href="../power_of_introspection/getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用">第&nbsp;4.4&nbsp;节 “通过 getattr 获取对象引用”</a>中。
+         </p>
+         <div class="example"><a name="d0e26923"></a><h3 class="title">例&nbsp;10.18.&nbsp;<tt class="function">parse</tt>，通用 <span class="acronym">XML</span> 节点分发器
+            </h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> parse</span>(self, node):          
+        parseMethod = getattr(self, <span class='pystring'>"parse_%s"</span> % node.__class__.__name__) <a name="kgp.handler.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"> <a name="kgp.handler.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        parseMethod(node) <a name="kgp.handler.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">首先，注意你正在基于传入节点 (<tt class="varname">node</tt> 参数) 的类名构造一个较大的字符串。所以如果你传入一个 <tt class="classname">Document</tt> 节点，你就构造了字符串 <tt class="literal">'parse_Document'</tt>，其它类同于此。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在你可以把这个字符串当作一个函数名称，然后通过 <tt class="function">getattr</tt> 得到函数自身的引用。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">最后，你可以调用函数并将节点自身作为参数传入。下一个例子将展示每个函数的定义。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e26960"></a><h3 class="title">例&nbsp;10.19.&nbsp;<tt class="function">parse</tt> 分发器调用的函数
+            </h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> parse_Document</span>(self, node): <a name="kgp.handler.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        self.parse(node.documentElement)
+
+    <span class='pykeyword'>def</span><span class='pyclass'> parse_Text</span>(self, node):    <a name="kgp.handler.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        text = node.data
+        <span class='pykeyword'>if</span> self.capitalizeNextWord:
+            self.pieces.append(text[0].upper())
+            self.pieces.append(text[1:])
+            self.capitalizeNextWord = 0
+        <span class='pykeyword'>else</span>:
+            self.pieces.append(text)
+
+    <span class='pykeyword'>def</span><span class='pyclass'> parse_Comment</span>(self, node): <a name="kgp.handler.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        <span class='pykeyword'>pass</span>
+
+    <span class='pykeyword'>def</span><span class='pyclass'> parse_Element</span>(self, node): <a name="kgp.handler.3.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+        handlerMethod = getattr(self, <span class='pystring'>"do_%s"</span> % node.tagName)
+        handlerMethod(node)</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">parse_Document</tt> 只会被调用一次，因为在一个 <span class="acronym">XML</span> 文档中只有一个 <tt class="classname">Document</tt> 节点，并且在已解析 <span class="acronym">XML</span> 的表示中只有一个 <tt class="classname">Document</tt> 对象。在此它只是起到中转作用，转而解析语法文件的根元素。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">parse_Text</tt> 在节点表示文本时被调用。这个函数本身做某种特殊处理，自动将句子的第一个单词进行大写处理，而不是简单地将表示的文本追加到一个列表中。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">parse_Comment</tt> 只有一个 <tt class="literal">pass</tt>，因为你并不关心语法文件中嵌入的注释。但是注意，你还是要定义这个函数并显式地让它不做任何事情。如果这个函数不存在，通用 <tt class="function">parse</tt> 函数在遇到一个注释的时候会执行失败，因为它试图找到并不存在的 <tt class="function">parse_Comment</tt> 函数。为每个节点类型定义独立的函数――甚至你不要使用的――将会使通用 <tt class="function">parse</tt> 函数保持简单和沉默。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.handler.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">parse_Element</tt> 方法其实本身就是一个分发器，一个基于元素的标记名称的分发器。这个基本概念是相同的：使用元素的区别 (它们的标记名称) 然后针对每一个分发到一个独立的函数。你构建了一个类似于 <tt class="literal">'do_xref'</tt> 的字符串 (对 <tt class="sgmltag-element">&lt;xref&gt;</tt> 标记而言)，找到这个名称的函数，并调用它。对其它的标记名称 (像<tt class="sgmltag-element">&lt;p&gt;</tt> 和 <tt class="sgmltag-element">&lt;choice&gt;</tt>) 在解析语法文件的时候都可以找到类似的函数。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>在这个例子中，分发函数 <tt class="function">parse</tt> 和 <tt class="function">parse_Element</tt> 只是找到相同类中的其它方法。如果你进行的处理过程很复杂 (或者你有很多不同的标记名称)，你可以将代码分散到独立的模块中，然后使用动态导入的方式导入每个模块并调用你需要的任何函数。动态导入将在<a href="../functional_programming/index.html" title="第&nbsp;16&nbsp;章&nbsp;函数编程">第&nbsp;16&nbsp;章 <i>函数编程</i></a>中介绍。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="child_nodes.html">&lt;&lt;&nbsp;查找节点的直接子节点</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#kgp.openanything" title="10.1.&nbsp;抽象输入源">1</a> <span class="divider">|</span> <a href="stdin_stdout_stderr.html" title="10.2.&nbsp;标准输入、输出和错误">2</a> <span class="divider">|</span> <a href="caching.html" title="10.3.&nbsp;查询缓冲节点">3</a> <span class="divider">|</span> <a href="child_nodes.html" title="10.4.&nbsp;查找节点的直接子节点">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="command_line_arguments.html" title="10.6.&nbsp;处理命令行参数">6</a> <span class="divider">|</span> <a href="all_together.html" title="10.7.&nbsp;全部放在一起">7</a> <span class="divider">|</span> <a href="summary.html" title="10.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="command_line_arguments.html">处理命令行参数&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

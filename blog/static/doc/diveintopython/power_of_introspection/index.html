@@ -1,0 +1,190 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;4&nbsp;章&nbsp;自省的威力</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../native_data_types/summary.html" title="3.8.&nbsp;小结">
+      <link rel="next" href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">自省的威力</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../native_data_types/summary.html" title="上一页: “小结”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="optional_arguments.html" title="下一页: “使用可选参数和命名参数”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="apihelper"></a>第&nbsp;4&nbsp;章&nbsp;自省的威力
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#apihelper.divein">4.1. 概览</a></span></li>
+               <li><span class="section"><a href="optional_arguments.html">4.2. 使用可选参数和命名参数</a></span></li>
+               <li><span class="section"><a href="built_in_functions.html">4.3. 使用 type、str、dir 和其它内置函数</a></span><ul>
+                     <li><span class="section"><a href="built_in_functions.html#d0e8648">4.3.1. type 函数</a></span></li>
+                     <li><span class="section"><a href="built_in_functions.html#d0e8758">4.3.2. str 函数</a></span></li>
+                     <li><span class="section"><a href="built_in_functions.html#d0e9105">4.3.3. 内置函数</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="section"><a href="getattr.html">4.4. 通过 getattr 获取对象引用</a></span><ul>
+                     <li><span class="section"><a href="getattr.html#d0e9345">4.4.1. 用于模块的 getattr</a></span></li>
+                     <li><span class="section"><a href="getattr.html#d0e9513">4.4.2. getattr 作为一个分发者</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="section"><a href="filtering_lists.html">4.5. 过滤列表</a></span></li>
+               <li><span class="section"><a href="and_or.html">4.6. and 和 or 的特殊性质</a></span><ul>
+                     <li><span class="section"><a href="and_or.html#d0e10128">4.6.1. 使用 and-or 技巧</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="section"><a href="lambda_functions.html">4.7. 使用 lambda 函数</a></span><ul>
+                     <li><span class="section"><a href="lambda_functions.html#d0e10549">4.7.1. 真实世界中的 lambda 函数</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="section"><a href="all_together.html">4.8. 全部放在一起</a></span></li>
+               <li><span class="section"><a href="summary.html">4.9. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>本章论述了 <span class="application">Python</span> 众多强大功能之一：自省。正如你所知道的，<a href="../getting_to_know_python/everything_is_an_object.html" title="2.4.&nbsp;万物皆对象"><span class="application">Python</span> 中万物皆对象</a>，自省是指代码可以查看内存中以对象形式存在的其它模块和函数，获取它们的信息，并对它们进行操作。用这种方法，你可以定义没有名称的函数，不按函数声明的参数顺序调用函数，甚至引用事先并不知道名称的函数。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="apihelper.divein"></a>4.1.&nbsp;概览
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="abstract">
+               <p>下面是一个完整可运行的 <span class="application">Python</span> 程序。大概看一下这段程序，你应该可以理解不少了。用数字标出的行阐述了 <a href="../getting_to_know_python/index.html" title="第&nbsp;2&nbsp;章&nbsp;第一个 Python 程序">第&nbsp;2&nbsp;章 <i>第一个 Python 程序</i></a> 中涉及的一些概念。如果剩下来的代码看起来有点奇怪，不用担心，通过阅读本章你将会理解所有这些。
+               </p>
+            </div>
+            <div class="example"><a name="d0e8300"></a><h3 class="title">例&nbsp;4.1.&nbsp;<tt class="filename">apihelper.py</tt></h3>
+               <p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+               </p><pre class="programlisting"><span class='pykeyword'>
+def</span> info(object, spacing=10, collapse=1): <a name="apihelper.intro.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"> <a name="apihelper.intro.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"> <a name="apihelper.intro.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+    <span class='pystring'>"""Print methods and doc strings.
+    
+    Takes module, class, list, dictionary, or string."""</span>
+    methodList = [method <span class='pykeyword'>for</span> method <span class='pykeyword'>in</span> dir(object) <span class='pykeyword'>if</span> callable(getattr(object, method))]
+    processFunc = collapse <span class='pykeyword'>and</span> (<span class='pykeyword'>lambda</span> s: <span class='pystring'>" "</span>.join(s.split())) <span class='pykeyword'>or</span> (<span class='pykeyword'>lambda</span> s: s)
+    <span class='pykeyword'>print</span> <span class='pystring'>"\n"</span>.join([<span class='pystring'>"%s %s"</span> %
+                      (method.ljust(spacing),
+                       processFunc(str(getattr(object, method).__doc__)))
+                     <span class='pykeyword'>for</span> method <span class='pykeyword'>in</span> methodList])
+
+<span class='pykeyword'>if</span> __name__ == <span class='pystring'>"__main__"</span>:                <a name="apihelper.intro.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"> <a name="apihelper.intro.1.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+    <span class='pykeyword'>print</span> info.__doc__</pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.intro.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">该模块有一个声明为 <tt class="function">info</tt> 的函数。根据它的<a href="../getting_to_know_python/declaring_functions.html" title="2.2.&nbsp;函数声明">函数声明</a>可知，它有三个参数： <tt class="varname">object</tt>、<tt class="varname">spacing</tt> 和 <tt class="varname">collapse</tt>。实际上后面两个参数都是可选参数，关于这点你很快就会看到。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.intro.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="function">info</tt> 函数有一个多行的 <a href="../getting_to_know_python/documenting_functions.html" title="2.3.&nbsp;文档化函数"><tt class="literal">doc string</tt></a>，简要地描述了函数的功能。注意这里并没有提到返回值；单独使用这个函数只是为了这个函数产生的效果，并不是为了它的返回值。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.intro.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">函数内的代码是<a href="../getting_to_know_python/indenting_code.html" title="2.5.&nbsp;代码缩进">缩进</a>形式的。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.intro.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="literal"><span class="literal">if</span> <span class="literal">__name__</span></tt> <a href="../getting_to_know_python/testing_modules.html#odbchelper.ifnametrick">技巧</a>允许这个程序在自己独立运行时做些有用的事情，同时又不妨碍作为其它程序的模块使用。在这个例子中，程序只是简单地打印出 <tt class="function">info</tt> 函数的 <tt class="literal">doc string</tt>。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.intro.1.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><a href="../getting_to_know_python/testing_modules.html#odbchelper.ifnametrick"><tt class="literal">if</tt> 语句</a>使用 <tt class="literal">==</tt> 进行比较，而且不需要括号。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p><tt class="function">info</tt> 函数的设计意图是提供给工作在 <span class="application">Python</span> <span class="acronym">IDE</span> 中的开发人员使用，它可以接受任何含有函数或者方法的对象 (比如模块，含有函数，又比如list，含有方法) 作为参数，并打印出对象的所有函数和它们的 <tt class="literal">doc string</tt>。
+            </p>
+            <div class="example"><a name="d0e8396"></a><h3 class="title">例&nbsp;4.2.&nbsp;<tt class="filename">apihelper.py</tt> 的用法示例
+               </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> apihelper <span class='pykeyword'>import</span> info</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = []</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">info(li)</span>
+<span class="computeroutput">append     L.append(object) -- append object to end
+count      L.count(value) -&gt; integer -- return number of occurrences of value
+extend     L.extend(list) -- extend list by appending list elements
+index      L.index(value) -&gt; integer -- return index of first occurrence of value
+insert     L.insert(index, object) -- insert object before index
+pop        L.pop([index]) -&gt; item -- remove and return item at index (default last)
+remove     L.remove(value) -- remove first occurrence of value
+reverse    L.reverse() -- reverse *IN PLACE*
+sort       L.sort([cmpfunc]) -- sort *IN PLACE*; if given, cmpfunc(x, y) -&gt; -1, 0, 1</span></pre></div>
+            <p>缺省地，程序输出进行了格式化处理，以使其易于阅读。多行 <tt class="literal">doc string</tt> 被合并到单行中，要改变这个选项需要指定 <i class="parameter"><tt>collapse</tt></i> 参数的值为 <tt class="constant">0</tt>。如果函数名称长于10个字符，你可以将 <i class="parameter"><tt>spacing</tt></i> 参数的值指定为更大的值以使输出更容易阅读。
+            </p>
+            <div class="example"><a name="d0e8433"></a><h3 class="title">例&nbsp;4.3.&nbsp;<tt class="filename">apihelper.py</tt> 的高级用法
+               </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> odbchelper</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">info(odbchelper)</span>
+<span class="computeroutput">buildConnectionString Build a connection string from a dictionary Returns string.</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">info(odbchelper, 30)</span>
+<span class="computeroutput">buildConnectionString          Build a connection string from a dictionary Returns string.</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">info(odbchelper, 30, 0)</span>
+<span class="computeroutput">buildConnectionString          Build a connection string from a dictionary
+    
+    Returns string.
+</span></pre></div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../native_data_types/summary.html">&lt;&lt;&nbsp;小结</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">2</a> <span class="divider">|</span> <a href="built_in_functions.html" title="4.3.&nbsp;使用 type、str、dir 和其它内置函数">3</a> <span class="divider">|</span> <a href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用">4</a> <span class="divider">|</span> <a href="filtering_lists.html" title="4.5.&nbsp;过滤列表">5</a> <span class="divider">|</span> <a href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质">6</a> <span class="divider">|</span> <a href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">7</a> <span class="divider">|</span> <a href="all_together.html" title="4.8.&nbsp;全部放在一起">8</a> <span class="divider">|</span> <a href="summary.html" title="4.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="optional_arguments.html">使用可选参数和命名参数&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

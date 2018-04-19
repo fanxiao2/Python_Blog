@@ -1,0 +1,223 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>5.6.&nbsp;专用类方法</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;5&nbsp;章&nbsp;对象和面向对象">
+      <link rel="previous" href="userdict.html" title="5.5.&nbsp;探索 UserDict：一个封装类">
+      <link rel="next" href="special_class_methods2.html" title="5.7.&nbsp;高级专用类方法">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">对象和面向对象</a>&nbsp;&gt;&nbsp;<span class="thispage">专用类方法</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="userdict.html" title="上一页: “探索 UserDict：一个封装类”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="special_class_methods2.html" title="下一页: “高级专用类方法”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="fileinfo.specialmethods"></a>5.6.&nbsp;专用类方法
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="special_class_methods.html#d0e13019">5.6.1. 获得和设置数据项</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>除了普通的类方法，<span class="application">Python</span> 类还可以定义专用方法。专用方法是在特殊情况下或当使用特别语法时由 <span class="application">Python</span> 替你调用的，而不是在代码中直接调用 (像普通的方法那样)。
+            </p>
+         </div>
+         <p>就像你在<a href="userdict.html" title="5.5.&nbsp;探索 UserDict：一个封装类">上一节</a>所看到的，普通的方法对在类中封装字典很有帮助。但是只有普通方法是不够的，因为除了对字典调用方法之外，还有很多事情可以做的。例如，你可以通过一种没有包括明确方法调用的语法来<a href="../native_data_types/index.html#odbchelper.dict.define" title="例&nbsp;3.1.&nbsp;定义 Dictionary">获得</a>和<a href="../native_data_types/index.html#odbchelper.dict.modify" title="例&nbsp;3.2.&nbsp;修改 Dictionary">设置</a>数据项。这就是专用方法产生的原因：它们提供了一种方法，可以将非方法调用语法映射到方法调用上。
+         </p>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e13019"></a>5.6.1.&nbsp;获得和设置数据项
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="example"><a name="d0e13022"></a><h3 class="title">例&nbsp;5.12.&nbsp;<tt class="function">__getitem__</tt> 专用方法
+               </h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> __getitem__</span>(self, key): <span class='pykeyword'>return</span> self.data[key]</pre><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f = fileinfo.FileInfo(<span class='pystring'>"/music/_singles/kairo.mp3"</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f</span>
+<span class="computeroutput">{'name':'/music/_singles/kairo.mp3'}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.__getitem__(<span class='pystring'>"name"</span>)</span> <a name="fileinfo.specialmethods.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'/music/_singles/kairo.mp3'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f[<span class='pystring'>"name"</span>]</span>             <a name="fileinfo.specialmethods.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'/music/_singles/kairo.mp3'</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="function">__getitem__</tt> 专用方法很简单。像普通的方法 <tt class="function">clear</tt>，<tt class="function">keys</tt> 和 <tt class="function">values</tt> 一样，它只是重定向到字典，返回字典的值。但是怎么调用它呢？哦，你可以直接调用 <tt class="function">__getitem__</tt>，但是在实际中你其实不会那样做：我在这里执行它只是要告诉你它是如何工作的。正确地使用 <tt class="function">__getitem__</tt> 的方法是让 <span class="application">Python</span> 来替你调用。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">这个看上去就像你用来<a href="../native_data_types/index.html#odbchelper.dict.define" title="例&nbsp;3.1.&nbsp;定义 Dictionary">得到一个字典值</a>的语法，事实上它返回你期望的值。下面是隐藏起来的一个环节：暗地里，<span class="application">Python</span> 已经将这个语法转化为 <tt class="literal">f.__getitem__("name")</tt> 的方法调用。这就是为什么 <tt class="function">__getitem__</tt> 是一个专用类方法的原因，不仅仅是你可以自已调用它，还可以通过使用正确的语法让 <span class="application">Python</span> 来替你调用。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>当然，<span class="application">Python</span> 有一个与 <tt class="function">__getitem__</tt> 类似的 <tt class="function">__setitem__</tt> 专用方法，参见下面的例子。
+            </p>
+            <div class="example"><a name="fileinfo.specialmethods.setitem.example"></a><h3 class="title">例&nbsp;5.13.&nbsp;<tt class="function">__setitem__</tt> 专用方法
+               </h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> __setitem__</span>(self, key, item): self.data[key] = item</pre><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f</span>
+<span class="computeroutput">{'name':'/music/_singles/kairo.mp3'}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.__setitem__(<span class='pystring'>"genre"</span>, 31)</span> <a name="fileinfo.specialmethods.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f</span>
+<span class="computeroutput">{'name':'/music/_singles/kairo.mp3', 'genre':31}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f[<span class='pystring'>"genre"</span>] = 32</span>            <a name="fileinfo.specialmethods.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f</span>
+<span class="computeroutput">{'name':'/music/_singles/kairo.mp3', 'genre':32}</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">与 <tt class="function">__getitem__</tt> 方法一样，<tt class="function">__setitem__</tt> 简单地重定向到真正的字典 <tt class="varname">self.data</tt> ，让它来进行工作。并且像 <tt class="function">__getitem__</tt> 一样，通常你不会直接调用它，当你使用了正确的语法，<span class="application">Python</span> 会替你调用 <tt class="function">__setitem__</tt> 。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">这个看上去像正常的字典语法，当然除了 <tt class="varname">f</tt> 实际上是一个类，它尽可能地打扮成一个字典，并且 <tt class="function">__setitem__</tt> 是打扮的一个重点。这行代码实际上暗地里调用了 <tt class="literal">f.__setitem__("genre", 32)</tt>。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p><tt class="function">__setitem__</tt> 是一个专用类方法，因为它可以让 <span class="application">Python</span> 来替你调用，但是它仍然是一个类方法。就像在 <tt class="classname">UserDict</tt> 中定义 <tt class="function">__setitem__</tt> 方法一样容易，我们可以在子类中重新定义它，对父类的方法进行覆盖。这就允许我们定义出在某些方面像字典一样动作的类，但是可以定义它自已的行为，超过和超出内置的字典。
+            </p>
+            <p>这个概念是本章中我们正在学习的整个框架的基础。每个文件类型可以拥有一个处理器类，这些类知道如何从一个特殊的文类型得到元数据。只要知道了某些属性 (像文件名和位置)，处理器类就知道如何自动地得到其它的属性。它的实现是通过覆盖 <tt class="function">__setitem__</tt> 方法，检查特别的关键字，然后当找到后加入额外的处理。
+            </p>
+            <p>例如，<tt class="classname">MP3FileInfo</tt> 是 <tt class="classname">FileInfo</tt> 的子类。在设置了一个 <tt class="classname">MP3FileInfo</tt> 类的 <tt class="literal">name</tt> 时，并不只是设置 <tt class="literal">name</tt> 关键字 (像父类 <tt class="classname">FileInfo</tt> 所做的)，它还要在文件自身内进行搜索 <span class="abbrev">MP3</span> 的标记然后填充一整套关键字。下面的例子将展示其工作方式。
+            </p>
+            <div class="example"><a name="d0e13235"></a><h3 class="title">例&nbsp;5.14.&nbsp;在 <tt class="classname">MP3FileInfo</tt> 中覆盖 <tt class="function">__setitem__</tt></h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> __setitem__</span>(self, key, item):         <a name="fileinfo.specialmethods.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> key == <span class='pystring'>"name"</span> <span class='pykeyword'>and</span> item:            <a name="fileinfo.specialmethods.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+            self.__parse(item)                <a name="fileinfo.specialmethods.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        FileInfo.__setitem__(self, key, item) <a name="fileinfo.specialmethods.3.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">注意我们的 <tt class="function">__setitem__</tt> 方法严格按照与父类方法相同的形式进行定义。这一点很重要，因为 <span class="application">Python</span> 将替你执行方法，而它希望这个函数用确定个数的参数进行定义。(从技术上说，参数的名字没有关系，只是个数。)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">这里就是整个 <tt class="classname">MP3FileInfo</tt> 类的难点：如果给 <tt class="literal">name</tt> 关键字赋一个值，我们还想做些额外的事情。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">我们对 <tt class="literal">name</tt> 所做的额外处理封装在了 <tt class="function">__parse</tt> 方法中。这是定义在 <tt class="classname">MP3FileInfo</tt> 中的另一个类方法，则当我们调用它时，我们用 <tt class="varname">self</tt> 对其限定。仅是调用 <tt class="function">__parse</tt> 将只会看成定义在类外的普通方法，调用 <tt class="function">self.__parse</tt> 将会看成定义在类中的一个类方法。这不是什么新东西，你用同样的方法来引用<a href="userdict.html#fileinfo.userdict.normalmethods" title="例&nbsp;5.10.&nbsp;UserDict 常规方法">数据属性</a>。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">在做完我们额外的处理之后，我们需要调用父类的方法。记住，在 <span class="application">Python</span> 中不会自动为你完成，需手工执行。注意，我们在调用直接父类，<tt class="classname">FileInfo</tt>，尽管它没有 <tt class="function">__setitem__</tt> 方法。没问题，因为 <span class="application">Python</span> 将会沿着父类树走，直到它找到一个拥有我们正在调用方法的类，所以这行代码最终会找到并且调用定义在 <tt class="classname">UserDict</tt> 中的 <tt class="function">__setitem__</tt>。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div><a name="tip.self.call"></a><table class="note" border="0" summary="">
+               <tr>
+                  <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+               </tr>
+               <tr>
+                  <td colspan="2" align="left" valign="top" width="99%">当在一个类中存取数据属性时，你需要限定属性名：<tt class="literal">self.<i class="replaceable">attribute</i></tt>。当调用类中的其它方法时，你属要限定方法名：<tt class="literal">self.<i class="replaceable">method</i></tt>。
+                  </td>
+               </tr>
+            </table>
+            <div class="example"><a name="fileinfo.specialmethods.setname"></a><h3 class="title">例&nbsp;5.15.&nbsp;设置 <tt class="classname">MP3FileInfo</tt> 的 <tt class="literal">name</tt></h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> fileinfo</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">mp3file = fileinfo.MP3FileInfo()</span>                   <a name="fileinfo.specialmethods.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">mp3file</span>
+<span class="computeroutput">{'name':None}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">mp3file[<span class='pystring'>"name"</span>] = <span class='pystring'>"/music/_singles/kairo.mp3"</span></span>      <a name="fileinfo.specialmethods.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">mp3file</span>
+<span class="computeroutput">{'album': 'Rave Mix', 'artist': '***DJ MARY-JANE***', 'genre': 31,
+'title': 'KAIRO****THE BEST GOA', 'name': '/music/_singles/kairo.mp3',
+'year': '2000', 'comment': 'http://mp3.com/DJMARYJANE'}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">mp3file[<span class='pystring'>"name"</span>] = <span class='pystring'>"/music/_singles/sidewinder.mp3"</span></span> <a name="fileinfo.specialmethods.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">mp3file</span>
+<span class="computeroutput">{'album': '', 'artist': 'The Cynic Project', 'genre': 18, 'title': 'Sidewinder', 
+'name': '/music/_singles/sidewinder.mp3', 'year': '2000', 
+'comment': 'http://mp3.com/cynicproject'}</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">首先，我们创建了一个 <tt class="classname">MP3FileInfo</tt> 的实例，没有传递给它文件名。(我们可以不用它，因为 <tt class="function">__init__</tt> 方法的 <tt class="varname">filename</tt> 参数是<a href="../power_of_introspection/optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">可选的</a>。) 因为 <tt class="classname">MP3FileInfo</tt> 没有它自已的 <tt class="function">__init__</tt> 方法，<span class="application">Python</span> 沿着父类树走，发现了 <tt class="classname">FileInfo</tt> 的 <tt class="function">__init__</tt> 方法。这个 <tt class="function">__init__</tt> 方法手工调用了 <tt class="classname">UserDict</tt> 的 <tt class="function">__init__</tt> 方法，然后设置 <tt class="literal">name</tt> 关键字为 <tt class="varname">filename</tt>，它为 <tt class="literal">None</tt>，因为我们还没有传入一个文件名。所以，<tt class="varname">mp3file</tt> 最初看上去像是有一个关键字的字典，<tt class="literal">name</tt> 的值为 <tt class="literal">None</tt>。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">现在真正有趣的开始了。设置 <tt class="varname">mp3file</tt> 的 <tt class="literal">name</tt> 关键字触发了 <tt class="classname">MP3FileInfo</tt> 上的 <tt class="function">__setitem__</tt> 方法 (而不是 <tt class="classname">UserDict</tt> 的)，这个方法注意到我们正在用一个真实的值来设置 <tt class="literal">name</tt> 关键字，接着调用 <tt class="function">self.__parse</tt>。尽管我们完全还没有研究过 <tt class="function">__parse</tt> 方法，从它的输出你可以看出，它设置了其它几个关键字：<tt class="literal">album</tt>、<tt class="literal">artist</tt>、<tt class="literal">genre</tt>、<tt class="literal">title</tt>、<tt class="literal">year</tt> 和 <tt class="literal">comment</tt>。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.specialmethods.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">修改 <tt class="literal">name</tt> 关键字将再次经受同样的处理过程：<span class="application">Python</span> 调用 <tt class="function">__setitem__</tt>，<tt class="function">__setitem__</tt>调用 <tt class="function">self.__parse</tt>，<tt class="function">self.__parse</tt> 设置其它所有的关键字。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="userdict.html">&lt;&lt;&nbsp;探索 UserDict：一个封装类</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#fileinfo.divein" title="5.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="importing_modules.html" title="5.2.&nbsp;使用 from module import 导入模块">2</a> <span class="divider">|</span> <a href="defining_classes.html" title="5.3.&nbsp;类的定义">3</a> <span class="divider">|</span> <a href="instantiating_classes.html" title="5.4.&nbsp;类的实例化">4</a> <span class="divider">|</span> <a href="userdict.html" title="5.5.&nbsp;探索 UserDict：一个封装类">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="special_class_methods2.html" title="5.7.&nbsp;高级专用类方法">7</a> <span class="divider">|</span> <a href="class_attributes.html" title="5.8.&nbsp;类属性介绍">8</a> <span class="divider">|</span> <a href="private_functions.html" title="5.9.&nbsp;私有函数">9</a> <span class="divider">|</span> <a href="summary.html" title="5.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="special_class_methods2.html">高级专用类方法&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

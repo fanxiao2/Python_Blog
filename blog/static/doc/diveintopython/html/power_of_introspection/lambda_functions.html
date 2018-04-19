@@ -1,0 +1,181 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>4.7.&nbsp;使用 lambda 函数</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;4&nbsp;章&nbsp;自省的威力">
+      <link rel="previous" href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质">
+      <link rel="next" href="all_together.html" title="4.8.&nbsp;全部放在一起">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">自省的威力</a>&nbsp;&gt;&nbsp;<span class="thispage">使用 lambda 函数</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="and_or.html" title="上一页: “and 和 or 的特殊性质”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="all_together.html" title="下一页: “全部放在一起”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="apihelper.lambda"></a>4.7.&nbsp;使用 <tt class="literal">lambda</tt> 函数
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="lambda_functions.html#d0e10549">4.7.1. 真实世界中的 lambda 函数</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p><span class="application">Python</span> 支持一种有趣的语法，它允许你快速定义单行的最小函数。这些叫做 <tt class="literal">lambda</tt> 的函数，是从 <span class="application">Lisp</span> 借用来的，可以用在任何需要函数的地方。
+            </p>
+         </div>
+         <div class="example"><a name="d0e10455"></a><h3 class="title">例&nbsp;4.20.&nbsp;<tt class="literal">lambda</tt> 函数介绍
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>def</span><span class='pyclass'> f</span>(x):</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>return</span> x*2</span>
+<tt class="prompt">...     </tt><span class="userinput"></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f(3)</span>
+<span class="computeroutput">6</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">g = <span class='pykeyword'>lambda</span> x: x*2</span>  <a name="apihelper.lambda.1.2"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">g(3)</span>
+<span class="computeroutput">6</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>(lambda</span> x: x*2)(3)</span> <a name="apihelper.lambda.1.3"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">6</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.lambda.1.2"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是一个 <tt class="literal">lambda</tt> 函数，完成同上面普通函数相同的事情。注意这里的简短的语法：在参数列表周围没有括号，而且忽略了 <tt class="literal">return</tt> 关键字 (隐含存在，因为整个函数只有一行)。而且，该函数没有函数名称，但是可以将它赋值给一个变量进行调用。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.lambda.1.3"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用 <tt class="literal">lambda</tt> 函数时甚至不需要将它赋值给一个变量。这可能不是世上最有用的东西，它只是展示了 <tt class="literal">lambda</tt> 函数只是一个内联函数。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>总的来说，<tt class="literal">lambda</tt> 函数可以接收任意多个参数 (包括<a href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">可选参数</a>) 并且返回单个表达式的值。<tt class="literal">lambda</tt> 函数不能包含命令，包含的表达式不能超过一个。不要试图向 <tt class="literal">lambda</tt> 函数中塞入太多的东西；如果你需要更复杂的东西，应该定义一个普通函数，然后想让它多长就多长。
+         </p><a name="tip.lambda"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%"><tt class="literal">lambda</tt> 函数是一种风格问题。不一定非要使用它们；任何能够使用它们的地方，都可以定义一个单独的普通函数来进行替换。我将它们用在需要封装特殊的、非重用代码上，避免令我的代码充斥着大量单行函数。
+               </td>
+            </tr>
+         </table>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e10549"></a>4.7.1.&nbsp;真实世界中的 <tt class="literal">lambda</tt> 函数
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="informalexample">
+               <p><tt class="filename">apihelper.py</tt> 中的 <tt class="literal">lambda</tt> 函数：
+               </p><pre class="programlisting">
+    processFunc = collapse <span class='pykeyword'>and</span> (<span class='pykeyword'>lambda</span> s: <span class='pystring'>" "</span>.join(s.split())) <span class='pykeyword'>or</span> (<span class='pykeyword'>lambda</span> s: s)</pre></div>
+            <p>注意这里使用了 <a href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质"><tt class="literal">and-or</tt></a> 技巧的简单形式，它是没问题的，因为 <tt class="literal">lambda</tt> 函数<a href="../native_data_types/lists.html#tip.boolean">在布尔环境中</a>总是为真。(这并不意味这 <tt class="literal">lambda</tt> 函数不能返回假值。这个函数对象的布尔值为真；它的返回值可以是任何东西。)
+            </p>
+            <p>还要注意的是使用了没有参数的 <tt class="function">split</tt> 函数。你已经看到过它带<a href="../native_data_types/joining_lists.html#odbchelper.split.example" title="例&nbsp;3.28.&nbsp;分割字符串">一个或者两个参数</a>的使用，但是不带参数它按空白进行分割。
+            </p>
+            <div class="example"><a name="d0e10589"></a><h3 class="title">例&nbsp;4.21.&nbsp;<tt class="function">split</tt> 不带参数
+               </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s = <span class='pystring'>"this   is\na\ttest"</span></span>  <a name="apihelper.split.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> s</span>
+<span class="computeroutput">this   is
+a	test</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> s.split()</span>           <a name="apihelper.split.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">['this', 'is', 'a', 'test']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>" "</span>.join(s.split())</span> <a name="apihelper.split.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'this is a test'</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.split.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">这是一个多行字符串，通过使用转义字符的定义代替了<a href="../getting_to_know_python/documenting_functions.html#odbchelper.triplequotes" title="例&nbsp;2.2.&nbsp;定义 buildConnectionString 函数的 doc string">三重引号</a>。<tt class="literal">\n</tt> 是一个回车，<tt class="literal">\t</tt> 是一个制表符。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.split.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">不带参数的 <tt class="function">split</tt> 按照空白进行分割。所以三个空格、一个回车和一个制表符都是一样的。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.split.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">通过 <tt class="function">split</tt> 分割字符串你可以将空格统一化；然后再以单个空格作为分隔符用 <tt class="function">join</tt> 将其重新连接起来。这也就是 <tt class="function">info</tt> 函数将多行 <tt class="literal">doc string</tt> 合并成单行所做的事情。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>那么 <tt class="function">info</tt> 函数到底用这些 <tt class="literal">lambda</tt> 函数、<tt class="function">split</tt> 函数和 <tt class="literal">and-or</tt> 技巧做了些什么呢？
+            </p>
+            <div class="informalexample"><a name="apihelper.funcassign"></a><pre class="programlisting">
+    processFunc = collapse <span class='pykeyword'>and</span> (<span class='pykeyword'>lambda</span> s: <span class='pystring'>" "</span>.join(s.split())) <span class='pykeyword'>or</span> (<span class='pykeyword'>lambda</span> s: s)</pre></div>
+            <p><tt class="varname">processFunc</tt> 现在是一个函数，但是它到底是哪一个函数还要取决于 <tt class="varname">collapse</tt> 变量。如果 <tt class="varname">collapse</tt> 为真，<tt class="literal"><tt class="varname">processFunc</tt>(<i class="replaceable">string</i>)</tt> 将压缩空白；否则 <tt class="literal"><tt class="varname">processFunc</tt>(<i class="replaceable">string</i>)</tt> 将返回未改变的参数。
+            </p>
+            <p>在一个不很健壮的语言中实现它，像 <span class="application">Visual Basic</span>，你很有可能要创建一个函数，接受一个字符串参数和一个 <i class="parameter"><tt>collapse</tt></i> 参数，并使用 <tt class="literal">if</tt> 语句确定是否压缩空白，然后再返回相应的值。这种方式是低效的，因为函数可能需要处理每一种可能的情况。每次你调用它，它将不得不在给出你所想要的东西之前，判断是否要压缩空白。在 <span class="application">Python</span> 中，你可以将决策逻辑拿到函数外面，而定义一个裁减过的 <tt class="literal">lambda</tt> 函数提供确切的 (唯一的) 你想要的。这种方式更为高效、更为优雅，而且很少引起那些令人讨厌 (哦，想到那些参数就头昏) 的错误。
+            </p>
+            <div class="furtherreading">
+               <h3><tt class="literal">lambda</tt> 函数进一步阅读
+               </h3>
+               <ul>
+                  <li><a href="http://www.faqts.com/knowledge-base/index.phtml/fid/199/"><span class="application">Python</span> Knowledge Base</a> 讨论了使用 <tt class="literal">lambda</tt> 来<a href="http://www.faqts.com/knowledge-base/view.phtml/aid/6081/fid/241">间接调用函数</a>。
+                  </li>
+                  <li><a href="http://www.python.org/doc/current/tut/tut.html"><i class="citetitle"><span class="application">Python</span> Tutorial</i></a> 演示了如何<a href="http://www.python.org/doc/current/tut/node6.html#SECTION006740000000000000000">从一个 <tt class="literal">lambda</tt> 函数内部访问外部变量</a>。(<a href="http://python.sourceforge.net/peps/pep-0227.html"><span class="acronym">PEP</span> 227</a> 解释了在 <span class="application">Python</span> 的未来版本中将如何变化。)
+                  </li>
+                  <li><a href="http://www.python.org/doc/FAQ.html"><i class="citetitle">The Whole <span class="application">Python</span> <span class="acronym">FAQ</span></i></a> 有关于<a href="http://www.python.org/cgi-bin/faqw.py?query=4.15&querytype=simple&casefold=yes&req=search">令人模糊的使用 <tt class="literal">lambda</tt> 单行语句</a>的例子。
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="and_or.html">&lt;&lt;&nbsp;and 和 or 的特殊性质</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#apihelper.divein" title="4.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">2</a> <span class="divider">|</span> <a href="built_in_functions.html" title="4.3.&nbsp;使用 type、str、dir 和其它内置函数">3</a> <span class="divider">|</span> <a href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用">4</a> <span class="divider">|</span> <a href="filtering_lists.html" title="4.5.&nbsp;过滤列表">5</a> <span class="divider">|</span> <a href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质">6</a> <span class="divider">|</span> <span class="thispage">7</span> <span class="divider">|</span> <a href="all_together.html" title="4.8.&nbsp;全部放在一起">8</a> <span class="divider">|</span> <a href="summary.html" title="4.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="all_together.html">全部放在一起&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

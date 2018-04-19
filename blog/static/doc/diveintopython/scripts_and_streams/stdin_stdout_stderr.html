@@ -1,0 +1,305 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>10.2.&nbsp;标准输入、输出和错误</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;10&nbsp;章&nbsp;脚本和流">
+      <link rel="previous" href="index.html" title="第&nbsp;10&nbsp;章&nbsp;脚本和流">
+      <link rel="next" href="caching.html" title="10.3.&nbsp;查询缓冲节点">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">脚本和流</a>&nbsp;&gt;&nbsp;<span class="thispage">标准输入、输出和错误</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="index.html" title="上一页: “脚本和流”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="caching.html" title="下一页: “查询缓冲节点”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="kgp.stdio"></a>10.2.&nbsp;标准输入、输出和错误
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><span class="acronym">UNIX</span> 用户已经对标准输入、标准输出和标准错误的概念非常熟悉了。这一节是为其他不熟悉的人准备的。
+            </p>
+         </div>
+         <p>标准输入和标准错误 (通常缩写为 <tt class="literal">stdout</tt> 和 <tt class="literal">stderr</tt>) 是内建在每一个 <span class="acronym">UNIX</span> 系统中的管道。当你 <tt class="function">print</tt> 某些东西时，结果前往 <tt class="literal">stdout</tt> 管道；当你的程序崩溃并打印出调试信息 (例如 <span class="application">Python</span> 中的 traceback (错误跟踪)) 的时候，信息前往 <tt class="literal">stderr</tt> 管道。通常这两个管道只与你正在工作的终端窗口相联，所以当一个程序打印时，你可以看到输出，而当一个程序崩溃时，你可以看到调试信息。(如果你正在一个基于窗口的 <span class="application">Python</span> <span class="acronym">IDE</span> 上工作，<tt class="literal">stdout</tt> 和 <tt class="literal">stderr</tt> 缺省为你的“<span class="quote">交互窗口</span>”。)
+         </p>
+         <div class="example"><a name="d0e25966"></a><h3 class="title">例&nbsp;10.8.&nbsp;<tt class="literal">stdout</tt> 和 <tt class="literal">stderr</tt> 介绍
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> i <span class='pykeyword'>in</span> range(3):</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>'Dive in'</span></span>             <a name="kgp.stdio.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">Dive in
+Dive in
+Dive in</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> sys</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> i <span class='pykeyword'>in</span> range(3):</span>
+<tt class="prompt">...     </tt><span class="userinput">sys.stdout.write(<span class='pystring'>'Dive in'</span>)</span> <a name="kgp.stdio.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">Dive inDive inDive in</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> i <span class='pykeyword'>in</span> range(3):</span>
+<tt class="prompt">...     </tt><span class="userinput">sys.stderr.write(<span class='pystring'>'Dive in'</span>)</span> <a name="kgp.stdio.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">Dive inDive inDive in</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如在<a href="../file_handling/for_loops.html#fileinfo.for.counter" title="例&nbsp;6.9.&nbsp;简单计数">例&nbsp;6.9 “简单计数”</a>中看到的，你可以使用 <span class="application">Python</span> 内置的 <tt class="function">range</tt> 函数来构造简单的计数循环，即重复某物一定的次数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">stdout</tt> 是一个类文件对象；调用它的 <tt class="function">write</tt> 函数可以打印出你给定的任何字符串。实际上，这就是 <tt class="function">print</tt> 函数真正做的事情；它在你打印的字符串后面加上一个硬回车，然后调用 <tt class="function">sys.stdout.write</tt> 函数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在最简单的例子中，<tt class="literal">stdout</tt> 和 <tt class="literal">stderr</tt> 把它们的输出发送到相同的地方：<span class="application">Python</span> <span class="acronym">IDE</span> (如果你在一个 <span class="acronym">IDE</span> 中的话)，或者终端 (如果你从命令行运行 <span class="application">Python</span> 的话)。和 <tt class="literal">stdout</tt> 一样，<tt class="literal">stderr</tt> 并不为你添加硬回车；如果需要，要自己加上。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p><tt class="literal">stdout</tt> 和 <tt class="literal">stderr</tt> 都是类文件对象，就像在<a href="index.html#kgp.openanything" title="10.1.&nbsp;抽象输入源">第&nbsp;10.1&nbsp;节 “抽象输入源”</a>中讨论的一样，但是它们都是只写的。它们都没有 <tt class="function">read</tt> 方法，只有 <tt class="function">write</tt> 方法。然而，它们仍然是类文件对象，因此你可以将其它任何 (类) 文件对象赋值给它们来重定向其输出。
+         </p>
+         <div class="example"><a name="d0e26093"></a><h3 class="title">例&nbsp;10.9.&nbsp;重定向输出</h3><pre class="screen">
+<tt class="prompt">[you@localhost kgp]$ </tt><span class="userinput">python stdout.py</span>
+<span class="computeroutput">Dive in</span>
+<tt class="prompt">[you@localhost kgp]$ </tt><span class="userinput">cat out.log</span>
+<span class="computeroutput">This message will be logged instead of displayed</span></pre><p>(在 Windows 上，你要使用 <tt class="literal">type</tt> 来代替 <tt class="literal">cat</tt> 显示文件的内容。)
+            </p>
+            <p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+            </p><pre class="programlisting">
+<span class='pycomment'>#stdout.py</span>
+<span class='pykeyword'>import</span> sys
+
+<span class='pykeyword'>print</span> <span class='pystring'>'Dive in'</span>                                          <a name="kgp.stdio.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+saveout = sys.stdout                                     <a name="kgp.stdio.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+fsock = open(<span class='pystring'>'out.log'</span>, <span class='pystring'>'w'</span>)                             <a name="kgp.stdio.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+sys.stdout = fsock                                       <a name="kgp.stdio.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"><span class='pykeyword'>
+print</span> <span class='pystring'>'This message will be logged instead of displayed'</span> <a name="kgp.stdio.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+sys.stdout = saveout                                     <a name="kgp.stdio.2.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12">
+fsock.close()                                            <a name="kgp.stdio.2.7"></a><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">打印输出到 <span class="acronym">IDE</span> “<span class="quote">交互窗口</span>” (或终端，如果从命令行运行脚本的话)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">始终在重定向前保存 <tt class="literal">stdout</tt>，这样的话之后你还可以将其设回正常。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">打开一个新文件用于写入。如果文件不存在，将会被创建。如果文件存在，将被覆盖。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">所有后续的输出都会被重定向到刚才打开的新文件上。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这样只会将输出结果“<span class="quote">打印</span>”到日志文件中；在 <span class="acronym">IDE</span> 窗口中或在屏幕上不会看到输出结果。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.2.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在我们将 <tt class="literal">stdout</tt> 搞乱之前，让我们把它设回原来的方式。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.2.7"><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">关闭日志文件。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>重定向 <tt class="literal">stderr</tt> 以完全相同的方式进行，只要把 <tt class="function">sys.stdout</tt> 改为 <tt class="function">sys.stderr</tt>。
+         </p>
+         <div class="example"><a name="d0e26193"></a><h3 class="title">例&nbsp;10.10.&nbsp;重定向错误信息</h3><pre class="screen">
+<tt class="prompt">[you@localhost kgp]$ </tt><span class="userinput">python stderr.py</span>
+<tt class="prompt">[you@localhost kgp]$ </tt><span class="userinput">cat error.log</span>
+<span class="computeroutput">Traceback (most recent line last):
+  File "stderr.py", line 5, in ?
+    raise Exception, 'this error will be logged'
+Exception: this error will be logged</span></pre><p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+            </p><pre class="programlisting">
+<span class='pycomment'>#stderr.py</span>
+<span class='pykeyword'>import</span> sys
+
+fsock = open(<span class='pystring'>'error.log'</span>, <span class='pystring'>'w'</span>)               <a name="kgp.stdio.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+sys.stderr = fsock                           <a name="kgp.stdio.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"><span class='pykeyword'>
+raise</span> Exception, <span class='pystring'>'this error will be logged'</span> <a name="kgp.stdio.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"> <a name="kgp.stdio.3.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">打开你要存储调试信息的日志文件。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">将新打开的日志文件的文件对象赋值给 <tt class="literal">stderr</tt> 以重定向标准错误。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">引发一个异常。从屏幕输出上可以注意到这个行为<span class="emphasis"><em>没有</em></span> 在屏幕上打印出任何东西。所有正常的跟踪信息已经写进 <tt class="filename">error.log</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">还要注意你既没有显式关闭日志文件，也没有将 <tt class="literal">stderr</tt> 设回最初的值。这样挺好，因为一旦程序崩溃 (由于引发的异常)，<span class="application">Python</span> 将替我们清理并关闭文件，因此永远不恢复 <tt class="literal">stderr</tt> 不会造成什么影响。然而对于 <tt class="literal">stdout</tt>，恢复初始值相对更为重要――你可能会在后面再次操作标准输出。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>向标准错误写入错误信息是很常见的，所以有一种较快的语法可以立刻导出信息。</p>
+         <div class="example"><a name="kgp.stdio.print.example"></a><h3 class="title">例&nbsp;10.11.&nbsp;打印到 <tt class="literal">stderr</tt></h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>'entering function'</span></span>
+<span class="computeroutput">entering function</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> sys</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> &gt;&gt; sys.stderr, <span class='pystring'>'entering function'</span></span> <a name="kgp.stdio.6.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">entering function</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.6.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">print</tt> 语句的快捷语法可以用于写入任何打开的文件 (或者是类文件对象)。在这里，你可以将单个 <tt class="function">print</tt> 语句重定向到 <tt class="literal">stderr</tt> 而且不用影响后面的 <tt class="function">print</tt> 语句。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>另一方面，标准输入是一个只读文件对象，它表示从前一个程序到这个程序的数据流。这个对于老的 <span class="abbrev">Mac</span> <span class="acronym">OS</span> 用户和 Windows 用户可能不太容易理解，除非你受到过 <span class="acronym">MS-DOS</span> 命令行的影响。在 <span class="acronym">MS-DOS</span> 命令行中，你可以使用一行指令构造一个命令的链，使得一个程序的输出就可以成为下一个程序的输入。第一个程序只是简单地输出到标准输出上 (程序本身没有做任何特别的重定向，只是执行了普通的 <tt class="function">print</tt> 语句等)，然后，下一个程序从标准输入中读取，操作系统就把一个程序的输出连接到一个程序的输入。
+         </p>
+         <div class="example"><a name="d0e26323"></a><h3 class="title">例&nbsp;10.12.&nbsp;链接命令</h3><pre class="screen">
+<tt class="prompt">[you@localhost kgp]$ </tt><span class="userinput">python kgp.py -g binary.xml</span>         <a name="kgp.stdio.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">01100111</span>
+<tt class="prompt">[you@localhost kgp]$ </tt><span class="userinput">cat binary.xml</span>                      <a name="kgp.stdio.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE grammar PUBLIC "-//diveintopython.org//DTD Kant Generator Pro v1.0//EN" "kgp.dtd"&gt;
+&lt;grammar&gt;
+&lt;ref id="bit"&gt;
+  &lt;p&gt;0&lt;/p&gt;
+  &lt;p&gt;1&lt;/p&gt;
+&lt;/ref&gt;
+&lt;ref id="byte"&gt;
+  &lt;p&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;\
+&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;/p&gt;
+&lt;/ref&gt;
+&lt;/grammar&gt;</span>
+<tt class="prompt">[you@localhost kgp]$ </tt><span class="userinput">cat binary.xml | python kgp.py -g -</span> <a name="kgp.stdio.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"> <a name="kgp.stdio.4.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">10110001</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你在<a href="../xml_processing/index.html#kgp.divein" title="9.1.&nbsp;概览">第&nbsp;9.1&nbsp;节 “概览”</a>中看到的，该命令将只打印一个随机的八位字符串，其中只有 <tt class="constant">0</tt> 或者 <tt class="constant">1</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">该处只是简单地打印出整个 <tt class="filename">binary.xml</tt> 文档的内容。(Windows 用户应该用 <tt class="literal">type</tt> 代替 <tt class="literal">cat</tt>。)
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">该处打印 <tt class="filename">binary.xml</tt> 的内容，但是“<span class="quote"><tt class="literal">|</tt></span>”字符，称为“<span class="quote">管道</span>”符，说明内容不会打印到屏幕上；它们会成为下一个命令的标准输入，在这个例子中是你调用的 <span class="application">Python</span> 脚本。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.4.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">为了不用指定一个文件 (例如 <tt class="filename">binary.xml</tt>)，你需要指定“<span class="quote"><tt class="literal">-</tt></span>”，它会使得你的脚本从标准输入载入脚本，而不是从磁盘上的特定文件。 (下一个例子更多地说明了这是如何实现的)。所以效果和第一种语法是一样的，在那里你要直接指定语法文件，但是想想这里的扩展性。让我们把 <tt class="literal">cat binary.xml</tt> 换成别的什么东西――例如运行一个脚本动态生成语法――然后通过管道将它导入你的脚本。它可以来源于任何地方：数据库，或者是生成语法的元脚本，或者其他。你根本不需要修改你的 <tt class="filename">kgp.py</tt> 脚本就可以并入这个功能。你要做的仅仅是从标准输入取得一个语法文件，然后你就可以将其他的逻辑分离出来，放到另一程序中去了。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>那么脚本是如何“<span class="quote">知道</span>”在语法文件是“<span class="quote"><tt class="literal">-</tt></span>”时从标准输入读取? 其实不神奇；它只是代码。
+         </p>
+         <div class="example"><a name="d0e26424"></a><h3 class="title">例&nbsp;10.13.&nbsp;在 <tt class="filename">kgp.py</tt> 中从标准输入读取
+            </h3><pre class="programlisting"><span class='pykeyword'>
+def</span> openAnything(source):
+    <span class='pykeyword'>if</span> source == <span class='pystring'>"-"</span>:    <a name="kgp.stdio.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        <span class='pykeyword'>import</span> sys
+        <span class='pykeyword'>return</span> sys.stdin
+
+    <span class='pycomment'># try to open with urllib (if source is http, ftp, or file URL)</span>
+    <span class='pykeyword'>import</span> urllib
+    <span class='pykeyword'>try</span>:
+
+[... snip ...]</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.stdio.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是 <tt class="filename">toolbox.py</tt> 中的 <tt class="function">openAnything</tt> 函数，以前在<a href="index.html#kgp.openanything" title="10.1.&nbsp;抽象输入源">第&nbsp;10.1&nbsp;节 “抽象输入源”</a>中你已经检视过了。所有你要做的就是在函数的开始加入 3 行代码来检测源是否是“<span class="quote"><tt class="literal">-</tt></span>”；如果是，返回 <tt class="literal">sys.stdin</tt>。就这么简单！记住，<tt class="literal">stdin</tt> 是一个拥有 <tt class="function">read</tt> 方法的类文件对象，所以其它的代码 (在 <tt class="filename">kgp.py</tt> 中，在那里你调用了 <tt class="function">openAnything</tt>) 一点都不需要改动。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="index.html">&lt;&lt;&nbsp;脚本和流</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#kgp.openanything" title="10.1.&nbsp;抽象输入源">1</a> <span class="divider">|</span> <span class="thispage">2</span> <span class="divider">|</span> <a href="caching.html" title="10.3.&nbsp;查询缓冲节点">3</a> <span class="divider">|</span> <a href="child_nodes.html" title="10.4.&nbsp;查找节点的直接子节点">4</a> <span class="divider">|</span> <a href="handlers_by_node_type.html" title="10.5.&nbsp;根据节点类型创建不同的处理器">5</a> <span class="divider">|</span> <a href="command_line_arguments.html" title="10.6.&nbsp;处理命令行参数">6</a> <span class="divider">|</span> <a href="all_together.html" title="10.7.&nbsp;全部放在一起">7</a> <span class="divider">|</span> <a href="summary.html" title="10.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="caching.html">查询缓冲节点&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

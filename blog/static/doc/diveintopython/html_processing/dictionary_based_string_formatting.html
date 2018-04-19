@@ -1,0 +1,162 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>8.6.&nbsp;基于 dictionary 的字符串格式化</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;8&nbsp;章&nbsp;HTML 处理">
+      <link rel="previous" href="locals_and_globals.html" title="8.5.&nbsp;locals 和 globals">
+      <link rel="next" href="quoting_attribute_values.html" title="8.7.&nbsp;给属性值加引号">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTML 处理</a>&nbsp;&gt;&nbsp;<span class="thispage">基于 dictionary 的字符串格式化</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="locals_and_globals.html" title="上一页: “locals 和 globals”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="quoting_attribute_values.html" title="下一页: “给属性值加引号”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="dialect.dictsub"></a>8.6.&nbsp;基于 dictionary 的字符串格式化
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <p>为什么学习 <tt class="function">locals</tt> 和 <tt class="function">globals</tt>？因为接下来就可以学习关于基于 dictionary 的字符串格式化。或许您还能记起，<a href="../native_data_types/formatting_strings.html" title="3.5.&nbsp;格式化字符串">字符串格式化</a>提供了一种将值插入字符串中的一种便捷的方法。值被列在一个 tuple 中，按照顺序插入到字符串中每个格式化标记所在的位置上。尽管这种做法效率高，但还不是最容易阅读的代码，特别是当插入多个值的时候。仅用眼看一遍字符串，您不能马上就明白结果是什么；您需要经常地在字符串和值的
+            tuple 之间进行反复查看。
+         </p>
+         <div class="abstract">
+            <p>有另外一种字符串格式化的形式，它使用 dictionary 而不是值的 tuple。</p>
+         </div>
+         <div class="example"><a name="d0e21685"></a><h3 class="title">例&nbsp;8.13.&nbsp;基于 dictionary 的字符串格式化介绍</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params = {<span class='pystring'>"server"</span>:<span class='pystring'>"mpilgrim"</span>, <span class='pystring'>"database"</span>:<span class='pystring'>"master"</span>, <span class='pystring'>"uid"</span>:<span class='pystring'>"sa"</span>, <span class='pystring'>"pwd"</span>:<span class='pystring'>"secret"</span>}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>"%(pwd)s"</span> % params</span>                                    <a name="dialect.dictsub.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'secret'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>"%(pwd)s is not a good password for %(uid)s"</span> % params</span> <a name="dialect.dictsub.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'secret is not a good password for sa'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>"%(database)s of mind, %(database)s of body"</span> % params</span> <a name="dialect.dictsub.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'master of mind, master of body'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dictsub.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这种字符串格式化形式不用显式的值的 tuple，而是使用一个 dictionary，<tt class="varname">params</tt>。并且标记也不是在字符串中的一个简单 <tt class="literal">%s</tt>，而是包含了一个用括号包围起来的名字。这个名字是 <tt class="varname">params</tt> dictionary 中的一个键字，所以 <tt class="literal">%(pwd)s</tt> 标记被替换成相应的值 <tt class="literal">secret</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dictsub.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">基于 dictionary 的字符串格式化可用于任意数量的有名的键字。每个键字必须在一个给定的 dictionary 中存在，否则这个格式化操作将失败并引发一个 <tt class="errorcode">KeyError</tt> 的异常。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dictsub.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">您甚至可以两次指定同一键字，每个键字出现之处将被同一个值所替换。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>那么为什么您偏要使用基于 dictionary 的字符串格式化呢？的确，仅为了进行字符串格式化，就事先创建一个有键字和值的 dictionary 看上去的确有些小题大作。它的真正最大用处是当您碰巧已经有了像 <a href="locals_and_globals.html" title="8.5.&nbsp;locals 和 globals"><tt class="function">locals</tt></a> 一样的有意义的键字和值的 dictionary 的时候。
+         </p>
+         <div class="example"><a name="dialect.unknownstarttag"></a><h3 class="title">例&nbsp;8.14.&nbsp;<tt class="filename">BaseHTMLProcessor.py</tt> 中的基于 dictionary 的字符串格式化
+            </h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> handle_comment</span>(self, text):        
+        self.pieces.append(<span class='pystring'>"&lt;!--%(text)s--&gt;"</span> % locals()) <a name="dialect.dictsub.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dictsub.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用内置的 <tt class="function">locals</tt> 函数是最普通的基于 dictionary 的字符串格式化的应用。这就是说您可以在您的字符串 (本例中是 <tt class="varname">text</tt>，它作为一个参数传递给类方法) 中使用局部变量的名字，并且每个命名的变量将会被它的值替换。如果 <tt class="varname">text</tt> 是 <tt class="literal">'Begin page footer'</tt>，字符串格式化 <tt class="literal">"&lt;!--%(text)s--&gt;" % locals()</tt> 将得到字符串 <tt class="literal">'&lt;!--Begin page footer--&gt;'</tt>。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e21789"></a><h3 class="title">例&nbsp;8.15.&nbsp;基于 dictionary 的字符串格式化的更多内容</h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> unknown_starttag</span>(self, tag, attrs):
+        strattrs = <span class='pystring'>""</span>.join([<span class='pystring'>' %s="%s"'</span> % (key, value) <span class='pykeyword'>for</span> key, value <span class='pykeyword'>in</span> attrs]) <a name="dialect.dictsub.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        self.pieces.append(<span class='pystring'>"&lt;%(tag)s%(strattrs)s&gt;"</span> % locals())                       <a name="dialect.dictsub.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dictsub.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">当这个模块被调用时，<tt class="varname">attrs</tt> 是一个键/值 tuple 的 list，就像一个 <a href="../native_data_types/mapping_lists.html#odbchelper.items" title="例&nbsp;3.25.&nbsp;keys, values 和 items 函数">dictionary 的 <tt class="function">items</tt></a>。这就意味着我们可以使用<a href="../native_data_types/declaring_variables.html#odbchelper.multiassign" title="3.4.2.&nbsp;一次赋多值">多变量赋值</a>来遍历它。到现在这将是一种熟悉的模式，但是这里有很多东西，让我们分开来看：
+                        <div class="orderedlist">
+                           <ol type="a">
+                              <li>假设 <tt class="varname">attrs</tt> 是 <tt class="literal">[('href', 'index.html'), ('title', 'Go to home page')]</tt>。
+                              </li>
+                              <li>在这个列表解析的第一轮循环中，<tt class="varname">key</tt> 将为 <tt class="literal">'href'</tt>，<tt class="varname">value</tt> 将为 <tt class="literal">'index.html'</tt>。
+                              </li>
+                              <li>字符串格式化 <tt class="literal">'&nbsp;%s="%s"' % (key, value)</tt> 将生成 <tt class="literal">'&nbsp;href="index.html"'</tt>。这个字符串就作为这个列表解析返回值的第一个元素。
+                              </li>
+                              <li>在第二轮中，<tt class="varname">key</tt> 将为 <tt class="literal">'title'</tt>，<tt class="varname">value</tt> 将为 <tt class="literal">'Go to home page'</tt>。
+                              </li>
+                              <li>字符串格式化将生成 <tt class="literal">' title="Go to home page"'</tt>。
+                              </li>
+                              <li>这个 list 理解返回两个生成的字符串 list，并且 <tt class="varname">strattrs</tt> 将把这个 list 的两个元素连接在一起形成 <tt class="literal">'&nbsp;href="index.html" title="Go to home page"'</tt>。
+                              </li>
+                           </ol>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dictsub.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在，使用基于 dictionary 的字符串格式化，我们将 <tt class="varname">tag</tt> 和 <tt class="varname">strattrs</tt> 的值插入到一个字符串中。所以，如果 <tt class="varname">tag</tt> 是 <tt class="literal">'a'</tt>，最终的结果会是 <tt class="literal">'&lt;a href="index.html" title="Go to home page"&gt;'</tt>，并且这就是追加到 <tt class="varname">self.pieces</tt> 后面的东西。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="d0e21898"></a><table class="important" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/important.png" alt="重要" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">使用 <tt class="function">locals</tt> 来应用基于 dictionary 的字符串格式化是一种方便的作法，它可以使复杂的字符串格式化表达式更易读。但它需要花费一定的代价。在调用 <tt class="function">locals</tt> 方面有一点性能上的问题，这是由于 <a href="locals_and_globals.html#dialect.locals.readonly.example" title="例&nbsp;8.12.&nbsp;locals 是只读的，globals 不是"> <tt class="function">locals</tt> 创建了局部名字空间的一个拷贝</a>引起的。
+               </td>
+            </tr>
+         </table>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="locals_and_globals.html">&lt;&lt;&nbsp;locals 和 globals</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#dialect.divein" title="8.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="introducing_sgmllib.html" title="8.2.&nbsp;sgmllib.py 介绍">2</a> <span class="divider">|</span> <a href="extracting_data.html" title="8.3.&nbsp;从 HTML 文档中提取数据">3</a> <span class="divider">|</span> <a href="basehtmlprocessor.html" title="8.4.&nbsp;BaseHTMLProcessor.py 介绍">4</a> <span class="divider">|</span> <a href="locals_and_globals.html" title="8.5.&nbsp;locals 和 globals">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="quoting_attribute_values.html" title="8.7.&nbsp;给属性值加引号">7</a> <span class="divider">|</span> <a href="dialect.html" title="8.8.&nbsp;dialect.py 介绍">8</a> <span class="divider">|</span> <a href="all_together.html" title="8.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="8.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="quoting_attribute_values.html">给属性值加引号&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

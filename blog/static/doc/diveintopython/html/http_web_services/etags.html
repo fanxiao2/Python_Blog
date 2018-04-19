@@ -1,0 +1,273 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>11.6.&nbsp;处理 Last-Modified 和 ETag</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务">
+      <link rel="previous" href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">
+      <link rel="next" href="redirects.html" title="11.7.&nbsp;处理重定向">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTTP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">处理 Last-Modified 和 ETag</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="user_agent.html" title="上一页: “设置 User-Agent”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="redirects.html" title="下一页: “处理重定向”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="oa.etags"></a>11.6.&nbsp;处理 <tt class="literal">Last-Modified</tt> 和 <tt class="literal">ETag</tt></h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>既然你知道如何在你的 web 服务请求中添加自定义的 HTTP 头信息，接下来看看如何添加 <tt class="literal">Last-Modified</tt> 和 <tt class="literal">ETag</tt> 头信息的支持。
+            </p>
+         </div>
+         <p>下面的这些例子将以调试标记置为关闭的状态来显示输出结果。如果你还停留在上一部分的开启状态，可以使用 <tt class="literal">httplib.HTTPConnection.debuglevel = 0</tt> 将其设置为关闭状态。或者，如果你认为有帮助也可以保持为开启状态。
+         </p>
+         <div class="example"><a name="oa.etags.example.1"></a><h3 class="title">例&nbsp;11.6.&nbsp;测试 <tt class="literal">Last-Modified</tt></h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> urllib2</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request = urllib2.Request(<span class='pystring'>'http://diveintomark.org/xml/atom.xml'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">opener = urllib2.build_opener()</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">firstdatastream = opener.open(request)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">firstdatastream.headers.dict</span>                       <a name="oa.etags.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">{'date': 'Thu, 15 Apr 2004 20:42:41 GMT', 
+ 'server': 'Apache/2.0.49 (Debian GNU/Linux)', 
+ 'content-type': 'application/atom+xml',
+ 'last-modified': 'Thu, 15 Apr 2004 19:45:21 GMT', 
+ 'etag': '"e842a-3e53-55d97640"',
+ 'content-length': '15955', 
+ 'accept-ranges': 'bytes', 
+ 'connection': 'close'}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request.add_header(<span class='pystring'>'If-Modified-Since'</span>,</span>
+<tt class="prompt">...     </tt><span class="userinput">firstdatastream.headers.get(<span class='pystring'>'Last-Modified'</span>))</span>  <a name="oa.etags.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">seconddatastream = opener.open(request)</span>            <a name="oa.etags.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="traceback">Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+  File "c:\python23\lib\urllib2.py", line 326, in open
+    '_open', req)
+  File "c:\python23\lib\urllib2.py", line 306, in _call_chain
+    result = func(*args)
+  File "c:\python23\lib\urllib2.py", line 901, in http_open
+    return self.do_open(httplib.HTTP, req)
+  File "c:\python23\lib\urllib2.py", line 895, in do_open
+    return self.parent.error('http', req, fp, code, msg, hdrs)
+  File "c:\python23\lib\urllib2.py", line 352, in error
+    return self._call_chain(*args)
+  File "c:\python23\lib\urllib2.py", line 306, in _call_chain
+    result = func(*args)
+  File "c:\python23\lib\urllib2.py", line 412, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+urllib2.HTTPError: HTTP Error 304: Not Modified</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">还记得当调试标记设置为开启时所有那些你看到的 HTTP 头信息打印输出吗？
+                        这里便是用编程方式访问它们的方法：
+                        
+                        <tt class="varname">firstdatastream.headers</tt> 是<a href="../object_oriented_framework/userdict.html" title="5.5.&nbsp;探索 UserDict：一个封装类">一个类似 dictionary 行为的对象</a>并且允许你获得任何个别的从 HTTP 服务器返回的头信息。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在第二次请求时，你用第一次请求获得的最近修改时间添加了 <tt class="literal">If-Modified-Since</tt> 头信息。如果数据没被改变，服务器应该返回一个 <tt class="literal">304</tt> 状态代码。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">毫无疑问，数据没被改变。你可以从跟踪返回结果看到 <tt class="filename">urllib2</tt> 抛出了一个特殊异常，<tt class="classname">HTTPError</tt>，以响应 <tt class="literal">304</tt> 状态代码。这有点不寻常，并且完全没有任何帮助。毕竟，它不是个错误；你明确地询问服务器如果没有变化就不要发送任何数据，并且数据没有变化，所以服务器告诉你它没有为你发送任何数据。那不是个错误；实际上也正是你所期望的。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p><tt class="filename">urllib2</tt> 也为你认为是错误的其他条件引发 <tt class="classname">HTTPError</tt> 异常，比如 <tt class="literal">404</tt> (page not found)。实际上，它将为<span class="emphasis"><em>任何</em></span> 除了状态代码 <tt class="literal">200</tt> (OK)、<tt class="literal">301</tt> (permanent redirect)或 <tt class="literal">302</tt> (temporary redirect) 之外的状态引发 <tt class="classname">HTTPError</tt>。捕获状态代码并简单返回它，而不是抛出异常，这应该对你很有帮助。为了实现它，你将需要自定义一个 URL 处理器。
+         </p>
+         <div class="example"><a name="d0e28580"></a><h3 class="title">例&nbsp;11.7.&nbsp;定义 URL 处理器</h3>
+            <p>这个自定义的 URL 处理器是 <tt class="filename">openanything.py</tt> 的一部分。
+            </p><pre class="programlisting"><span class='pykeyword'>
+class</span> DefaultErrorHandler(urllib2.HTTPDefaultErrorHandler):    <a name="oa.etags.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>def</span><span class='pyclass'> http_error_default</span>(self, req, fp, code, msg, headers): <a name="oa.etags.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        result = urllib2.HTTPError(                           
+            req.get_full_url(), code, msg, headers, fp)       
+        result.status = code                                   <a name="oa.etags.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        <span class='pykeyword'>return</span> result                                         
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">urllib2</tt> 是围绕 URL 处理器而设计的。每一个处理器就是一个能定义任意数量方法的类。当某事件发生时——比如一个 HTTP 错误，甚至是 <tt class="literal">304</tt> 代码——<tt class="filename">urllib2</tt> 审视用于处理它的 一系列已定义的处理器方法。在此要用到自省，与 <a href="../xml_processing/index.html" title="第&nbsp;9&nbsp;章&nbsp;XML 处理">第&nbsp;9&nbsp;章 <i>XML 处理</i></a>中为不同节点类型定义不同处理器类似。但是 <tt class="filename">urllib2</tt> 是很灵活的，还可以内省为当前请求所定义的所有处理器。
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">当从服务器接收到一个 <tt class="literal">304</tt> 状态代码时，<tt class="filename">urllib2</tt> 查找定义的操作并调用 <tt class="methodname">http_error_default</tt> 方法。通过定义一个自定义的错误处理，你可以阻止 <tt class="filename">urllib2</tt> 引发异常。取而代之的是，你创建 <tt class="classname">HTTPError</tt> 对象，返回它而不是引发异常。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是关键部分：返回之前，你保存从 HTTP 服务器返回的状态代码。这将使你从主调程序轻而易举地访问它。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e28634"></a><h3 class="title">例&nbsp;11.8.&nbsp;使用自定义 URL 处理器</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request.headers</span>                           <a name="oa.etags.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">{'If-modified-since': 'Thu, 15 Apr 2004 19:45:21 GMT'}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> openanything</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">opener = urllib2.build_opener(</span>
+<tt class="prompt">...     </tt><span class="userinput">openanything.DefaultErrorHandler())</span>   <a name="oa.etags.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">seconddatastream = opener.open(request)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">seconddatastream.status</span>                   <a name="oa.etags.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">304</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">seconddatastream.read()</span>                   <a name="oa.etags.3.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">''</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">继续前面的例子，<tt class="classname">Request</tt> 对象已经被设置，并且你已经添加了 <tt class="literal">If-Modified-Since</tt> 头信息。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是关键所在：既然已经定义了你的自定义 URL 处理器，你需要告诉 <tt class="filename">urllib2</tt> 来使用它。还记得我怎么说 <tt class="filename">urllib2</tt> 将一个 HTTP 资源的访问过程分解为三个步骤的正当理由吗？这便是为什么构建 HTTP 开启器是其步骤之一，因为你能用你自定义的 URL 操作覆盖 <tt class="filename">urllib2</tt> 的默认行为来创建它。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在你可以快速地打开一个资源，返回给你的对象既包括常规头信息 (使用 <tt class="varname">seconddatastream.headers.dict</tt> 访问它们)，也包括 HTTP 状态代码。在此，正如你所期望的，状态代码是 <tt class="literal">304</tt>，意味着此数据自从上次请求后没有被修改。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">注意当服务器返回 <tt class="literal">304</tt> 状态代码时，并没有重新发送数据。这就是全部的关键：没有重新下载未修改的数据，从而节省了带宽。因此若你确实想要那个数据，你需要在首次获得它时在本地缓存数据。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>处理 <tt class="literal">ETag</tt> 的工作也非常相似，只不过不是检查 <tt class="literal">Last-Modified</tt> 并发送 <tt class="literal">If-Modified-Since</tt>，而是检查 <tt class="literal">ETag</tt> 并发送 <tt class="literal">If-None-Match</tt>。让我们打开一个新的 <span class="acronym">IDE</span> 会话。
+         </p>
+         <div class="example"><a name="oa.etags.example"></a><h3 class="title">例&nbsp;11.9.&nbsp;支持 <tt class="literal">ETag</tt>/<tt class="literal">If-None-Match</tt></h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> urllib2, openanything</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request = urllib2.Request(<span class='pystring'>'http://diveintomark.org/xml/atom.xml'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">opener = urllib2.build_opener(</span>
+<tt class="prompt">...     </tt><span class="userinput">openanything.DefaultErrorHandler())</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">firstdatastream = opener.open(request)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">firstdatastream.headers.get(<span class='pystring'>'ETag'</span>)</span>        <a name="oa.etags.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'"e842a-3e53-55d97640"'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">firstdata = firstdatastream.read()</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> firstdata</span>                            <a name="oa.etags.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;feed version="0.3"
+  xmlns="http://purl.org/atom/ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xml:lang="en"&gt;
+  &lt;title mode="escaped"&gt;dive into mark&lt;/title&gt;
+  &lt;link rel="alternate" type="text/html" href="http://diveintomark.org/"/&gt;
+  &lt;-- rest of feed omitted for brevity --&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request.add_header(<span class='pystring'>'If-None-Match'</span>,</span>
+<tt class="prompt">...     </tt><span class="userinput">firstdatastream.headers.get(<span class='pystring'>'ETag'</span>))</span>   <a name="oa.etags.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">seconddatastream = opener.open(request)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">seconddatastream.status</span>                    <a name="oa.etags.4.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">304</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">seconddatastream.read()</span>                    <a name="oa.etags.4.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="computeroutput">''</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用 <tt class="varname">firstdatastream.headers</tt> 伪字典，你可以获得从服务器返回的 <tt class="literal">ETag</tt>  (如果服务器没有返回 <tt class="literal">ETag</tt> 会发生什么？答案是，这一行代码将返回 <tt class="literal">None</tt>。)
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">OK，你获得了数据。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在进行第二次调用，将 <tt class="literal">If-None-Match</tt> 头信息设置为你第一次调用获得的 <tt class="literal">ETag</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.4.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">第二次调用静静地成功了 (没有出现任何的异常)，并且你又一次看到了从服务器返回的 <tt class="literal">304</tt> 状态代码。你第二次基于 <tt class="literal">ETag</tt> 发送请求，服务器知道数据没有被改变。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.etags.4.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">无论 <tt class="literal">304</tt> 是被 <tt class="literal">Last-Modified</tt> 数据检查还是 <tt class="literal">ETag</tt> hash 匹配触发的，获得 <tt class="literal">304</tt> 的同时都不会下载数据。这就是重点所在。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="tip.etag.vs.lastmodified"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在这些例子中，HTTP 服务器同时支持 <tt class="literal">Last-Modified</tt> 和 <tt class="literal">ETag</tt> 头信息，但并非所有的服务器皆如此。作为一个 web 服务的客户端，你应该为支持两种头信息做准备，但是你的程序也应该为服务器仅支持其中一种头信息或两种头信息都不支持而做准备。
+               </td>
+            </tr>
+         </table>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="user_agent.html">&lt;&lt;&nbsp;设置 User-Agent</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#oa.divein" title="11.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">2</a> <span class="divider">|</span> <a href="http_features.html" title="11.3.&nbsp;HTTP 的特性">3</a> <span class="divider">|</span> <a href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">4</a> <span class="divider">|</span> <a href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="redirects.html" title="11.7.&nbsp;处理重定向">7</a> <span class="divider">|</span> <a href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">8</a> <span class="divider">|</span> <a href="alltogether.html" title="11.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="11.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="redirects.html">处理重定向&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,165 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>16.3.&nbsp;重识列表过滤</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;16&nbsp;章&nbsp;函数编程">
+      <link rel="previous" href="finding_the_path.html" title="16.2.&nbsp;找到路径">
+      <link rel="next" href="mapping_lists.html" title="16.4.&nbsp;重识列表映射">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">函数编程</a>&nbsp;&gt;&nbsp;<span class="thispage">重识列表过滤</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="finding_the_path.html" title="上一页: “找到路径”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="mapping_lists.html" title="下一页: “重识列表映射”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="regression.filter"></a>16.3.&nbsp;重识列表过滤
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你已经熟识了<a href="../power_of_introspection/filtering_lists.html" title="4.5.&nbsp;过滤列表">应用列表解析来过滤列表</a>。这里介绍的是达到相同效果的另一种令很多人感觉清晰的实现方法。
+            </p>
+         </div>
+         <p><span class="application">Python</span> 有一个内建 <tt class="function">filter</tt> 函数，它接受两个参数：一个函数和一个列表，返回一个列表。<sup>[<a name="d0e35870" href="#ftn.d0e35870">12</a>]</sup>  作为第一个参数传递给 <tt class="function">filter</tt> 的函数本身应接受一个参数，<tt class="function">filter</tt> 返回的列表将会包含被传入列表参数传递给 <tt class="function">filter</tt> 所有可以令函数返回真 (true) 的元素。
+         </p>
+         <p>都明白了吗？并没有听起来那么难。</p>
+         <div class="example"><a name="d0e35894"></a><h3 class="title">例&nbsp;16.7.&nbsp;<tt class="function">filter</tt> 介绍
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>def</span><span class='pyclass'> odd</span>(n):</span>                 <a name="regression.filter.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>return</span> n % 2</span>
+<tt class="prompt">...     </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = [1, 2, 3, 5, 9, 10, 256, -3]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">filter(odd, li)</span>             <a name="regression.filter.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">[1, 3, 5, 9, -3]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[e <span class='pykeyword'>for</span> e <span class='pykeyword'>in</span> li <span class='pykeyword'>if</span> odd(e)]</span>   <a name="regression.filter.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">filteredList = []</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> n <span class='pykeyword'>in</span> li:</span>                <a name="regression.filter.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>if</span> odd(n):</span>
+<tt class="prompt">...     </tt><span class="userinput">    filteredList.append(n)</span>
+<tt class="prompt">...     </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">filteredList</span>
+<span class="computeroutput">[1, 3, 5, 9, -3]</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.filter.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">odd</tt> 使用内建的取模 (mod) 函数 “<span class="quote"><tt class="literal">%</tt></span>” 对于为奇数的 <tt class="varname">n</tt> 返回 <tt class="constant">1</tt>；为偶数的返回 <tt class="constant">0</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.filter.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">filter</tt> 接受两个参数：一个函数 (<tt class="function">odd</tt>) 和一个列表 (<tt class="varname">li</tt>)。它依列表循环为每个元素调用 <tt class="function">odd</tt> 函数。如果 <tt class="function">odd</tt> 返回的是真 (记住，<span class="application">Python</span> 认为所有非零值为真)，则该元素被放在返回列表中，如若不然则被过滤掉。结果是一个只包含原列表中奇数的列表，出现顺序则和原列表相同。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.filter.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以通过遍历的方式完成相同的工作，正如在 <a href="../power_of_introspection/filtering_lists.html" title="4.5.&nbsp;过滤列表">第&nbsp;4.5&nbsp;节 “过滤列表”</a> 中看到的。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.filter.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以通过 <tt class="literal">for</tt> 循环的方式完成相同的工作。取决于你的编程背景，这样也许更“<span class="quote">直接</span>”，但是像  <tt class="function">filter</tt> 函数这样的实现方法更清晰。不但编写简单，而且易于读懂。<tt class="literal">for</tt> 循环就好比近距离的绘画：你可以看到所有的细节，但是或许你应该花几秒时间退后几步看一看图画的全景：“<span class="quote">啊，你仅仅是要过滤列表！</span>”
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e36031"></a><h3 class="title">例&nbsp;16.8.&nbsp;<tt class="filename">regression.py</tt> 中的 <tt class="function">filter</tt></h3><pre class="programlisting">
+    files = os.listdir(path)                                <a name="regression.filter.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    test = re.compile(<span class='pystring'>"test\.py$"</span>, re.IGNORECASE)           <a name="regression.filter.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    files = filter(test.search, files)                      <a name="regression.filter.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.filter.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你在 <a href="finding_the_path.html" title="16.2.&nbsp;找到路径">第&nbsp;16.2&nbsp;节 “找到路径”</a> 中看到的，<tt class="varname">path</tt> 可能包括正在运行脚本的完全或者部分路径名，或者当脚本运行自当前目录时包含一个空的字符串。任何一种情况下，<tt class="varname">files</tt> 都会获得正运行脚本所在目录的文件名。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.filter.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是一个预编译的正则表达式。正如你在 <a href="../refactoring/refactoring.html" title="15.3.&nbsp;重构">第&nbsp;15.3&nbsp;节 “重构”</a>中看到的，如果你需要反复使用同一个正则表达式，你应该编译它已获得更快的性能。编译后的对象将含有接受一个待寻找字符串作为参数的 <tt class="function">search</tt> 方法。如果这个正则表达式匹配字符串，<tt class="function">search</tt> 方法返回一个包含正则表达式匹配信息的 <tt class="classname">Match</tt> 对象；否则返回 <tt class="literal">None</tt>，这是 <span class="application">Python</span> 空 (null) 值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.filter.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">对于 <tt class="varname">files</tt> 列表中的每个元素，你将会调用正则表达式编译对象 <tt class="varname">test</tt> 的 <tt class="function">search</tt> 方法。如果正则表达匹配，方法将会返回一个被 <span class="application">Python</span> 认定为真 (true) 的  <tt class="classname">Match</tt> 对象；如果正则表达不匹配，<tt class="function">search</tt> 方法将会返回被认定为假 (false) 的 <tt class="literal">None</tt>，元素将被排除。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p><b>历史注释.&nbsp;</b><span class="application">Python</span> 2.0 早期的版本不包含 <a href="../native_data_types/mapping_lists.html" title="3.6.&nbsp;映射 list">列表解析</a>，因此不能 <a href="../power_of_introspection/filtering_lists.html" title="4.5.&nbsp;过滤列表">以列表解析方式过滤</a>，<tt class="function">filter</tt> 函数是当时唯一的方法。即便是在引入列表解析的 2.0 版，有些人仍然钟情于老派的 <tt class="function">filter</tt> (和这章稍后将见到的它的伴侣函数 <tt class="function">map</tt> )。两种方法并存于世，使用哪种方法只是风格问题，<tt class="function">map</tt> 和 <tt class="function">filter</tt> 将在未来的  <span class="application">Python</span> 版本中被废止的讨论尚无定论。
+         </p>
+         <div class="example"><a name="d0e36132"></a><h3 class="title">例&nbsp;16.9.&nbsp;以列表解析法过滤</h3><pre class="programlisting">
+    files = os.listdir(path)                               
+    test = re.compile(<span class='pystring'>"test\.py$"</span>, re.IGNORECASE)          
+    files = [f <span class='pykeyword'>for</span> f <span class='pykeyword'>in</span> files <span class='pykeyword'>if</span> test.search(f)] <a name="regression.filter.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#regression.filter.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这种方法将完成和 <tt class="function">filter</tt> 函数完全相同的工作。哪种方法更清晰完全取决于你自己。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="footnotes">
+            <h3 class="footnotetitle">Footnotes</h3>
+            <div class="footnote">
+               <p><sup>[<a name="ftn.d0e35870" href="#d0e35870">12</a>] </sup>从技术层面上讲，<tt class="function">filter</tt> 的第二个参数可以是任意的序列，包括列表、元组以及定义了 <tt class="function">__getitem__</tt> 特殊方法而能像列表一样工作的自定义类。在可能情况下，<tt class="function">filter</tt> 会返回与输入相同的数据类型，也就是过滤一个列表返回一个列表，过滤一个元组返回一个元组。
+               </p>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="finding_the_path.html">&lt;&lt;&nbsp;找到路径</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#regression.divein" title="16.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="finding_the_path.html" title="16.2.&nbsp;找到路径">2</a> <span class="divider">|</span> <span class="thispage">3</span> <span class="divider">|</span> <a href="mapping_lists.html" title="16.4.&nbsp;重识列表映射">4</a> <span class="divider">|</span> <a href="data_centric.html" title="16.5.&nbsp;数据中心思想编程">5</a> <span class="divider">|</span> <a href="dynamic_import.html" title="16.6.&nbsp;动态导入模块">6</a> <span class="divider">|</span> <a href="all_together.html" title="16.7.&nbsp;全部放在一起">7</a> <span class="divider">|</span> <a href="summary.html" title="16.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="mapping_lists.html">重识列表映射&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,286 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>14.2.&nbsp;roman.py, 第 2 阶段</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="stage_1.html" title="第&nbsp;14&nbsp;章&nbsp;测试优先编程">
+      <link rel="previous" href="stage_1.html" title="第&nbsp;14&nbsp;章&nbsp;测试优先编程">
+      <link rel="next" href="stage_3.html" title="14.3.&nbsp;roman.py, 第 3 阶段">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="stage_1.html">测试优先编程</a>&nbsp;&gt;&nbsp;<span class="thispage">roman.py, 第 2 阶段</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="stage_1.html" title="上一页: “测试优先编程”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="stage_3.html" title="下一页: “roman.py, 第 3 阶段”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="roman.stage2"></a>14.2.&nbsp;<tt class="filename">roman.py</tt>, 第 2 阶段
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>现在你有了 <tt class="filename">roman</tt> 模块的大概框架，到了开始写代码以通过测试的时候了。
+            </p>
+         </div>
+         <div class="example"><a name="roman.stage2.example"></a><h3 class="title">例&nbsp;14.3.&nbsp;<tt class="filename">roman2.py</tt></h3>
+            <p>这个文件可以从 <tt class="filename">py/roman/stage2/</tt> 目录中找到。
+            </p>
+            <p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+            </p><pre class="programlisting">
+<span class='pystring'>"""Convert to and from Roman numerals"""</span>
+
+<span class='pycomment'>#Define exceptions</span>
+<span class='pykeyword'>class</span><span class='pyclass'> RomanError</span>(Exception): <span class='pykeyword'>pass</span>
+<span class='pykeyword'>class</span><span class='pyclass'> OutOfRangeError</span>(RomanError): <span class='pykeyword'>pass</span>
+<span class='pykeyword'>class</span><span class='pyclass'> NotIntegerError</span>(RomanError): <span class='pykeyword'>pass</span>
+<span class='pykeyword'>class</span><span class='pyclass'> InvalidRomanNumeralError</span>(RomanError): <span class='pykeyword'>pass</span>
+
+<span class='pycomment'>#Define digit mapping</span>
+romanNumeralMap = ((<span class='pystring'>'M'</span>,  1000), <a name="roman.stage2.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+                   (<span class='pystring'>'CM'</span>, 900),
+                   (<span class='pystring'>'D'</span>,  500),
+                   (<span class='pystring'>'CD'</span>, 400),
+                   (<span class='pystring'>'C'</span>,  100),
+                   (<span class='pystring'>'XC'</span>, 90),
+                   (<span class='pystring'>'L'</span>,  50),
+                   (<span class='pystring'>'XL'</span>, 40),
+                   (<span class='pystring'>'X'</span>,  10),
+                   (<span class='pystring'>'IX'</span>, 9),
+                   (<span class='pystring'>'V'</span>,  5),
+                   (<span class='pystring'>'IV'</span>, 4),
+                   (<span class='pystring'>'I'</span>,  1))
+
+<span class='pykeyword'>def</span><span class='pyclass'> toRoman</span>(n):
+    <span class='pystring'>"""convert integer to Roman numeral"""</span>
+    result = <span class='pystring'>""</span>
+    <span class='pykeyword'>for</span> numeral, integer <span class='pykeyword'>in</span> romanNumeralMap:
+        <span class='pykeyword'>while</span> n &gt;= integer:      <a name="roman.stage2.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+            result += numeral
+            n -= integer
+    <span class='pykeyword'>return</span> result
+
+<span class='pykeyword'>def</span><span class='pyclass'> fromRoman</span>(s):
+    <span class='pystring'>"""convert Roman numeral to integer"""</span>
+    <span class='pykeyword'>pass</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.stage2.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">romanNumeralMap</tt> 是一个用来定义三个内容的元组的元组：
+                        <div class="orderedlist">
+                           <ol type="1">
+                              <li>代表大部分罗马数字的字符。注意不只是单字符的罗马数字，你同样在这里定义诸如 <tt class="literal">CM</tt> (“<span class="quote">比一千少一百，即 900</span>”) 的双字符，这可以让稍后编写的 <tt class="function">toRoman</tt> 简单一些。
+                              </li>
+                              <li>罗马数字的顺序。它们是以降序排列的，从<tt class="literal">M</tt> 一路到 <tt class="literal">I</tt>。
+                              </li>
+                              <li>每个罗马数字所对应的数值。每个内部的元组都是一个 <tt class="literal"> (<i class="replaceable">numeral</i>，<i class="replaceable">value</i>)</tt> 数值对。
+                              </li>
+                           </ol>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.stage2.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里便显示出你丰富的数据结构带来的优势，你不需要什么特定的逻辑处理减法规则。你只需要通过搜寻 <tt class="varname">romanNumeralMap</tt> 寻找不大于输入数值的最大对应整数即可。只要找到，就在结果的结尾把这个整数对应的罗马字符添加到输出结果的末尾，从输入值中减去这个整数，一遍遍这样继续下去。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e33360"></a><h3 class="title">例&nbsp;14.4.&nbsp;<tt class="function">toRoman</tt> 如何工作
+            </h3>
+            <p>如果你不明了 <tt class="function">toRoman</tt> 如何工作，在 <tt class="literal">while</tt> 循环的结尾添加一个 <tt class="function">print</tt> 语句：
+            </p><pre class="programlisting">
+        <span class='pykeyword'>while</span> n &gt;= integer:
+            result += numeral
+            n -= integer
+            <span class='pykeyword'>print</span> <span class='pystring'>'subtracting'</span>, integer, <span class='pystring'>'from input, adding'</span>, numeral, <span class='pystring'>'to output'</span></pre><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> roman2</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">roman2.toRoman(1424)</span>
+<span class="computeroutput">subtracting 1000 from input, adding M to output
+subtracting 400 from input, adding CD to output
+subtracting 10 from input, adding X to output
+subtracting 10 from input, adding X to output
+subtracting 4 from input, adding IV to output
+'MCDXXIV'</span>
+</pre></div>
+         <p>看来 <tt class="function">toRoman</tt> 可以运转了，至少手工测试可以。但能通过单元测试吗？啊哈，不，不完全可以。
+         </p>
+         <div class="example"><a name="d0e33398"></a><h3 class="title">例&nbsp;14.5.&nbsp;以 <tt class="filename">romantest2.py</tt> 测试 <tt class="filename">roman2.py</tt> 的输出
+            </h3>
+            <p>要记得用 <tt class="literal">-v</tt> 命令行选项运行 <tt class="filename">romantest2.py</tt> 开启详细信息模式。
+            </p><pre class="screen"><span class="computeroutput">fromRoman should only accept uppercase input ... FAIL
+toRoman should always return uppercase ... ok                  </span><a name="roman.stage2.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"><span class="computeroutput">
+fromRoman should fail with malformed antecedents ... FAIL
+fromRoman should fail with repeated pairs of numerals ... FAIL
+fromRoman should fail with too many repeated numerals ... FAIL
+fromRoman should give known result with known input ... FAIL
+toRoman should give known result with known input ... ok       </span><a name="roman.stage2.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"><span class="computeroutput">
+fromRoman(toRoman(n))==n for all n ... FAIL
+toRoman should fail with non-integer input ... FAIL            </span><a name="roman.stage2.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"><span class="computeroutput">
+toRoman should fail with negative input ... FAIL
+toRoman should fail with large input ... FAIL
+toRoman should fail with 0 input ... FAIL</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.stage2.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">事实上，<tt class="function">toRoman</tt> 的返回值总是大写的，因为 <tt class="varname">romanNumeralMap</tt> 定义的罗马字符都是以大写字母表示的。因此这个测试已经通过了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.stage2.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">好消息来了：这个版本的 <tt class="function">toRoman</tt> 函数能够通过<a href="testing_for_success.html#roman.testtoromanknownvalues.example" title="例&nbsp;13.2.&nbsp;testToRomanKnownValues">已知值测试</a>。记住，这并不能证明完全没问题，但至少通过测试多种有效输入考验了这个函数：包括每个单一字符的罗马数字，可能的最大输入 (<tt class="literal">3999</tt>)，以及可能的最长的罗马数字 (对应于 <tt class="literal">3888</tt>)。从这点来看，你有理由相信这个函数对于任何有效输入都不会出问题。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.stage2.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">但是，函数还没办法处理无效输入，每个<a href="testing_for_failure.html#roman.tobadinput.example" title="例&nbsp;13.3.&nbsp;测试 toRoman 的无效输入">无效输入测试</a>都失败了。这很好理解，因为你还没有对无效输入进行检查，测试用例希望捕捉到特定的异常 (通过 <tt class="function">assertRaises</tt>)，而你根本没有让这些异常引发。这是你下一阶段的工作。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <p>下面是单元测试结果的剩余部分，列出了所有失败的详细信息，你已经让它降到了 10 个。</p><pre class="screen"><span class="computeroutput">
+======================================================================
+FAIL: fromRoman should only accept uppercase input
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 156, in testFromRomanCase
+    roman2.fromRoman, numeral.lower())
+  File "c:\python21\lib\unittest.py", line 266, in failUnlessRaises
+    raise self.failureException, excName
+AssertionError: InvalidRomanNumeralError</span><span class="computeroutput">
+======================================================================
+FAIL: fromRoman should fail with malformed antecedents
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 133, in testMalformedAntecedent
+    self.assertRaises(roman2.InvalidRomanNumeralError, roman2.fromRoman, s)
+  File "c:\python21\lib\unittest.py", line 266, in failUnlessRaises
+    raise self.failureException, excName
+AssertionError: InvalidRomanNumeralError</span><span class="computeroutput">
+======================================================================
+FAIL: fromRoman should fail with repeated pairs of numerals
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 127, in testRepeatedPairs
+    self.assertRaises(roman2.InvalidRomanNumeralError, roman2.fromRoman, s)
+  File "c:\python21\lib\unittest.py", line 266, in failUnlessRaises
+    raise self.failureException, excName
+AssertionError: InvalidRomanNumeralError</span><span class="computeroutput">
+======================================================================
+FAIL: fromRoman should fail with too many repeated numerals
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 122, in testTooManyRepeatedNumerals
+    self.assertRaises(roman2.InvalidRomanNumeralError, roman2.fromRoman, s)
+  File "c:\python21\lib\unittest.py", line 266, in failUnlessRaises
+    raise self.failureException, excName
+AssertionError: InvalidRomanNumeralError</span><span class="computeroutput">
+======================================================================
+FAIL: fromRoman should give known result with known input
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 99, in testFromRomanKnownValues
+    self.assertEqual(integer, result)
+  File "c:\python21\lib\unittest.py", line 273, in failUnlessEqual
+    raise self.failureException, (msg or '%s != %s' % (first, second))
+AssertionError: 1 != None</span><span class="computeroutput">
+======================================================================
+FAIL: fromRoman(toRoman(n))==n for all n
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 141, in testSanity
+    self.assertEqual(integer, result)
+  File "c:\python21\lib\unittest.py", line 273, in failUnlessEqual
+    raise self.failureException, (msg or '%s != %s' % (first, second))
+AssertionError: 1 != None</span><span class="computeroutput">
+======================================================================
+FAIL: toRoman should fail with non-integer input
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 116, in testNonInteger
+    self.assertRaises(roman2.NotIntegerError, roman2.toRoman, 0.5)
+  File "c:\python21\lib\unittest.py", line 266, in failUnlessRaises
+    raise self.failureException, excName
+AssertionError: NotIntegerError</span><span class="computeroutput">
+======================================================================
+FAIL: toRoman should fail with negative input
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 112, in testNegative
+    self.assertRaises(roman2.OutOfRangeError, roman2.toRoman, -1)
+  File "c:\python21\lib\unittest.py", line 266, in failUnlessRaises
+    raise self.failureException, excName
+AssertionError: OutOfRangeError</span><span class="computeroutput">
+======================================================================
+FAIL: toRoman should fail with large input
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 104, in testTooLarge
+    self.assertRaises(roman2.OutOfRangeError, roman2.toRoman, 4000)
+  File "c:\python21\lib\unittest.py", line 266, in failUnlessRaises
+    raise self.failureException, excName
+AssertionError: OutOfRangeError</span><span class="computeroutput">
+======================================================================
+FAIL: toRoman should fail with 0 input
+----------------------------------------------------------------------
+</span><span class="traceback">Traceback (most recent call last):
+  File "C:\docbook\dip\py\roman\stage2\romantest2.py", line 108, in testZero
+    self.assertRaises(roman2.OutOfRangeError, roman2.toRoman, 0)
+  File "c:\python21\lib\unittest.py", line 266, in failUnlessRaises
+    raise self.failureException, excName
+AssertionError: OutOfRangeError</span><span class="computeroutput">
+----------------------------------------------------------------------
+Ran 12 tests in 0.320s
+
+FAILED (failures=10)</span></pre></div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="stage_1.html">&lt;&lt;&nbsp;测试优先编程</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="stage_1.html#roman.stage1" title="14.1.&nbsp;roman.py, 第 1 阶段">1</a> <span class="divider">|</span> <span class="thispage">2</span> <span class="divider">|</span> <a href="stage_3.html" title="14.3.&nbsp;roman.py, 第 3 阶段">3</a> <span class="divider">|</span> <a href="stage_4.html" title="14.4.&nbsp;roman.py, 第 4 阶段">4</a> <span class="divider">|</span> <a href="stage_5.html" title="14.5.&nbsp;roman.py, 第 5 阶段">5</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="stage_3.html">roman.py, 第 3 阶段&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

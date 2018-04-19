@@ -1,0 +1,105 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;7&nbsp;章&nbsp;正则表达式</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../file_handling/summary.html" title="6.7.&nbsp;小结">
+      <link rel="next" href="street_addresses.html" title="7.2.&nbsp;个案研究：街道地址">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">正则表达式</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../file_handling/summary.html" title="上一页: “小结”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="street_addresses.html" title="下一页: “个案研究：街道地址”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="re"></a>第&nbsp;7&nbsp;章&nbsp;正则表达式
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#re.intro">7.1. 概览</a></span></li>
+               <li><span class="section"><a href="street_addresses.html">7.2. 个案研究：街道地址</a></span></li>
+               <li><span class="section"><a href="roman_numerals.html">7.3. 个案研究：罗马字母</a></span><ul>
+                     <li><span class="section"><a href="roman_numerals.html#d0e17763">7.3.1. 校验千位数</a></span></li>
+                     <li><span class="section"><a href="roman_numerals.html#d0e17955">7.3.2. 校验百位数</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="section"><a href="n_m_syntax.html">7.4. 使用 {n,m} 语法</a></span><ul>
+                     <li><span class="section"><a href="n_m_syntax.html#d0e18499">7.4.1. 校验十位数和个位数</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="section"><a href="verbose.html">7.5. 松散正则表达式</a></span></li>
+               <li><span class="section"><a href="phone_numbers.html">7.6. 个案研究：解析电话号码</a></span></li>
+               <li><span class="section"><a href="summary.html">7.7. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>正则表达式是搜索、替换和解析复杂字符模式的一种强大而标准的方法。如果你曾经在其他语言 (如 <span class="application">Perl</span>) 中使用过它，由于它们的语法非常相似，你仅仅阅读一下 <tt class="filename">re</tt> 模块的摘要，大致了解其中可用的函数和参数就可以了。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="re.intro"></a>7.1.&nbsp;概览
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>字符串也有很多方法，可以进行搜索 (<tt class="function">index</tt>、<tt class="function">find</tt> 和 <tt class="function">count</tt>)、替换 (<tt class="function">replace</tt>) 和解析 (<tt class="function">split</tt>)，但它们仅限于处理最简单的情况。搜索方法查找单个和固定编码的子串，并且它们总是大小写敏感的。对一个字符串<tt class="varname">s</tt>，如果要进行大小写不敏感的搜索，则你必须调用 <tt class="function">s.lower()</tt> 或 <tt class="function">s.upper()</tt> 将 <tt class="varname">s</tt> 转换成全小写或者全大写，然后确保搜索串有着相匹配的大小写。<tt class="function">replace</tt> 和 <tt class="function">split</tt>方法有着类似的限制。
+            </p>
+            <div class="abstract">
+               <p>如果你要解决的问题利用字符串函数能够完成，你应该使用它们。它们快速、简单且容易阅读，而快速、简单、可读性强的代码可以说出很多好处。但是，如果你发现你使用了许多不同的字符串函数和 <tt class="literal">if</tt> 语句来处理一个特殊情况，或者你组合使用了 <tt class="function">split</tt>、<tt class="function">join</tt> 等函数而导致用一种奇怪的甚至读不下去的方式理解列表，此时，你也许需要转到正则表达式了。
+               </p>
+            </div>
+            <p>尽管正则表达式语法较之普通代码相对麻烦一些，但是却可以得到更可读的结果，与用一长串字符串函数的解决方案相比要好很多。在正则表达式内部有多种方法嵌入注释，从而使之具有自文档化 (self-documenting) 的能力。</p>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../file_handling/summary.html">&lt;&lt;&nbsp;小结</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="street_addresses.html" title="7.2.&nbsp;个案研究：街道地址">2</a> <span class="divider">|</span> <a href="roman_numerals.html" title="7.3.&nbsp;个案研究：罗马字母">3</a> <span class="divider">|</span> <a href="n_m_syntax.html" title="7.4.&nbsp;使用 {n,m} 语法">4</a> <span class="divider">|</span> <a href="verbose.html" title="7.5.&nbsp;松散正则表达式">5</a> <span class="divider">|</span> <a href="phone_numbers.html" title="7.6.&nbsp;个案研究：解析电话号码">6</a> <span class="divider">|</span> <a href="summary.html" title="7.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="street_addresses.html">个案研究：街道地址&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,256 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>4.4.&nbsp;通过 getattr 获取对象引用</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;4&nbsp;章&nbsp;自省的威力">
+      <link rel="previous" href="built_in_functions.html" title="4.3.&nbsp;使用 type、str、dir 和其它内置函数">
+      <link rel="next" href="filtering_lists.html" title="4.5.&nbsp;过滤列表">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">自省的威力</a>&nbsp;&gt;&nbsp;<span class="thispage">通过 getattr 获取对象引用</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="built_in_functions.html" title="上一页: “使用 type、str、dir 和其它内置函数”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="filtering_lists.html" title="下一页: “过滤列表”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="apihelper.getattr"></a>4.4.&nbsp;通过 <tt class="function">getattr</tt> 获取对象引用
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="getattr.html#d0e9345">4.4.1. 用于模块的 getattr</a></span></li>
+               <li><span class="section"><a href="getattr.html#d0e9513">4.4.2. getattr 作为一个分发者</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>你已经知道 <a href="../getting_to_know_python/everything_is_an_object.html" title="2.4.&nbsp;万物皆对象"><span class="application">Python</span> 函数是对象</a>。你不知道的是，使用 <tt class="function">getattr</tt> 函数，可以得到一个直到运行时才知道名称的函数的引用。
+            </p>
+         </div>
+         <div class="example"><a name="apihelper.getattr.intro"></a><h3 class="title">例&nbsp;4.10.&nbsp;<tt class="function">getattr</tt> 介绍
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = [<span class='pystring'>"Larry"</span>, <span class='pystring'>"Curly"</span>]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li.pop</span>                       <a name="apihelper.getattr.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">&lt;built-in method pop of list object at 010DF884&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">getattr(li, <span class='pystring'>"pop"</span>)</span>           <a name="apihelper.getattr.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">&lt;built-in method pop of list object at 010DF884&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">getattr(li, <span class='pystring'>"append"</span>)(<span class='pystring'>"Moe"</span>)</span> <a name="apihelper.getattr.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li</span>
+<span class="computeroutput">["Larry", "Curly", "Moe"]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">getattr({}, <span class='pystring'>"clear"</span>)</span>         <a name="apihelper.getattr.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">&lt;built-in method clear of dictionary object at 00F113D4&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">getattr((), <span class='pystring'>"pop"</span>)</span>           <a name="apihelper.getattr.1.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="traceback">Traceback (innermost last):
+  File "&lt;interactive input&gt;", line 1, in ?
+AttributeError: 'tuple' object has no attribute 'pop'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.getattr.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">该语句获取列表的 <tt class="function">pop</tt> 方法的引用。注意该语句并不是调用 <tt class="function">pop</tt> 方法；调用 <tt class="function">pop</tt> 方法的应该是 <tt class="literal">li.pop()</tt>。这里指的是方法对象本身。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.getattr.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">该语句也是返回 <tt class="function">pop</tt> 方法的引用，但是此时，方法名称是作为一个字符串参数传递给 <tt class="function">getattr</tt> 函数的。<tt class="function">getattr</tt> 是一个有用到令人无法致信的内置函数，可以返回任何对象的任何属性。在这个例子中，对象是一个 list，属性是 <tt class="function">pop</tt> 方法。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.getattr.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果不确信它是多么的有用，试试这个：<tt class="function">getattr</tt> 的返回值<span class="emphasis"><em>是</em></span> 方法，然后你就可以调用它，就像直接使用 <tt class="literal">li.append("Moe")</tt> 一样。但是实际上你没有直接调用函数；只是以字符串形式指定了函数名称。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.getattr.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">getattr</tt> 也可以作用于字典。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.getattr.1.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">理论上，<tt class="function">getattr</tt> 可以作用于元组，但是由于<a href="../native_data_types/tuples.html#odbchelper.tuplemethods" title="例&nbsp;3.16.&nbsp;Tuple 没有方法">元组没有方法</a>，所以不管你指定什么属性名称 <tt class="function">getattr</tt> 都会引发一个异常。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e9345"></a>4.4.1.&nbsp;用于模块的 <tt class="function">getattr</tt></h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p><tt class="function">getattr</tt> 不仅仅适用于内置数据类型，也可作用于模块。
+            </p>
+            <div class="example"><a name="apihelper.getattr.example"></a><h3 class="title">例&nbsp;4.11.&nbsp;<tt class="filename">apihelper.py</tt> 中的 <tt class="function">getattr</tt> 函数
+               </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> odbchelper</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">odbchelper.buildConnectionString</span>             <a name="apihelper.getattr.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">&lt;function buildConnectionString at 00D18DD4&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">getattr(odbchelper, <span class='pystring'>"buildConnectionString"</span>)</span> <a name="apihelper.getattr.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">&lt;function buildConnectionString at 00D18DD4&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">object = odbchelper</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">method = <span class='pystring'>"buildConnectionString"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">getattr(object, method)</span>                      <a name="apihelper.getattr.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">&lt;function buildConnectionString at 00D18DD4&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">type(getattr(object, method))</span>                <a name="apihelper.getattr.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">&lt;type 'function'&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> types</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">type(getattr(object, method)) == types.FunctionType</span>
+<span class="computeroutput">True</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">callable(getattr(object, method))</span>            <a name="apihelper.getattr.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="computeroutput">True</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.getattr.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">该语句返回 <tt class="filename">odbchelper</tt> 模块中 <tt class="function">buildConnectionString</tt> 函数的引用，<a href="../getting_to_know_python/index.html" title="第&nbsp;2&nbsp;章&nbsp;第一个 Python 程序">第&nbsp;2&nbsp;章 <i>第一个 Python 程序</i></a> 你已经研习过这个方法了。(你看到的这个十六进制地址是我机器上的；你的输出结果会有所不同。)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.getattr.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">使用 <tt class="function">getattr</tt>，你能够获得同一函数的同一引用。通常，<tt class="literal"><tt class="function">getattr</tt>(<i class="replaceable">object</i>, "<i class="replaceable">attribute</i>")</tt> 等价于 <tt class="literal"><i class="replaceable">object</i>.<i class="replaceable">attribute</i></tt>。如果 <i class="replaceable"><tt>object</tt></i> 是一个模块的话，那么 <i class="replaceable"><tt>attribute</tt></i> 可能是定义在模块中的任何东西：函数、类或者全局变量。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.getattr.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">接下来的是你真正用在 <tt class="function">info</tt> 函数中的东西。<tt class="varname">object</tt> 作为一个参数传递给函数； <tt class="varname">method</tt> 是方法或者函数的名称字符串。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.getattr.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">在这个例子中，<tt class="varname">method</tt> 是函数的名称，通过获取 <a href="built_in_functions.html#apihelper.type.intro" title="例&nbsp;4.5.&nbsp;type 介绍"><tt class="function">type</tt></a> 可以进行验证。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.getattr.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">由于 <tt class="varname">method</tt> 是一个函数，所以它是<a href="built_in_functions.html#apihelper.builtin.callable" title="例&nbsp;4.8.&nbsp;callable 介绍">可调用的</a>。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e9513"></a>4.4.2.&nbsp;<tt class="function">getattr</tt> 作为一个分发者
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p><tt class="function">getattr</tt> 常见的使用模式是作为一个分发者。举个例子，如果你有一个程序可以以不同的格式输出数据，你可以为每种输出格式定义各自的格式输出函数，然后使用唯一的分发函数调用所需的格式输出函数。
+            </p>
+            <p>例如，让我们假设有一个以 <span class="acronym">HTML</span>、<span class="acronym">XML</span> 和普通文本格式打印站点统计的程序。输出格式在命令行中指定，或者保存在配置文件中。<tt class="filename">statsout</tt> 模块定义了三个函数：<tt class="function">output_html</tt>、<tt class="function">output_xml</tt> 和 <tt class="function">output_text</tt>。然后主程序定义了唯一的输出函数，如下：
+            </p>
+            <div class="example"><a name="apihelper.getattr.dispatch"></a><h3 class="title">例&nbsp;4.12.&nbsp;使用<tt class="function">getattr</tt> 创建分发者
+               </h3><pre class="programlisting"><span class='pykeyword'>
+import</span> statsout
+
+<span class='pykeyword'>def</span><span class='pyclass'> output</span>(data, format=<span class='pystring'>"text"</span>):                              <a name="apihelper.getattr.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    output_function = getattr(statsout, <span class='pystring'>"output_%s"</span> % format) <a name="apihelper.getattr.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    <span class='pykeyword'>return</span> output_function(data)                              <a name="apihelper.getattr.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+</pre></div>
+            <div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.getattr.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">output</tt> 函数接收一个必备参数 <tt class="varname">data</tt>，和一个可选参数 <tt class="varname">format</tt>。如果没有指定 <tt class="varname">format</tt> 参数，其缺省值是 <tt class="literal">text</tt> 并完成普通文本输出函数的调用。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.getattr.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以连接 <tt class="varname">format</tt> 参数值和 "output_" 来创建一个函数名称作为参数值，然后从 <tt class="filename">statsout</tt> 模块中取得该函数。这种方式允许今后很容易地扩展程序以支持其它的输出格式，而且无需修改分发函数。所要做的仅仅是向 <tt class="filename">statsout</tt> 中添加一个函数，比如 <tt class="function">output_pdf</tt>，之后只要将 “pdf” 作为 <tt class="varname">format</tt> 的参数值传递给 <tt class="function">output</tt> 函数即可。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.getattr.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在你可以简单地调用输出函数，就像调用其它函数一样。<tt class="varname">output_function</tt> 变量是指向 <tt class="filename">statsout</tt> 模块中相应函数的引用。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <p>你是否发现前面示例的一个 Bug？即字符串和函数之间的松耦合，而且没有错误检查。如果用户传入一个格式参数，但是在 <tt class="filename">statsout</tt> 中没有定义相应的格式输出函数，会发生什么呢？还好，<tt class="function">getattr</tt> 会返回 <tt class="literal">None</tt>，它会取代一个有效函数并被赋值给 <tt class="varname">output_function</tt>，然后下一行调用函数的语句将会失败并抛出一个异常。这种方式不好。
+            </p>
+            <p>值得庆幸的是，<tt class="function">getattr</tt> 能够使用可选的第三个参数，一个缺省返回值。
+            </p>
+            <div class="example"><a name="apihelper.getattr.default"></a><h3 class="title">例&nbsp;4.13.&nbsp;<tt class="function">getattr</tt> 缺省值
+               </h3><pre class="programlisting"><span class='pykeyword'>
+import</span> statsout
+
+<span class='pykeyword'>def</span><span class='pyclass'> output</span>(data, format=<span class='pystring'>"text"</span>):
+    output_function = getattr(statsout, <span class='pystring'>"output_%s"</span> % format, statsout.output_text)
+    <span class='pykeyword'>return</span> output_function(data) <a name="apihelper.getattr.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.getattr.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">这个函数调用一定可以工作，因为你在调用 <tt class="function">getattr</tt> 时添加了第三个参数。第三个参数是一个缺省返回值，如果第二个参数指定的属性或者方法没能找到，则将返回这个缺省返回值。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>正如你所看到，<tt class="function">getattr</tt> 是相当强大的。它是自省的核心，在后面的章节中你将看到它更强大的示例。
+            </p>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="built_in_functions.html">&lt;&lt;&nbsp;使用 type、str、dir 和其它内置函数</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#apihelper.divein" title="4.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">2</a> <span class="divider">|</span> <a href="built_in_functions.html" title="4.3.&nbsp;使用 type、str、dir 和其它内置函数">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="filtering_lists.html" title="4.5.&nbsp;过滤列表">5</a> <span class="divider">|</span> <a href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质">6</a> <span class="divider">|</span> <a href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">7</a> <span class="divider">|</span> <a href="all_together.html" title="4.8.&nbsp;全部放在一起">8</a> <span class="divider">|</span> <a href="summary.html" title="4.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="filtering_lists.html">过滤列表&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

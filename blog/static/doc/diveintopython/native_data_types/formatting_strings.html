@@ -1,0 +1,181 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>3.5.&nbsp;格式化字符串</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;3&nbsp;章&nbsp;内置数据类型">
+      <link rel="previous" href="declaring_variables.html" title="3.4.&nbsp;变量声明">
+      <link rel="next" href="mapping_lists.html" title="3.6.&nbsp;映射 list">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">内置数据类型</a>&nbsp;&gt;&nbsp;<span class="thispage">格式化字符串</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="declaring_variables.html" title="上一页: “变量声明”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="mapping_lists.html" title="下一页: “映射 list”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="odbchelper.stringformatting"></a>3.5.&nbsp;格式化字符串
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><span class="application">Python</span> 支持格式化字符串的输出 。尽管这样可能会用到非常复杂的表达式，但最基本的用法是将一个值插入到一个有字符串格式符 <tt class="literal">%s</tt> 的字符串中。
+            </p>
+         </div><a name="compare.stringformatting.c"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在 <span class="application">Python</span> 中，字符串格式化使用与 <span class="application"><span class="acronym">C</span></span> 中 <tt class="function">sprintf</tt> 函数一样的语法。
+               </td>
+            </tr>
+         </table>
+         <div class="example"><a name="d0e7308"></a><h3 class="title">例&nbsp;3.21.&nbsp;字符串的格式化</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">k = <span class='pystring'>"uid"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">v = <span class='pystring'>"sa"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>"%s=%s"</span> % (k, v)</span> <a name="odbchelper.stringformatting.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'uid=sa'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.stringformatting.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">整个表达式的值为一个字符串。第一个 <tt class="literal">%s</tt> 被变量 <tt class="varname">k</tt> 的值替换；第二个 <tt class="literal">%s</tt> 被 <tt class="varname">v</tt> 的值替换。字符串中的所有其它字符 (在这个例子中，是等号) 按原样打印输出。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>注意 <tt class="literal">(k, v)</tt> 是一个 tuple。我说过它们对某些东西有用。
+         </p>
+         <p>您可能一直在想，做了这么多工作只不过是为了做简单的字符串连接。您想的不错，只不过字符串格式化不只是连接。它甚至不仅仅是格式化。它也是强制类型转换。</p>
+         <div class="example"><a name="odbchelper.stringformatting.coerce"></a><h3 class="title">例&nbsp;3.22.&nbsp;字符串格式化与字符串连接的比较</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">uid = <span class='pystring'>"sa"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">pwd = <span class='pystring'>"secret"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> pwd + <span class='pystring'>" is not a good password for "</span> + uid</span>      <a name="odbchelper.stringformatting.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">secret is not a good password for sa</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"%s is not a good password for %s"</span> % (pwd, uid)</span> <a name="odbchelper.stringformatting.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">secret is not a good password for sa</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">userCount = 6</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"Users connected: %d"</span> % (userCount, )</span>           <a name="odbchelper.stringformatting.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"> <a name="odbchelper.stringformatting.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">Users connected: 6</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"Users connected: "</span> + userCount</span>                 <a name="odbchelper.stringformatting.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="traceback">Traceback (innermost last):
+  File "&lt;interactive input&gt;", line 1, in ?
+TypeError: cannot concatenate 'str' and 'int' objects</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.stringformatting.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">+</tt> 是字符串连接操作符。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.stringformatting.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在这个简单例子中，字符串格式化实现与连接一样的结果。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.stringformatting.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">(userCount, )</tt> 是一个只包含一个元素的 tuple。是的，语法有一点奇怪，但是使用它的理由就是：显示地指出它是一个 tuple，而不是其他。实际上，当定义一个 list、tuple 或 dictionary 时，您可以总是在最后一个元素后面跟上一个逗号，但是当定义一个只包含一个元素的
+                        tuple 时逗号是必须的。如果省略逗号，<span class="application">Python</span> 不会知道 <tt class="literal">(userCount)</tt> 究竟是一个只包含一个元素的 tuple 还是变量 <tt class="varname">userCount</tt> 的值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.stringformatting.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">字符串格式化通过将 <tt class="literal">%s</tt> 替换成 <tt class="literal">%d</tt> 即可处理整数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.stringformatting.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">试图将一个字符串同一个非字符串连接会引发一个异常。与字符串格式化不同，字符串连接只能在被连接的每一个都是字符串时起作用。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>如同 <tt class="function">printf</tt> 在 <span class="application"><span class="acronym">C</span></span> 中的作用，<span class="application">Python</span> 中的字符串格式化是一把瑞士军刀。它有丰富的选项，不同的格式化格式符和可选的修正符可用于不同的数据类型。
+         </p>
+         <div class="example"><a name="odbchelper.stringformatting.numbers"></a><h3 class="title">例&nbsp;3.23.&nbsp;数值的格式化</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"Today's stock price: %f"</span> % 50.4625</span>   <a name="odbchelper.stringformatting.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">50.462500</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"Today's stock price: %.2f"</span> % 50.4625</span> <a name="odbchelper.stringformatting.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">50.46</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"Change since yesterday: %+.2f"</span> % 1.5</span> <a name="odbchelper.stringformatting.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">+1.50</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.stringformatting.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">%f</tt> 格式符选项对应一个十进制浮点数，不指定精度时打印 6 位小数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.stringformatting.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用包含“.2”精度修正符的 <tt class="literal">%f</tt> 格式符选项将只打印 2 位小数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.stringformatting.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">您甚至可以混合使用各种修正符。添加 <tt class="literal">+</tt> 修正符用于在数值之前显示一个正号或负号。注意“.2”精度修正符仍旧在它原来的位置，用于只打印 2 位小数。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 总结了<a href="http://www.python.org/doc/current/lib/typesseq-strings.html">所有字符串格式化所使用的格式符</a>。
+               </li>
+               <li><a href="http://www-gnats.gnu.org:8080/cgi-bin/info2www?(gawk)Top"><i class="citetitle">Effective <span class="acronym">AWK</span> Programming</i></a> 讨论了<a href="http://www-gnats.gnu.org:8080/cgi-bin/info2www?(gawk)Control+Letters">所有的格式符</a>和高级字符串格式化技术，如<a href="http://www-gnats.gnu.org:8080/cgi-bin/info2www?(gawk)Format+Modifiers">指定宽度，精度和0填充</a>。
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="declaring_variables.html">&lt;&lt;&nbsp;变量声明</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#odbchelper.dict" title="3.1.&nbsp;Dictionary 介绍">1</a> <span class="divider">|</span> <a href="lists.html" title="3.2.&nbsp;List 介绍">2</a> <span class="divider">|</span> <a href="tuples.html" title="3.3.&nbsp;Tuple 介绍">3</a> <span class="divider">|</span> <a href="declaring_variables.html" title="3.4.&nbsp;变量声明">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="mapping_lists.html" title="3.6.&nbsp;映射 list">6</a> <span class="divider">|</span> <a href="joining_lists.html" title="3.7.&nbsp;连接 list 与分割字符串">7</a> <span class="divider">|</span> <a href="summary.html" title="3.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="mapping_lists.html">映射 list&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

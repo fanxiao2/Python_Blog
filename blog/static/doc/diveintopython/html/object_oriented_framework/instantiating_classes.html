@@ -1,0 +1,168 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>5.4.&nbsp;类的实例化</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;5&nbsp;章&nbsp;对象和面向对象">
+      <link rel="previous" href="defining_classes.html" title="5.3.&nbsp;类的定义">
+      <link rel="next" href="userdict.html" title="5.5.&nbsp;探索 UserDict：一个封装类">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">对象和面向对象</a>&nbsp;&gt;&nbsp;<span class="thispage">类的实例化</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="defining_classes.html" title="上一页: “类的定义”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="userdict.html" title="下一页: “探索 UserDict：一个封装类”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="fileinfo.create"></a>5.4.&nbsp;类的实例化
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="instantiating_classes.html#d0e12314">5.4.1. 垃圾回收</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>在 <span class="application">Python</span> 中对类进行实例化很直接。要对类进行实例化，只要调用类 (就好像它是一个函数)，传入定义在 <tt class="function">__init__</tt> 方法中的参数。返回值将是新创建的对象。
+            </p>
+         </div>
+         <div class="example"><a name="d0e12149"></a><h3 class="title">例&nbsp;5.7.&nbsp;创建 <tt class="classname">FileInfo</tt> 实例
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> fileinfo</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f = fileinfo.FileInfo(<span class='pystring'>"/music/_singles/kairo.mp3"</span>)</span> <a name="fileinfo.create.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.__class__</span>                                        <a name="fileinfo.create.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">&lt;class fileinfo.FileInfo at 010EC204&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.__doc__</span>                                          <a name="fileinfo.create.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'store file metadata'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f</span>                                                  <a name="fileinfo.create.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">{'name': '/music/_singles/kairo.mp3'}</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.create.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你正在创建 <tt class="classname">FileInfo</tt> 类 (定义在 <tt class="filename">fileinfo</tt> 模块中) 的实例，并且将新创建的实例赋值给变量 <tt class="varname">f</tt>。你传入了一个参数，<tt class="literal">/music/_singles/kairo.mp3</tt>，它将最后作为在 <tt class="classname">FileInfo</tt> 中 <tt class="function">__init__</tt> 方法中的 <tt class="varname">filename</tt> 参数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.create.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">每一个类的实例有一个内置属性，<tt class="literal">__class__</tt>，它是对象的类。(注意这个表示包括了在我机器上的实例的物理地址，你的表示不会一样。)<span class="application">Java</span> 程序员可能对 <tt class="classname">Class</tt> 类熟悉，这个类包含了像 <tt class="function">getName</tt> 和 <tt class="function">getSuperclass</tt> 之类用来得到一个对象元数据信息的方法。在 <span class="application">Python</span> 中，这类元数据可以直接通过对象本身的属性，像 <tt class="literal">__class__</tt>、<tt class="literal">__name__</tt> 和 <tt class="literal">__bases__</tt> 来得到。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.create.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以像对函数或模块一样来访问实例的 <tt class="literal">doc string</tt>。一个类的所有实例共享相同的 <tt class="literal">doc string</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.create.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">还记得什么时候 <tt class="function">__init__</tt> 方法<a href="defining_classes.html#fileinfo.class.example" title="例&nbsp;5.4.&nbsp;定义 FileInfo 类">将它的 <tt class="varname">filename</tt> 参数赋给 <tt class="literal">self["name"]</tt></a> 吗？哦，答案在这。在创建类实例时你传入的参数被正确发送到 <tt class="function">__init__</tt> 方法中 (当我们创建类实例时，我们所传递的参数被正确地发送给 <tt class="function">__init__</tt> 方法 (随同一起传递的还有对象的引用，<tt class="literal">self</tt>，它是由 <span class="application">Python</span> 自动添加的)。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="compare.new.java"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在 <span class="application">Python</span> 中，创建类的实例只要调用一个类，仿佛它是一个函数就行了。不像 <span class="application"><span class="acronym">C++</span></span> 或 <span class="application">Java</span> 有一个明确的 <tt class="literal">new</tt> 操作符。
+               </td>
+            </tr>
+         </table>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e12314"></a>5.4.1.&nbsp;垃圾回收
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>如果说创建一个新的实例是容易的，那么销毁它们甚至更容易。通常，不需要明确地释放实例，因为当指派给它们的变量超出作用域时，它们会被自动地释放。内存泄漏在 <span class="application">Python</span> 中很少见。
+            </p>
+            <div class="example"><a name="fileinfo.scope"></a><h3 class="title">例&nbsp;5.8.&nbsp;尝试实现内存泄漏</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>def</span><span class='pyclass'> leakmem</span>():</span>
+<tt class="prompt">...     </tt><span class="userinput">f = fileinfo.FileInfo(<span class='pystring'>'/music/_singles/kairo.mp3'</span>)</span> <a name="fileinfo.create.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">...     </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> i <span class='pykeyword'>in</span> range(100):</span>
+<tt class="prompt">...     </tt><span class="userinput">leakmem()</span>                                          <a name="fileinfo.create.2.3"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.create.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">每次 <tt class="function">leakmem</tt> 函数被调用，你创建了 <tt class="classname">FileInfo</tt> 的一个实例，将其赋给变量 <tt class="varname">f</tt>，这个变量是函数内的一个局部变量。然后函数结束时没有释放 <tt class="varname">f</tt>，所以你可能认为有内存泄漏，但是你错了。当函数结束时，局部变量 <tt class="varname">f</tt> 超出了作用域。在这个地方，不再有任何对 <tt class="classname">FileInfo</tt> 新创建实例的引用 (因为除了 <tt class="varname">f</tt> 我们从未将其赋值给其它变量)，所以 <span class="application">Python</span> 替我们销毁掉实例。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.create.2.3"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">不管我们调用 <tt class="function">leakmem</tt> 函数多少次，决不会泄漏内存，因为每一次，<span class="application">Python</span> 将在从 <tt class="function">leakmem</tt> 返回前销毁掉新创建的 <tt class="classname">FileInfo</tt> 类实例。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>对于这种垃圾收集的方式，技术上的术语叫做“<span class="quote">引用计数</span>”。<span class="application">Python</span> 维护着对每个实例的引用列表。在上面的例子中，只有一个 <tt class="classname">FileInfo</tt> 的实例引用：局部变量 <tt class="varname">f</tt>。当函数结束时，变量 <tt class="varname">f</tt> 超出作用域，所以引用计数降为 <tt class="constant">0</tt>，则 <span class="application">Python</span> 自动销毁掉实例。
+            </p>
+            <p>在 <span class="application">Python</span> 的以前版本中，存在引用计数失败的情况，这样 <span class="application">Python</span> 不能在后面进行清除。如果你创建两个实例，它们相互引用 (例如，双重链表，每一个结点有都一个指向列表中前一个和后一个结点的指针)，任一个实例都不会被自动销毁，因为 <span class="application">Python</span> (正确) 认为对于每个实例都存在一个引用。<span class="application">Python</span> 2.0 有一种额外的垃圾回收方式，叫做“<span class="quote">标记后清除</span>”，它足够聪明，可以正确地清除循环引用。
+            </p>
+            <p>作为曾经读过哲学专业的一员，让我感到困惑的是，当没有人对事物进行观察时，它们就消失了，但是这确实是在 <span class="application">Python</span> 中所发生的。通常，你可以完全忘记内存管理，让 <span class="application">Python</span> 在后面进行清理。
+            </p>
+            <div class="furtherreading">
+               <h3>进一步阅读</h3>
+               <ul>
+                  <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 总结了<a href="http://www.python.org/doc/current/lib/specialattrs.html">像 <tt class="literal">__class__</tt> 之类的内置属性</a>。
+                  </li>
+                  <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 提供了 <a href="http://www.python.org/doc/current/lib/module-gc.html"><tt class="filename">gc</tt> 模块的文档</a>，此模块给予你对 <span class="application">Python</span> 的垃圾回收的底层控制权。
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="defining_classes.html">&lt;&lt;&nbsp;类的定义</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#fileinfo.divein" title="5.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="importing_modules.html" title="5.2.&nbsp;使用 from module import 导入模块">2</a> <span class="divider">|</span> <a href="defining_classes.html" title="5.3.&nbsp;类的定义">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="userdict.html" title="5.5.&nbsp;探索 UserDict：一个封装类">5</a> <span class="divider">|</span> <a href="special_class_methods.html" title="5.6.&nbsp;专用类方法">6</a> <span class="divider">|</span> <a href="special_class_methods2.html" title="5.7.&nbsp;高级专用类方法">7</a> <span class="divider">|</span> <a href="class_attributes.html" title="5.8.&nbsp;类属性介绍">8</a> <span class="divider">|</span> <a href="private_functions.html" title="5.9.&nbsp;私有函数">9</a> <span class="divider">|</span> <a href="summary.html" title="5.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="userdict.html">探索 UserDict：一个封装类&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

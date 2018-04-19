@@ -1,0 +1,172 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>8.9.&nbsp;全部放在一起</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;8&nbsp;章&nbsp;HTML 处理">
+      <link rel="previous" href="dialect.html" title="8.8.&nbsp;dialect.py 介绍">
+      <link rel="next" href="summary.html" title="8.10.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTML 处理</a>&nbsp;&gt;&nbsp;<span class="thispage">全部放在一起</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="dialect.html" title="上一页: “dialect.py 介绍”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="dialect.alltogether"></a>8.9.&nbsp;全部放在一起
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>到了将迄今为止我们已经学过并用得不错的东西放在一起的时候了。我希望您专心些。</p>
+         </div>
+         <div class="example"><a name="d0e22557"></a><h3 class="title">例&nbsp;8.20.&nbsp;<tt class="function">translate</tt> 函数，第 1 部分
+            </h3><pre class="programlisting"><span class='pykeyword'>
+def</span> translate(url, dialectName=<span class='pystring'>"chef"</span>): <a name="dialect.alltogether.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>import</span> urllib                       <a name="dialect.alltogether.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    sock = urllib.urlopen(url)          <a name="dialect.alltogether.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+    htmlSource = sock.read()           
+    sock.close()                       
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.alltogether.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个 <tt class="function">translate</tt> 函数有一个<a href="../power_of_introspection/optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">可选参数</a> <tt class="varname">dialectName</tt>，它是一个字符串，指出我们将使用的方言。一会我们就会看到它是如何使用的。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.alltogether.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">嘿，等一下，在这个函数中有一个 <a href="../getting_to_know_python/everything_is_an_object.html#odbchelper.import" title="例&nbsp;2.3.&nbsp;访问 buildConnectionString 函数的 doc string"><tt class="literal">import</tt></a> 语句！它在 <span class="application">Python</span> 中完全合法。您已经习惯了在一个程序的前面看到 <tt class="literal">import</tt> 语句，它意味着导入的模块在程序的任何地方都是可用的。但您也可以在一个函数中导入模块，这意味着导入的模块只能在函数中使用。如果您有一个只能用在一个函数中的模块，这是一个简便的方法，使您的代码更模块化。(当发现您周末的加班已经变成了一个 800
+                        行的艺术作品，并且决定将其分割成一打可重用的模块时，您会感谢它的。) 
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.alltogether.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在我们<a href="extracting_data.html#dialect.extract.urllib" title="例&nbsp;8.5.&nbsp;urllib 介绍">得到了给定的 URL 源文件</a>。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e22602"></a><h3 class="title">例&nbsp;8.21.&nbsp;<tt class="function">translate</tt> 函数，第 2 部分：奇妙而又奇妙
+            </h3><pre class="programlisting">
+    parserName = <span class='pystring'>"%sDialectizer"</span> % dialectName.capitalize() <a name="dialect.alltogether.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    parserClass = globals()[parserName]                     <a name="dialect.alltogether.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    parser = parserClass()                                  <a name="dialect.alltogether.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.alltogether.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">capitalize</tt> 是一个我们以前未曾见过的字符串方法；它只是将一个字符串的第一个字母变成大写，将其它的字母强制变成小写。再使用<a href="../native_data_types/formatting_strings.html" title="3.5.&nbsp;格式化字符串">字符串格式化</a>，我们就得到了一种方言的名字，并将它转化为了相应的方言变换器类的名字。如果 <tt class="varname">dialectName</tt> 是字符串 <tt class="literal">'chef'</tt>，<tt class="varname">parserName</tt> 将是字符串 <tt class="literal">'ChefDialectizer'</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.alltogether.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我们有了一个字符串形式 (<tt class="varname">parserName</tt>) 的类名称，还有一个 dictionary (<tt class="function">globals</tt>()) 形式的全局名字空间。合起来后，我们可以得到以前者命名的类的引用。(回想一下，<a href="../object_oriented_framework/class_attributes.html" title="5.8.&nbsp;类属性介绍">类是对象</a>，并且它们可以像其它对象一样赋值给一个变量。) 如果 <tt class="varname">parserName</tt> 是字符串 <tt class="literal">'ChefDialectizer'</tt>，<tt class="varname">parserClass</tt> 将是类 <tt class="literal">ChefDialectizer</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.alltogether.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">最后，我们拥有了一个类对象 (<tt class="varname">parserClass</tt>)，接着我们想要生成这个类的一个实例。好，我们已经知道如何去做了：<a href="../object_oriented_framework/instantiating_classes.html" title="5.4.&nbsp;类的实例化">像函数一样调用类</a>。这个类保存在一个局部变量中，但这个事实完全不会有什么影响；我们只是像函数一样调用这个局部变量，取出这个类的一个实例。如果 <tt class="varname">parserClass</tt> 是类 <tt class="literal">ChefDialectizer</tt>，<tt class="varname">parser</tt> 将是类 <tt class="literal">ChefDialectizer</tt> 的一个实例。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>何必这么麻烦？毕竟只有三个 <tt class="classname">Dialectizer</tt> 类；为什么不只使用一个 <tt class="function">case</tt> 语句？ (噢，在 <span class="application">Python</span> 中不存在 <tt class="function">case</tt> 语句，但为什么不只使用一组 <tt class="literal">if</tt> 语句呢？) 理由之一是：可扩展性。这个 <tt class="function">translate</tt> 函数完全不用关心我们定义了多少个方言变换器类。设想一下，如果我们明天定义了一个新的 <tt class="classname">FooDialectizer</tt> 类，把 <tt class="literal">'foo'</tt> 作为 <tt class="varname">dialectName</tt> 传给 <tt class="function">translate</tt> ，<tt class="function">translate</tt> 也能工作。
+         </p>
+         <p>甚至会更好。设想将 <tt class="classname">FooDialectizer</tt> 放进一个独立的模块中，使用 <tt class="literal">from <i class="replaceable">module</i> import</tt> 将其导入。我们已经知道了，这样会将它<a href="locals_and_globals.html#dialect.globals.example" title="例&nbsp;8.11.&nbsp;globals 介绍">包含在 <tt class="function">globals</tt>()</a> 中 ，所以不用修改 <tt class="function">translate</tt> ，它仍然可以正确运行，尽管 <tt class="classname">FooDialectizer</tt> 位于一个独立的文件中。
+         </p>
+         <p>现在设想一下方言的名字是从程序外面的某个地方来的，也许是从一个数据库中，或从一个表格中的用户输入的值中。您可以使用任意多的服务端 <span class="application">Python</span> 脚本架构来动态地生成网页；这个函数将接收在页面请求的查询字符串中的一个 <span class="acronym">URL</span> 和一个方言名字 (两个都是字符串) ，接着输出 “<span class="quote">翻译</span>” 后的网页。
+         </p>
+         <p>最后，设想一下，使用了一种插件架构的 <tt class="classname">Dialectizer</tt> 框架。您可以将每个 <tt class="classname">Dialectizer</tt> 类放在分别放在独立的文件中，在 <tt class="filename">dialect.py</tt> 中只留下 <tt class="function">translate</tt> 函数。假定一种统一的命名模式，这个 <tt class="function">translate</tt> 函数能够动态地从合适的文件中导入合适的类，除了方言名字外什么都不用给出。(虽然您还没有看过动态导入，但我保证在后面的一章中会涉及到它。) 如果要加入一种新的方言，您只要在插件目录下加入一个以合适的名字命名的文件 (像 <tt class="filename">foodialect.py</tt>，它包含了 <tt class="classname">FooDialectizer</tt> 类) 。使用方言名 <tt class="literal">'foo'</tt> 来调用这个 <tt class="function">translate</tt> 函数，将会查找 <tt class="filename">foodialect.py</tt> 模块，导入 <tt class="classname">FooDialectizer</tt> 类，这样就行了。
+         </p>
+         <div class="example"><a name="d0e22785"></a><h3 class="title">例&nbsp;8.22.&nbsp;<tt class="function">translate</tt> 函数，第 3 部分
+            </h3><pre class="programlisting">
+    parser.feed(htmlSource) <a name="dialect.alltogether.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    parser.close()          <a name="dialect.alltogether.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    <span class='pykeyword'>return</span> parser.output()  <a name="dialect.alltogether.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.alltogether.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">剩下的工作似乎会非常无聊，但实际上，<tt class="function">feed</tt> 函数<a href="extracting_data.html#dialect.feed.example" title="例&nbsp;8.7.&nbsp;使用 urllister.py">执行了全部的转换工作</a>。我们拥有存在于单个字符串中的全部 <span class="acronym">HTML</span> 源代码，所以我们只需要调用 <tt class="function">feed</tt> 一次。然而，您可以按您的需要经常调用 <tt class="function">feed</tt>，分析器将不停地进行分析。所以如果我们担心内存的使用 (或者我们已经知道了将要处理非常巨大的 <span class="acronym">HTML</span> 页面) ，我们可以在一个循环中调用它，即我们读出一点 <span class="acronym">HTML</span> 字节，就将其送进分析器。结果会是一样的。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.alltogether.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">因为 <tt class="function">feed</tt> 维护着一个内部缓冲区，当您完成时，应该总是调用分析器的 <tt class="function">close</tt> 方法 (那怕您像我们做的一样，一次就全部送出) 。否则您可能会发现，输出丢掉了最后几个字节。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.alltogether.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">回想一下，<tt class="function">output</tt> 是我们在 <tt class="classname">BaseHTMLProcessor</tt> 上定义的函数，用来<a href="basehtmlprocessor.html#dialect.output.example" title="例&nbsp;8.9.&nbsp;BaseHTMLProcessor 输出结果">将所有缓冲的输出片段连接起来</a>并且以单个字符串返回。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>像这样，我们已经 “<span class="quote">翻译</span>” 了一个网页，除了给出一个 <span class="acronym">URL</span> 和一种方言的名字外，什么都没有给出。
+         </p>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li>您可能会认为我的服务端脚本编程的想法是开玩笑。在我发现这个<a href="http://rinkworks.com/dialect/">基于 web 的方言转换器</a>之前，的确是这样想的。不幸的是，看不到它的源代码。
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="dialect.html">&lt;&lt;&nbsp;dialect.py 介绍</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#dialect.divein" title="8.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="introducing_sgmllib.html" title="8.2.&nbsp;sgmllib.py 介绍">2</a> <span class="divider">|</span> <a href="extracting_data.html" title="8.3.&nbsp;从 HTML 文档中提取数据">3</a> <span class="divider">|</span> <a href="basehtmlprocessor.html" title="8.4.&nbsp;BaseHTMLProcessor.py 介绍">4</a> <span class="divider">|</span> <a href="locals_and_globals.html" title="8.5.&nbsp;locals 和 globals">5</a> <span class="divider">|</span> <a href="dictionary_based_string_formatting.html" title="8.6.&nbsp;基于 dictionary 的字符串格式化">6</a> <span class="divider">|</span> <a href="quoting_attribute_values.html" title="8.7.&nbsp;给属性值加引号">7</a> <span class="divider">|</span> <a href="dialect.html" title="8.8.&nbsp;dialect.py 介绍">8</a> <span class="divider">|</span> <span class="thispage">9</span> <span class="divider">|</span> <a href="summary.html" title="8.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

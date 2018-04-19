@@ -1,0 +1,162 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>15.4.&nbsp;后记</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;15&nbsp;章&nbsp;重构">
+      <link rel="previous" href="refactoring.html" title="15.3.&nbsp;重构">
+      <link rel="next" href="summary.html" title="15.5.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">重构</a>&nbsp;&gt;&nbsp;<span class="thispage">后记</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="refactoring.html" title="上一页: “重构”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="roman.postscript"></a>15.4.&nbsp;后记
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>聪明的读者在学习<a href="refactoring.html" title="15.3.&nbsp;重构">前一节</a>时想得会更深入一层。现在写的这个程序中最令人头痛的性能负担是正则表达式，但它是必需的，因为没有其它方法来识别罗马数字。但是，它们只有 5000 个，为什么不一次性地构建一个查询表来读取？不必用正则表达式凸现了这个主意的好处。你建立了整数到罗马数字查询表的时候，罗马数字到整数的逆向查询表也构建了。
+            </p>
+         </div>
+         <p>更大的好处在于，你已经拥有一整套完全的单元测试。你修改了多半的代码，但单元测试还是一样的，因此你可以确定你的新代码与来的代码一样可以正常工作。</p>
+         <div class="example"><a name="d0e35256"></a><h3 class="title">例&nbsp;15.17.&nbsp;<tt class="filename">roman9.py</tt></h3>
+            <p>这个文件可以在例子目录下的 <tt class="filename">py/roman/stage9/</tt> 目录中找到。
+            </p>
+            <p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+            </p><pre class="programlisting">
+<span class='pycomment'>#Define exceptions</span>
+<span class='pykeyword'>class</span><span class='pyclass'> RomanError</span>(Exception): <span class='pykeyword'>pass</span>
+<span class='pykeyword'>class</span><span class='pyclass'> OutOfRangeError</span>(RomanError): <span class='pykeyword'>pass</span>
+<span class='pykeyword'>class</span><span class='pyclass'> NotIntegerError</span>(RomanError): <span class='pykeyword'>pass</span>
+<span class='pykeyword'>class</span><span class='pyclass'> InvalidRomanNumeralError</span>(RomanError): <span class='pykeyword'>pass</span>
+
+<span class='pycomment'>#Roman numerals must be less than 5000</span>
+MAX_ROMAN_NUMERAL = 4999
+
+<span class='pycomment'>#Define digit mapping</span>
+romanNumeralMap = ((<span class='pystring'>'M'</span>,  1000),
+                   (<span class='pystring'>'CM'</span>, 900),
+                   (<span class='pystring'>'D'</span>,  500),
+                   (<span class='pystring'>'CD'</span>, 400),
+                   (<span class='pystring'>'C'</span>,  100),
+                   (<span class='pystring'>'XC'</span>, 90),
+                   (<span class='pystring'>'L'</span>,  50),
+                   (<span class='pystring'>'XL'</span>, 40),
+                   (<span class='pystring'>'X'</span>,  10),
+                   (<span class='pystring'>'IX'</span>, 9),
+                   (<span class='pystring'>'V'</span>,  5),
+                   (<span class='pystring'>'IV'</span>, 4),
+                   (<span class='pystring'>'I'</span>,  1))
+
+<span class='pycomment'>#Create tables for fast conversion of roman numerals.</span>
+<span class='pycomment'>#See fillLookupTables() below.</span>
+toRomanTable = [ None ]  <span class='pycomment'># Skip an index since Roman numerals have no zero</span>
+fromRomanTable = {}
+
+<span class='pykeyword'>def</span><span class='pyclass'> toRoman</span>(n):
+    <span class='pystring'>"""convert integer to Roman numeral"""</span>
+    <span class='pykeyword'>if</span> <span class='pykeyword'>not</span> (0 &lt; n &lt;= MAX_ROMAN_NUMERAL):
+        <span class='pykeyword'>raise</span> OutOfRangeError, <span class='pystring'>"number out of range (must be 1..%s)"</span> % MAX_ROMAN_NUMERAL
+    <span class='pykeyword'>if</span> int(n) &lt;&gt; n:
+        <span class='pykeyword'>raise</span> NotIntegerError, <span class='pystring'>"non-integers can not be converted"</span>
+    <span class='pykeyword'>return</span> toRomanTable[n]
+
+<span class='pykeyword'>def</span><span class='pyclass'> fromRoman</span>(s):
+    <span class='pystring'>"""convert Roman numeral to integer"""</span>
+    <span class='pykeyword'>if</span> <span class='pykeyword'>not</span> s:
+        <span class='pykeyword'>raise</span> InvalidRomanNumeralError, <span class='pystring'>"Input can not be blank"</span>
+    <span class='pykeyword'>if</span> <span class='pykeyword'>not</span> fromRomanTable.has_key(s):
+        <span class='pykeyword'>raise</span> InvalidRomanNumeralError, <span class='pystring'>"Invalid Roman numeral: %s"</span> % s
+    <span class='pykeyword'>return</span> fromRomanTable[s]
+
+<span class='pykeyword'>def</span><span class='pyclass'> toRomanDynamic</span>(n):
+    <span class='pystring'>"""convert integer to Roman numeral using dynamic programming"""</span>
+    result = <span class='pystring'>""</span>
+    <span class='pykeyword'>for</span> numeral, integer <span class='pykeyword'>in</span> romanNumeralMap:
+        <span class='pykeyword'>if</span> n &gt;= integer:
+            result = numeral
+            n -= integer
+            <span class='pykeyword'>break</span>
+    <span class='pykeyword'>if</span> n &gt; 0:
+        result += toRomanTable[n]
+    <span class='pykeyword'>return</span> result
+
+<span class='pykeyword'>def</span><span class='pyclass'> fillLookupTables</span>():
+    <span class='pystring'>"""compute all the possible roman numerals"""</span>
+    <span class='pycomment'>#Save the values in two global tables to convert to and from integers.</span>
+    <span class='pykeyword'>for</span> integer <span class='pykeyword'>in</span> range(1, MAX_ROMAN_NUMERAL + 1):
+        romanNumber = toRomanDynamic(integer)
+        toRomanTable.append(romanNumber)
+        fromRomanTable[romanNumber] = integer
+
+fillLookupTables()
+</pre></div>
+         <p>这样有多快呢？</p>
+         <div class="example"><a name="d0e35274"></a><h3 class="title">例&nbsp;15.18.&nbsp;用 <tt class="filename">romantest9.py</tt> 测试 <tt class="filename">roman9.py</tt> 的结果
+            </h3><pre class="screen">
+<span class="computeroutput">
+.............
+----------------------------------------------------------------------
+Ran 13 tests in 0.791s
+
+OK
+</span>
+</pre></div>
+         <p>还记得吗？你原有版本的最快速度是 13 个测试耗时 3.315 秒。当然，这样的比较不完全公平，因为这个新版本需要更长的时间来导入 (当它填充查询表时)。但是导入只需一次，在运行过程中可以忽略。</p>
+         <p>这个重构的故事的寓意是什么？</p>
+         <div class="itemizedlist">
+            <ul>
+               <li>简洁是美德。</li>
+               <li>特别是使用正则表达式时。</li>
+               <li>并且单元测试给了你大规模重构的信心……即使原有的代码不是你写的。</li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="refactoring.html">&lt;&lt;&nbsp;重构</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#roman.bugs" title="15.1.&nbsp;处理 bugs">1</a> <span class="divider">|</span> <a href="handling_changing_requirements.html" title="15.2.&nbsp;应对需求变化">2</a> <span class="divider">|</span> <a href="refactoring.html" title="15.3.&nbsp;重构">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="summary.html" title="15.5.&nbsp;小结">5</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

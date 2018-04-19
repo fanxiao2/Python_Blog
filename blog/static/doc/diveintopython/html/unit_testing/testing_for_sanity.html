@@ -1,0 +1,172 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>13.6.&nbsp;完备性检测 (Testing for sanity)</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;13&nbsp;章&nbsp;单元测试">
+      <link rel="previous" href="testing_for_failure.html" title="13.5.&nbsp;负面测试 (Testing for failure)">
+      <link rel="next" href="stage_1.html" title="第&nbsp;14&nbsp;章&nbsp;测试优先编程">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">单元测试</a>&nbsp;&gt;&nbsp;<span class="thispage">完备性检测 (Testing for sanity)</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="testing_for_failure.html" title="上一页: “负面测试 (Testing for failure)”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="stage_1.html" title="下一页: “测试优先编程”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="roman.sanity"></a>13.6.&nbsp;完备性检测 (Testing for sanity)
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你经常会发现一组代码中包含互逆的转换函数，一个把 A 转换为 B ，另一个把 B 转换为 A。在这种情况下，创建“<span class="quote">完备性检测</span>”可以使你在由 A 转 B 再转 A 的过程中不会出现丢失精度或取整等错误。
+            </p>
+         </div>
+         <p>考虑这个<a href="index.html#roman.requirements">要求</a>：
+         </p>
+         <div class="orderedlist">
+            <ol start="6" type="1">
+               <li>如果你给定一个数，把它转化为罗马数字表示，然后再转换回阿拉伯数字表示，你所得到的应该是最初给定的那个数。因此，对于 <tt class="literal">1..3999</tt> 中的<tt class="varname">n</tt>，<tt class="literal">fromRoman(toRoman(n)) == n</tt> 总成立。
+               </li>
+            </ol>
+         </div>
+         <div class="example"><a name="roman.sanity.example"></a><h3 class="title">例&nbsp;13.5.&nbsp;以 <tt class="function">toRoman</tt> 测试 <tt class="function">fromRoman</tt> 的输出
+            </h3><pre class="programlisting"><span class='pykeyword'>
+class</span> SanityCheck(unittest.TestCase):        
+    <span class='pykeyword'>def</span><span class='pyclass'> testSanity</span>(self):                    
+        <span class='pystring'>"""fromRoman(toRoman(n))==n for all n"""</span>
+        <span class='pykeyword'>for</span> integer <span class='pykeyword'>in</span> range(1, 4000):        <a name="roman.sanity.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"> <a name="roman.sanity.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+            numeral = roman.toRoman(integer) 
+            result = roman.fromRoman(numeral)
+            self.assertEqual(integer, result) <a name="roman.sanity.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.sanity.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你已经见到过 <a href="../native_data_types/declaring_variables.html#odbchelper.multiassign.range" title="例&nbsp;3.20.&nbsp;连续值赋值"><tt class="function">range</tt> 函数</a>，但这里它以两个参数被调用，返回了从第一个参数 (<tt class="constant">1</tt>) 开始到<span class="emphasis"><em>但不包括</em></span> 第二个参数 (<tt class="literal">4000</tt>) 的整数列表。因此，<tt class="literal">1..3999</tt> 就是准备转换为罗马数字表示的有效值列表。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.sanity.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我想提一下，这里的 <tt class="varname">integer</tt> 并不是一个 <span class="application">Python</span> 关键字，而只是没有什么特别的变量名。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.sanity.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里的测试逻辑显而易见：把一个数 (<tt class="varname">integer</tt>) 转换为罗马数字表示的数 (<tt class="varname">numeral</tt>)，然后再转换回来 (<tt class="varname">result</tt>) 并确保最后的结果和最初的数是同一个数。如果不是，<tt class="function">assertEqual</tt> 便会引发异常，测试也便立刻失败。如果所有的结果都和初始数一致，<tt class="function">assertEqual</tt> 将会保持沉默，整个 <tt class="function">testSanity</tt> 方法将会最终也保持沉默，测试则将会被认定为通过。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p><a href="index.html#roman.requirements">最后两个要求</a>和其他的要求不同，似乎既武断而又微不足道：
+         </p>
+         <div class="orderedlist">
+            <ol start="7" type="1">
+               <li><tt class="function">toRoman</tt> 返回的罗马数字应该使用大写字母。
+               </li>
+               <li><tt class="function">fromRoman</tt> 应该只接受大写罗马数字 (也就是说给定小写字母进行转换时应该失败)。
+               </li>
+            </ol>
+         </div>
+         <p>事实上，它们确实有点武断，譬如你完全可以让 <tt class="function">fromRoman</tt> 接受小写和大小写混合的输入；但他们也不是完全武断；如果 <tt class="function">toRoman</tt> 总是返回大写的输出，那么 <tt class="function">fromRoman</tt> 至少应该接受大写字母输入，不然 “<span class="quote">完备性检测</span>” (要求 #6) 就会失败。不管怎么说，<span class="emphasis"><em>只</em></span> 接受大写输入还是武断的，但就像每个系统都会告诉你的那样，大小写总会出问题，因此事先规定这一点还是有必要的。既然有必要规定，那么也就有必要测试。
+         </p>
+         <div class="example"><a name="d0e32914"></a><h3 class="title">例&nbsp;13.6.&nbsp;大小写测试</h3><pre class="programlisting"><span class='pykeyword'>
+class</span> CaseCheck(unittest.TestCase):                   
+    <span class='pykeyword'>def</span><span class='pyclass'> testToRomanCase</span>(self):                        
+        <span class='pystring'>"""toRoman should always return uppercase"""</span>  
+        <span class='pykeyword'>for</span> integer <span class='pykeyword'>in</span> range(1, 4000):                
+            numeral = roman.toRoman(integer)          
+            self.assertEqual(numeral, numeral.upper())         <a name="roman.sanity.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+
+    <span class='pykeyword'>def</span><span class='pyclass'> testFromRomanCase</span>(self):                      
+        <span class='pystring'>"""fromRoman should only accept uppercase input"""</span>
+        <span class='pykeyword'>for</span> integer <span class='pykeyword'>in</span> range(1, 4000):                
+            numeral = roman.toRoman(integer)          
+            roman.fromRoman(numeral.upper())                   <a name="roman.sanity.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"> <a name="roman.sanity.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+            self.assertRaises(roman.InvalidRomanNumeralError,
+                              roman.fromRoman, numeral.lower())   <a name="roman.sanity.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.sanity.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">关于这个测试用例最有趣的一点不在于它测试了什么，而是它不测试什么。它不会测试 <tt class="function">toRoman</tt> 的返回值是否<a href="testing_for_success.html#roman.testtoromanknownvalues.example" title="例&nbsp;13.2.&nbsp;testToRomanKnownValues">正确</a>或者<a href="testing_for_sanity.html#roman.sanity.example" title="例&nbsp;13.5.&nbsp;以 toRoman 测试 fromRoman 的输出">一致</a>；这些问题由其他测试用例来回答。整个测试用例仅仅测试大写问题。你也许觉得应该将它并入到<a href="testing_for_sanity.html#roman.sanity.example" title="例&nbsp;13.5.&nbsp;以 toRoman 测试 fromRoman 的输出">完备性测试</a>，毕竟都要遍历整个输入值范围并调用 <tt class="function">toRoman</tt>。<sup>[<a name="d0e32945" href="#ftn.d0e32945">11</a>]</sup>但是这样将会违背一条<a href="testing_for_success.html" title="13.4.&nbsp;正面测试 (Testing for success)">基本规则</a>：每个测试用例只回答一个问题。试想一下，你将这个测试并入到完备性测试中，然后遇到了测试失败。你还需要进一步分析以便判定测试用例的哪部分出了问题。如果你需要分析方能找出问题所在，无疑你的测试用例在设计上出了问题。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.sanity.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这有一个和前面相似的情况：尽管 “<span class="quote">你知道</span>” <tt class="function">toRoman</tt> 总是返回大写字母，你还是需要把返回值显式地转换成大写字母后再传递给只接受大写的 <tt class="function">fromRoman</tt> 进行测试。为什么？因为 <tt class="function">toRoman</tt> 只返回大写字母是一个独立的需求。如果你改变了这个需求，例如改成总是返回小写字母，那么 <tt class="function">testToRomanCase</tt> 测试用例也应作出调整，但这个测试用例应该仍能通过。这是另外一个<a href="testing_for_success.html" title="13.4.&nbsp;正面测试 (Testing for success)">基本规则</a>：每个测试用例必须可以与其他测试用例隔离工作，每个测试用例是一个“孤岛”。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.sanity.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">注意你并没有使用 <tt class="function">fromRoman</tt> 的返回值。这是一个有效的 <span class="application">Python</span> 语法：如果一个函数返回一个值，但没有被使用，<span class="application">Python</span> 会直接把这个返回值扔掉。这正是你所希望的，这个测试用例并不对返回值进行测试，只是测试 <tt class="function">fromRoman</tt> 接受大写字母而不引发异常。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.sanity.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这行有点复杂，但是它与 <tt class="classname">ToRomanBadInput</tt> 和 <tt class="classname">FromRomanBadInput</tt> 测试很相似。
+                        你在测试以特定值 (<tt class="literal">numeral.lower()</tt>，循环中目前罗马数字的小写版) 调用特定函数 (<tt class="function">roman.fromRoman</tt>) 会确实引发特定的异常 (<tt class="literal">roman.InvalidRomanNumeralError</tt>)。如果 (在循环中的每一次) 确实如此，测试通过；如果有一次不是这样 (比如引发另外的异常或者不引发异常)，测试失败。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>在下一章中，你将看到如何编写可以通过这些测试的代码。</p>
+         <div class="footnotes">
+            <h3 class="footnotetitle">Footnotes</h3>
+            <div class="footnote">
+               <p><sup>[<a name="ftn.d0e32945" href="#d0e32945">11</a>] </sup>“<span class="quote">除了诱惑什么我都能抗拒。 (I can resist everything except temptation.)</span>”――Oscar Wilde
+               </p>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="testing_for_failure.html">&lt;&lt;&nbsp;负面测试 (Testing for failure)</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#roman.intro" title="13.1.&nbsp;罗马数字程序介绍 II">1</a> <span class="divider">|</span> <a href="diving_in.html" title="13.2.&nbsp;深入">2</a> <span class="divider">|</span> <a href="romantest.html" title="13.3.&nbsp;romantest.py 介绍">3</a> <span class="divider">|</span> <a href="testing_for_success.html" title="13.4.&nbsp;正面测试 (Testing for success)">4</a> <span class="divider">|</span> <a href="testing_for_failure.html" title="13.5.&nbsp;负面测试 (Testing for failure)">5</a> <span class="divider">|</span> <span class="thispage">6</span>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="stage_1.html">测试优先编程&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

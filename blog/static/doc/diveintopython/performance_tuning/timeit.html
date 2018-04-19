@@ -1,0 +1,135 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>18.2.&nbsp;使用 timeit 模块</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;18&nbsp;章&nbsp;性能优化">
+      <link rel="previous" href="index.html" title="第&nbsp;18&nbsp;章&nbsp;性能优化">
+      <link rel="next" href="regular_expressions.html" title="18.3.&nbsp;优化正则表达式">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">性能优化</a>&nbsp;&gt;&nbsp;<span class="thispage">使用 timeit 模块</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="index.html" title="上一页: “性能优化”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="regular_expressions.html" title="下一页: “优化正则表达式”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="soundex.timeit"></a>18.2.&nbsp;使用 <tt class="filename">timeit</tt> 模块
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>关于 <span class="application">Python</span> 代码优化你需要知道的最重要问题是，决不要自己编写计时函数。
+            </p>
+         </div>
+         <p>为一个很短的代码计时都很复杂。处理器有多少时间用于运行这个代码？有什么在后台运行吗？每个现代计算机都在后台运行持续或者间歇的程序。小小的疏忽可能破坏你的百年大计，后台服务偶尔被 “<span class="quote">唤醒</span>” 在最后千分之一秒做一些像查收信件，连接计时通信服务器，检查应用程序更新，扫描病毒，查看是否有磁盘被插入光驱之类很有意义的事。在开始计时测试之前，把一切都关掉，断开网络的连接。再次确定一切都关上后关掉那些不断查看网络是否恢复的服务等等。
+         </p>
+         <p>接下来是计时框架本身引入的变化因素。<span class="application">Python</span> 解释器是否缓存了方法名的查找？是否缓存代码块的编译结果？正则表达式呢? 你的代码重复运行时有副作用吗？不要忘记，你的工作结果将以比秒更小的单位呈现，你的计时框架中的小错误将会带来不可挽回的结果扭曲。
+         </p>
+         <p><span class="application">Python</span> 社区有句俗语：“<span class="quote"><span class="application">Python</span> 自己带着电池。</span>” 别自己写计时框架。<span class="application">Python</span> 2.3 具备一个叫做 <tt class="filename">timeit</tt> 的完美计时工具。
+         </p>
+         <div class="example"><a name="d0e39095"></a><h3 class="title">例&nbsp;18.2.&nbsp;<tt class="filename">timeit</tt> 介绍
+            </h3>
+            <p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+            </p><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> timeit</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">t = timeit.Timer(<span class='pystring'>"soundex.soundex('Pilgrim')"</span>,</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pystring'>"import soundex"</span>)</span>   <a name="soundex.timeit.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">t.timeit()</span>              <a name="soundex.timeit.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">8.21683733547</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">t.repeat(3, 2000000)</span>    <a name="soundex.timeit.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">[16.48319309109, 16.46128984923, 16.44203948912]</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soundex.timeit.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">timeit</tt> 模块定义了接受两个参数的 <tt class="classname">Timer</tt> 类。两个参数都是字符串。第一个参数是你要计时的语句，这里你计时的是以<tt class="literal">'Pilgrim'</tt>参数调用 Soundex 函数。传递给 <tt class="classname">Timer</tt> 的第二个参数是为第一个参数语句构建环境的导入语句。从内部讲，<tt class="filename">timeit</tt> 构建起一个独立的虚拟环境，手工地执行建立语句 (导入 <tt class="filename">soundex</tt> 模块)，然后手工地编译和执行被计时语句 (调用 Soundex 函数)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soundex.timeit.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">只要有了 <tt class="classname">Timer</tt> 对象，最简单的事就是调用 <tt class="methodname">timeit()</tt>，它调用你的函数一百万次并返回所耗费的秒数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soundex.timeit.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="classname">Timer</tt> 对象的另一个主要方法是 <tt class="methodname">repeat()</tt>，它接受两个可选参数。第一个参数是重复整个测试的次数，第二个参数是每个测试中调用被计时语句的次数。两个参数都是可选的，它们的默认值分别是 <tt class="literal">3</tt> 和 <tt class="literal">1000000</tt>。<tt class="methodname">repeat()</tt> 方法返回以秒记录的每个测试循环的耗时列表。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="d0e39191"></a><table class="tip" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/tip.png" alt="提示" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">你可以在命令行使用 <tt class="filename">timeit</tt> 模块来测试一个已存在的 <span class="application">Python</span> 程序，而不需要修改代码。在 <a href="http://docs.python.org/lib/node396.html">http://docs.python.org/lib/node396.html</a> 查看文档中关于命令行选项的内容。
+               </td>
+            </tr>
+         </table>
+         <p>注意 <tt class="methodname">repeat()</tt> 返回一个时间列表。由于 <span class="application">Python</span> 计时器使用的处理器时间的微小变化 (或者那些你没办法根除的可恶的后台进程)，这些时间中几乎不可能出现重复。你的第一想法也许是说：“<span class="quote">让我们求平均值获得真实的数据。</span>”
+         </p>
+         <p>事实上，那几乎是确定错误的。你的代码或者 <span class="application">Python</span> 解释器的变化可能缩短耗时，那些没办法去除的可恶后台进程或者其他 <span class="application">Python</span> 解释器以外的因素也许令耗时延长。如果计时结果之间的差异超过百分之几，太多的可变因素使你没法相信结果，如果不是这样则可以取最小值而丢弃其他结果。
+         </p>
+         <p><span class="application">Python</span> 有一个方便的 <tt class="function">min</tt> 函数返回输入列表中的最小值：
+         </p>
+         <div class="informalexample"><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">min(t.repeat(3, 1000000))</span>
+<span class="computeroutput">8.22203948912</span>
+</pre></div><a name="d0e39239"></a><table class="tip" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/tip.png" alt="提示" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%"><tt class="filename">timeit</tt> 模块只有在你知道哪段代码需要优化时使用。如果你有一个很大的 <span class="application">Python</span> 程序并且不知道你的性能问题所在，查看 <a href="http://docs.python.org/lib/module-hotshot.html"><tt class="filename">hotshot</tt> 模块</a>。
+               </td>
+            </tr>
+         </table>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="index.html">&lt;&lt;&nbsp;性能优化</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#soundex.divein" title="18.1.&nbsp;概览">1</a> <span class="divider">|</span> <span class="thispage">2</span> <span class="divider">|</span> <a href="regular_expressions.html" title="18.3.&nbsp;优化正则表达式">3</a> <span class="divider">|</span> <a href="dictionary_lookups.html" title="18.4.&nbsp;优化字典查找">4</a> <span class="divider">|</span> <a href="list_operations.html" title="18.5.&nbsp;优化列表操作">5</a> <span class="divider">|</span> <a href="string_manipulation.html" title="18.6.&nbsp;优化字符串操作">6</a> <span class="divider">|</span> <a href="summary.html" title="18.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="regular_expressions.html">优化正则表达式&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

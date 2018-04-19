@@ -1,0 +1,160 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>13.5.&nbsp;负面测试 (Testing for failure)</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;13&nbsp;章&nbsp;单元测试">
+      <link rel="previous" href="testing_for_success.html" title="13.4.&nbsp;正面测试 (Testing for success)">
+      <link rel="next" href="testing_for_sanity.html" title="13.6.&nbsp;完备性检测 (Testing for sanity)">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">单元测试</a>&nbsp;&gt;&nbsp;<span class="thispage">负面测试 (Testing for failure)</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="testing_for_success.html" title="上一页: “正面测试 (Testing for success)”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="testing_for_sanity.html" title="下一页: “完备性检测 (Testing for sanity)”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="roman.failure"></a>13.5.&nbsp;负面测试 (Testing for failure)
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>使用有效输入确保函数成功通过测试还不够，你还需要测试无效输入导致函数失败的情形。但并不是任何失败都可以，必须如你预期地失败。</p>
+         </div>
+         <p>还记得 <tt class="function">toRoman</tt> 的<a href="index.html#roman.requirements">其他要求</a>吧：
+         </p>
+         <div class="orderedlist">
+            <ol start="2" type="1">
+               <li><tt class="function">toRoman</tt> 在输入值为 <tt class="constant">1</tt> 到 <tt class="literal">3999</tt> 之外时失败。
+               </li>
+               <li><tt class="function">toRoman</tt> 在输入值为非整数时失败。
+               </li>
+            </ol>
+         </div>
+         <p>在 <span class="application">Python</span> 中，函数以引发<a href="../file_handling/index.html#fileinfo.exception" title="6.1.&nbsp;异常处理">异常</a>的方式表示失败。<tt class="filename">unittest</tt> 模块提供了用于测试函数是否在给定无效输入时引发特定异常的方法。
+         </p>
+         <div class="example"><a name="roman.tobadinput.example"></a><h3 class="title">例&nbsp;13.3.&nbsp;测试 <tt class="function">toRoman</tt> 的无效输入
+            </h3><pre class="programlisting"><span class='pykeyword'>
+class</span> ToRomanBadInput(unittest.TestCase):                            
+    <span class='pykeyword'>def</span><span class='pyclass'> testTooLarge</span>(self):                                          
+        <span class='pystring'>"""toRoman should fail with large input"""</span>                   
+        self.assertRaises(roman.OutOfRangeError, roman.toRoman, 4000) <a name="roman.failure.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+
+    <span class='pykeyword'>def</span><span class='pyclass'> testZero</span>(self):                                              
+        <span class='pystring'>"""toRoman should fail with 0 input"""</span>                       
+        self.assertRaises(roman.OutOfRangeError, roman.toRoman, 0)    <a name="roman.failure.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+
+    <span class='pykeyword'>def</span><span class='pyclass'> testNegative</span>(self):                                          
+        <span class='pystring'>"""toRoman should fail with negative input"""</span>                
+        self.assertRaises(roman.OutOfRangeError, roman.toRoman, -1)  
+
+    <span class='pykeyword'>def</span><span class='pyclass'> testNonInteger</span>(self):                                        
+        <span class='pystring'>"""toRoman should fail with non-integer input"""</span>             
+        self.assertRaises(roman.NotIntegerError, roman.toRoman, 0.5)  <a name="roman.failure.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.failure.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">unittest</tt> 模块中的 <tt class="classname">TestCase</tt> 类提供了 <tt class="function">assertRaises</tt> 方法，它接受这几个参数：预期的异常、测试的函数，以及传递给函数的参数。(如果被测试函数有不止一个参数，把它们按顺序全部传递给 <tt class="function">assertRaises</tt> ，它会把这些参数传给被测的函数。) 特别注意这里的操作：不是直接调用 <tt class="function">toRoman</tt> 再手工查看是否引发特定异常 (使用 <a href="../file_handling/index.html#fileinfo.exception" title="6.1.&nbsp;异常处理"><tt class="literal">try...except</tt> 块</a>捕捉异常)，<tt class="function">assertRaises</tt> 为我们封装了这些。所有你要做的就是把异常 (<tt class="errorcode">roman.OutOfRangeError</tt>)、函数 (<tt class="function">toRoman</tt>) 以及 <tt class="function">toRoman</tt> 的参数 (<tt class="literal">4000</tt>) 传递给 <tt class="function">assertRaises</tt> ，它会调用 <tt class="function">toRoman</tt> 查看是否引发 <tt class="errorcode">roman.OutOfRangeError</tt> 异常。(还应注意到你是把 <tt class="function">toRoman</tt> 函数本身当作一个参数，而不是调用它，传递它的时候也不是把它的名字作为一个字符串。我提到过吗？无论是函数还是异常，<a href="../getting_to_know_python/everything_is_an_object.html" title="2.4.&nbsp;万物皆对象"> <span class="application">Python</span> 中万物皆对象</a>)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.failure.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">与测试过大的数相伴的便是测试过小的数。记住，罗马数字不能表示 <tt class="constant">0</tt> 和负数，所以你要分别编写测试用例 ( <tt class="function">testZero</tt> 和 <tt class="function">testNegative</tt>)。在 <tt class="function">testZero</tt> 中，你测试 <tt class="function">toRoman</tt> 调用 <tt class="constant">0</tt> 引发的 <tt class="errorcode">roman.OutOfRangeError</tt> 异常，如果<span class="emphasis"><em>没能</em></span> 引发 <tt class="errorcode">roman.OutOfRangeError</tt> (不论是返回了一个值还是引发了其他异常)，则测试失败。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.failure.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><a href="index.html#roman.requirements">要求 #3</a>：<tt class="function">toRoman</tt> 不能接受非整数输入，所以这里你测试 <tt class="function">toRoman</tt> 在输入 <tt class="literal">0.5</tt> 时引发 <tt class="errorcode">roman.NotIntegerError</tt> 异常。如果 <tt class="function">toRoman</tt> 没有引发 <tt class="errorcode">roman.NotIntegerError</tt> 异常，则测试失败。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>接下来的两个<a href="index.html#roman.requirements">要求</a>与前三个类似，不同点是他们所针对的是 <tt class="function">fromRoman</tt> 而不是 <tt class="function">toRoman</tt>：
+         </p>
+         <div class="orderedlist">
+            <ol start="4" type="1">
+               <li><tt class="function">fromRoman</tt> 应该能将输入的有效罗马数字转换为相应的阿拉伯数字表示。
+               </li>
+               <li><tt class="function">fromRoman</tt> 在输入无效罗马数字时应该失败。
+               </li>
+            </ol>
+         </div>
+         <p>要求 #4 与<a href="testing_for_success.html#roman.testtoromanknownvalues.example" title="例&nbsp;13.2.&nbsp;testToRomanKnownValues">要求 #1</a> 的处理方法相同，即测试一个已知样本中的一个个数字对。要求 #5 与 #2 和 #3的处理方法相同，即通过无效输入确认 <tt class="function">fromRoman</tt> 引发恰当的异常。
+         </p>
+         <div class="example"><a name="roman.frombadinput.example"></a><h3 class="title">例&nbsp;13.4.&nbsp;测试 <tt class="function">fromRoman</tt> 的无效输入
+            </h3><pre class="programlisting"><span class='pykeyword'>
+class</span> FromRomanBadInput(unittest.TestCase):                                      
+    <span class='pykeyword'>def</span><span class='pyclass'> testTooManyRepeatedNumerals</span>(self):                                       
+        <span class='pystring'>"""fromRoman should fail with too many repeated numerals"""</span>              
+        <span class='pykeyword'>for</span> s <span class='pykeyword'>in</span> (<span class='pystring'>'MMMM'</span>, <span class='pystring'>'DD'</span>, <span class='pystring'>'CCCC'</span>, <span class='pystring'>'LL'</span>, <span class='pystring'>'XXXX'</span>, <span class='pystring'>'VV'</span>, <span class='pystring'>'IIII'</span>):             
+            self.assertRaises(roman.InvalidRomanNumeralError, roman.fromRoman, s) <a name="roman.failure.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+
+    <span class='pykeyword'>def</span><span class='pyclass'> testRepeatedPairs</span>(self):                                                 
+        <span class='pystring'>"""fromRoman should fail with repeated pairs of numerals"""</span>              
+        <span class='pykeyword'>for</span> s <span class='pykeyword'>in</span> (<span class='pystring'>'CMCM'</span>, <span class='pystring'>'CDCD'</span>, <span class='pystring'>'XCXC'</span>, <span class='pystring'>'XLXL'</span>, <span class='pystring'>'IXIX'</span>, <span class='pystring'>'IVIV'</span>):               
+            self.assertRaises(roman.InvalidRomanNumeralError, roman.fromRoman, s)
+
+    <span class='pykeyword'>def</span><span class='pyclass'> testMalformedAntecedent</span>(self):                                           
+        <span class='pystring'>"""fromRoman should fail with malformed antecedents"""</span>                   
+        <span class='pykeyword'>for</span> s <span class='pykeyword'>in</span> (<span class='pystring'>'IIMXCC'</span>, <span class='pystring'>'VX'</span>, <span class='pystring'>'DCM'</span>, <span class='pystring'>'CMM'</span>, <span class='pystring'>'IXIV'</span>,
+                  <span class='pystring'>'MCMC'</span>, <span class='pystring'>'XCX'</span>, <span class='pystring'>'IVI'</span>, <span class='pystring'>'LM'</span>, <span class='pystring'>'LD'</span>, <span class='pystring'>'LC'</span>):                       
+            self.assertRaises(roman.InvalidRomanNumeralError, roman.fromRoman, s)</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.failure.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">没什么新鲜的，与测试 <tt class="function">toRoman</tt> 无效输入时相同的模式，只是你有了一个新的异常：<tt class="errorcode">roman.InvalidRomanNumeralError</tt>。<tt class="filename">roman.py</tt> 中一共要定义三个异常 (另外的两个是 <tt class="errorcode">roman.OutOfRangeError</tt> 和 <tt class="errorcode">roman.NotIntegerError</tt>)。稍后你在开始编写 <tt class="filename">roman.py</tt> 时将会知道如何定义这些异常。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="testing_for_success.html">&lt;&lt;&nbsp;正面测试 (Testing for success)</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#roman.intro" title="13.1.&nbsp;罗马数字程序介绍 II">1</a> <span class="divider">|</span> <a href="diving_in.html" title="13.2.&nbsp;深入">2</a> <span class="divider">|</span> <a href="romantest.html" title="13.3.&nbsp;romantest.py 介绍">3</a> <span class="divider">|</span> <a href="testing_for_success.html" title="13.4.&nbsp;正面测试 (Testing for success)">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="testing_for_sanity.html" title="13.6.&nbsp;完备性检测 (Testing for sanity)">6</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="testing_for_sanity.html">完备性检测 (Testing for sanity)&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

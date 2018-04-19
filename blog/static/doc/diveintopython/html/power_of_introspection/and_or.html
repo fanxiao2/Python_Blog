@@ -1,0 +1,225 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>4.6.&nbsp;and 和 or 的特殊性质</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;4&nbsp;章&nbsp;自省的威力">
+      <link rel="previous" href="filtering_lists.html" title="4.5.&nbsp;过滤列表">
+      <link rel="next" href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">自省的威力</a>&nbsp;&gt;&nbsp;<span class="thispage">and 和 or 的特殊性质</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="filtering_lists.html" title="上一页: “过滤列表”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="lambda_functions.html" title="下一页: “使用 lambda 函数”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="apihelper.andor"></a>4.6.&nbsp;<tt class="literal">and</tt> 和 <tt class="literal">or</tt> 的特殊性质
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="and_or.html#d0e10128">4.6.1. 使用 and-or 技巧</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>在<span class="application">Python</span> 中，<tt class="literal">and</tt> 和 <tt class="literal">or</tt> 执行布尔逻辑演算，如你所期待的一样。但是它们并不返回布尔值，而是返回它们实际进行比较的值之一。
+            </p>
+         </div>
+         <div class="example"><a name="apihelper.andor.intro.example"></a><h3 class="title">例&nbsp;4.15.&nbsp;<tt class="literal">and</tt> 介绍
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>'a'</span> <span class='pykeyword'>and</span> <span class='pystring'>'b'</span></span>         <a name="apihelper.andor.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'b'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>''</span> <span class='pykeyword'>and</span> <span class='pystring'>'b'</span></span>          <a name="apihelper.andor.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">''</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>'a'</span> <span class='pykeyword'>and</span> <span class='pystring'>'b'</span> <span class='pykeyword'>and</span> <span class='pystring'>'c'</span></span> <a name="apihelper.andor.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'c'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.andor.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用 <tt class="literal">and</tt> 时，在布尔环境中从左到右演算表达式的值。<tt class="constant">0</tt>、<tt class="literal">''</tt>、<tt class="literal">[]</tt>、<tt class="literal">()</tt>、<tt class="literal">{}</tt>、<tt class="literal">None</tt> 在布尔环境中为假；其它任何东西都为真。还好，几乎是所有东西。默认情况下，布尔环境中的类实例为真，但是你可以在类中定义特定的方法使得类实例的演算值为假。你将会在<a href="../object_oriented_framework/index.html">第 5 章</a>中了解到类和这些特殊方法。如果布尔环境中的所有值都为真，那么 <tt class="literal">and</tt> 返回最后一个值。在这个例子中，<tt class="literal">and</tt> 演算 <tt class="literal">'a'</tt> 的值为真，然后是 <tt class="literal">'b'</tt> 的演算值为真，最终返回 <tt class="literal">'b'</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.andor.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果布尔环境中的某个值为假，则 <tt class="literal">and</tt> 返回第一个假值。在这个例子中，<tt class="literal">''</tt> 是第一个假值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.andor.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">所有值都为真，所以 <tt class="literal">and</tt> 返回最后一个真值，<tt class="literal">'c'</tt>。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e9965"></a><h3 class="title">例&nbsp;4.16.&nbsp;<tt class="literal">or</tt> 介绍
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>'a'</span> <span class='pykeyword'>or</span> <span class='pystring'>'b'</span></span>          <a name="apihelper.andor.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'a'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>''</span> <span class='pykeyword'>or</span> <span class='pystring'>'b'</span></span>           <a name="apihelper.andor.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'b'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>''</span> <span class='pykeyword'>or</span> [] <span class='pykeyword'>or</span> {}</span>      <a name="apihelper.andor.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">{}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>def</span><span class='pyclass'> sidefx</span>():</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"in sidefx()"</span></span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>return</span> 1</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>'a'</span> <span class='pykeyword'>or</span> sidefx()</span>     <a name="apihelper.andor.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">'a'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.andor.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用 <tt class="literal">or</tt> 时，在布尔环境中从左到右演算值，就像 <tt class="literal">and</tt> 一样。如果有一个值为真，<tt class="literal">or</tt> 立刻返回该值。本例中，<tt class="literal">'a'</tt> 是第一个真值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.andor.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">or</tt> 演算 <tt class="literal">''</tt> 的值为假，然后演算 <tt class="literal">'b'</tt> 的值为真，于是返回 <tt class="literal">'b'</tt> 。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.andor.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果所有的值都为假，<tt class="literal">or</tt> 返回最后一个假值。<tt class="literal">or</tt> 演算 <tt class="literal">''</tt> 的值为假，然后演算 <tt class="literal">[]</tt> 的值为假，依次演算 <tt class="literal">{}</tt> 的值为假，最终返回 <tt class="literal">{}</tt> 。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.andor.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">注意 <tt class="literal">or</tt> 在布尔环境中会一直进行表达式演算直到找到第一个真值，然后就会忽略剩余的比较值。如果某些值具有副作用，这种特性就非常重要了。在这里，函数 <tt class="function">sidefx</tt> 永远都不会被调用，因为 <tt class="literal">or</tt> 演算 <tt class="literal">'a'</tt> 的值为真，所以紧接着就立刻返回 <tt class="literal">'a'</tt> 了。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>如果你是一名 <span class="application"><span class="acronym">C</span></span> 语言黑客，肯定很熟悉 <tt class="literal"><i class="replaceable">bool</i> ? <tt class="varname">a</tt> : <tt class="varname">b</tt></tt> 表达式，如果 <i class="replaceable"><tt>bool</tt></i> 为真，表达式演算值为 <tt class="varname">a</tt>，否则为 <tt class="varname">b</tt>。基于 <span class="application">Python</span> 中 <tt class="literal">and</tt> 和 <tt class="literal">or</tt> 的工作方式，你可以完成相同的事情。
+         </p>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e10128"></a>4.6.1.&nbsp;使用 <tt class="literal">and-or</tt> 技巧
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="example"><a name="apihelper.andortrick.intro"></a><h3 class="title">例&nbsp;4.17.&nbsp;<tt class="literal">and-or</tt> 技巧介绍
+               </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">a = <span class='pystring'>"first"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">b = <span class='pystring'>"second"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">1 <span class='pykeyword'>and</span> a <span class='pykeyword'>or</span> b</span> <a name="apihelper.andor.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'first'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">0 <span class='pykeyword'>and</span> a <span class='pykeyword'>or</span> b</span> <a name="apihelper.andor.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'second'</span>
+</pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.andor.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">这个语法看起来类似于 <span class="application"><span class="acronym">C</span></span> 语言中的 <tt class="literal"><i class="replaceable">bool</i> ? <tt class="varname">a</tt> : <tt class="varname">b</tt></tt> 表达式。整个表达式从左到右进行演算，所以先进行 <tt class="literal">and</tt> 表达式的演算。<tt class="literal">1 and 'first'</tt> 演算值为 <tt class="literal">'first'</tt>，然后 <tt class="literal">'first' or 'second'</tt> 的演算值为 <tt class="literal">'first'</tt>。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.andor.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="literal">0 and 'first'</tt> 演算值为 <tt class="constant">False</tt>，然后 <tt class="literal">0 or 'second'</tt> 演算值为 <tt class="literal">'second'</tt>。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>然而，由于这种 <span class="application">Python</span> 表达式单单只是进行布尔逻辑运算，并不是语言的特定构成，这是 <tt class="literal">and-or</tt> 技巧和 <span class="application"><span class="acronym">C</span></span> 语言中的 <tt class="literal"><i class="replaceable">bool</i> ? <tt class="varname">a</tt> : <tt class="varname">b</tt></tt> 语法非常重要的不同。如果 <tt class="varname">a</tt> 为假，表达式就不会按你期望的那样工作了。(你能知道我被这个问题折腾过吗？不止一次？)
+            </p>
+            <div class="example"><a name="d0e10242"></a><h3 class="title">例&nbsp;4.18.&nbsp;<tt class="literal">and-or</tt> 技巧无效的场合
+               </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">a = <span class='pystring'>""</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">b = <span class='pystring'>"second"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">1 <span class='pykeyword'>and</span> a <span class='pykeyword'>or</span> b</span>         <a name="apihelper.andor.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'second'</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.andor.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">由于 <tt class="varname">a</tt> 是一个空字符串，在 <span class="application">Python</span> 的布尔环境中空字符串被认为是假的，<tt class="literal">1 and ''</tt> 的演算值为 <tt class="literal">''</tt>，最后 <tt class="literal">'' or 'second'</tt> 的演算值为 <tt class="literal">'second'</tt>。噢！这个值并不是你想要的。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p><tt class="literal">and-or</tt> 技巧，也就是 <tt class="literal"><i class="replaceable">bool</i> and <tt class="varname">a</tt> or <tt class="varname">b</tt></tt> 表达式，当 <tt class="varname">a</tt> 在布尔环境中的值为假时，不会像 <span class="application"><span class="acronym">C</span></span> 语言表达式 <tt class="literal"><i class="replaceable">bool</i> ? <tt class="varname">a</tt> : <tt class="varname">b</tt></tt> 那样工作。
+            </p>
+            <p>在 <tt class="literal">and-or</tt> 技巧后面真正的技巧是，确保 <tt class="varname">a</tt> 的值决不会为假。最常用的方式是使 <tt class="varname">a</tt> 成为 <tt class="literal">[<tt class="varname">a</tt>]</tt> 、 <tt class="varname">b</tt> 成为 <tt class="literal">[<tt class="varname">b</tt>]</tt>，然后使用返回值列表的第一个元素，应该是 <tt class="varname">a</tt> 或 <tt class="varname">b</tt>中的某一个。
+            </p>
+            <div class="example"><a name="d0e10352"></a><h3 class="title">例&nbsp;4.19.&nbsp;安全使用 <tt class="literal">and-or</tt> 技巧
+               </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">a = <span class='pystring'>""</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">b = <span class='pystring'>"second"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">(1 <span class='pykeyword'>and</span> [a] <span class='pykeyword'>or</span> [b])[0]</span> <a name="apihelper.andor.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">''</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#apihelper.andor.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">由于 <tt class="literal">[<tt class="varname">a</tt>]</tt> 是一个非空列表，所以它决不会为假。即使 <tt class="varname">a</tt> 是 <tt class="constant">0</tt> 或者 <tt class="literal">''</tt> 或者其它假值，列表 <tt class="literal">[<tt class="varname">a</tt>]</tt> 也为真，因为它有一个元素。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>到现在为止，这个技巧可能看上去问题超过了它的价值。毕竟，使用 <tt class="literal">if</tt>  语句可以完成相同的事情，那为什么要经历这些麻烦事呢？哦，在很多情况下，你要在两个常量值中进行选择，由于你知道 <tt class="varname">a</tt> 的值总是为真，所以你可以使用这种较为简单的语法而且不用担心。对于使用更为复杂的安全形式，依然有很好的理由要求这样做。例如，在 <span class="application">Python</span> 语言的某些情况下 <tt class="literal">if</tt> 语句是不允许使用的，比如在 <tt class="literal">lambda</tt> 函数中。
+            </p>
+            <div class="furtherreading">
+               <h3>进一步阅读</h3>
+               <ul>
+                  <li><a href="http://www.activestate.com/ASPN/Python/Cookbook/" title="growing archive of annotated code samples"><span class="application">Python</span> Cookbook</a> 讨论了<a href="http://www.activestate.com/ASPN/Python/Cookbook/Recipe/52310">其它的 <tt class="literal">and-or</tt> 技巧</a>。
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="filtering_lists.html">&lt;&lt;&nbsp;过滤列表</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#apihelper.divein" title="4.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">2</a> <span class="divider">|</span> <a href="built_in_functions.html" title="4.3.&nbsp;使用 type、str、dir 和其它内置函数">3</a> <span class="divider">|</span> <a href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用">4</a> <span class="divider">|</span> <a href="filtering_lists.html" title="4.5.&nbsp;过滤列表">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">7</a> <span class="divider">|</span> <a href="all_together.html" title="4.8.&nbsp;全部放在一起">8</a> <span class="divider">|</span> <a href="summary.html" title="4.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="lambda_functions.html">使用 lambda 函数&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

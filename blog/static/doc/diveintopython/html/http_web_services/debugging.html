@@ -1,0 +1,141 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>11.4.&nbsp;调试 HTTP web 服务</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务">
+      <link rel="previous" href="http_features.html" title="11.3.&nbsp;HTTP 的特性">
+      <link rel="next" href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTTP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">调试 HTTP web 服务</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="http_features.html" title="上一页: “HTTP 的特性”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="user_agent.html" title="下一页: “设置 User-Agent”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="oa.debug"></a>11.4.&nbsp;调试 HTTP web 服务
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>首先，让我们开启 <span class="application">Python</span> HTTP 库的调试特性并查看网络线路上的传输过程。这对本章的全部内容都很有用，因为你将添加越来越多的特性。
+            </p>
+         </div>
+         <div class="example"><a name="d0e27980"></a><h3 class="title">例&nbsp;11.3.&nbsp;调试 HTTP</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> httplib</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">httplib.HTTPConnection.debuglevel = 1</span>             <a name="oa.debug.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> urllib</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">feeddata = urllib.urlopen(<span class='pystring'>'http://diveintomark.org/xml/atom.xml'</span>).read()</span>
+<span class="computeroutput">connect: (diveintomark.org, 80)</span>                       <a name="oa.debug.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">send: '</span>
+<span class="computeroutput">GET /xml/atom.xml HTTP/1.0</span>                            <a name="oa.debug.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">Host: diveintomark.org</span>                                <a name="oa.debug.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">User-agent: Python-urllib/1.15</span>                        <a name="oa.debug.1.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="computeroutput">'</span>
+<span class="computeroutput">reply: 'HTTP/1.1 200 OK\r\n'</span>                          <a name="oa.debug.1.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12">
+<span class="computeroutput">header: Date: Wed, 14 Apr 2004 22:27:30 GMT</span>
+<span class="computeroutput">header: Server: Apache/2.0.49 (Debian GNU/Linux)</span>
+<span class="computeroutput">header: Content-Type: application/atom+xml</span>
+<span class="computeroutput">header: Last-Modified: Wed, 14 Apr 2004 22:14:38 GMT</span>  <a name="oa.debug.1.7"></a><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12">
+<span class="computeroutput">header: ETag: "e8284-68e0-4de30f80"</span>                   <a name="oa.debug.1.8"></a><img src="../images/callouts/8.png" alt="8" border="0" width="12" height="12">
+<span class="computeroutput">header: Accept-Ranges: bytes</span>
+<span class="computeroutput">header: Content-Length: 26848</span>
+<span class="computeroutput">header: Connection: close</span>
+</pre></div>
+         <div class="calloutlist">
+            <table border="0" summary="Callout list">
+               <tr>
+                  <td width="12" valign="top" align="left"><a href="#oa.debug.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                  </td>
+                  <td valign="top" align="left"><tt class="filename">urllib</tt> 依赖于另一个 <span class="application">Python</span> 的标准库，<tt class="filename">httplib</tt>。通常你不必显式地给出 <tt class="literal">import httplib</tt> (<tt class="filename">urllib</tt> 会自动导入)，但是你可以为 <tt class="classname">HTTPConnection</tt> 类 (<tt class="filename">urllib</tt> 在内部使用它来访问 HTTP 服务器) 设置调试标记。这是一种令人难以置信的有用技术。<span class="application">Python</span> 其他的一些库也有类似的调试标记，但是没有命名和开启它们的特殊标准；如果有类似的特性可用，你需要阅读每一个库的文档来查看使用方法。
+                  </td>
+               </tr>
+               <tr>
+                  <td width="12" valign="top" align="left"><a href="#oa.debug.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                  </td>
+                  <td valign="top" align="left">既然已经设置了调试标记，HTTP 的请求和响应信息会实时地被打印出来。首先告诉你的是你连接服务器 <tt class="literal">diveintomark.org</tt> 的 80 端口，这是 HTTP 的标准端口。
+                  </td>
+               </tr>
+               <tr>
+                  <td width="12" valign="top" align="left"><a href="#oa.debug.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                  </td>
+                  <td valign="top" align="left">当你请求 Atom feed 时，<tt class="filename">urllib</tt> 向服务器发送三行信息。第一行指出你使用的 HTTP verb 和资源的路径 (除去域名)。在本章中所有的请求都将使用 <tt class="literal">GET</tt>，但是在下一章的 <span class="acronym">SOAP</span> 中，你会看到所有的请求都使用 <tt class="literal">POST</tt> 。除了请求的动词不同之外，基本的语法是相同的。
+                  </td>
+               </tr>
+               <tr>
+                  <td width="12" valign="top" align="left"><a href="#oa.debug.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                  </td>
+                  <td valign="top" align="left">第二行是 <tt class="literal">Host</tt> 头信息，它指出你所访问的服务的域名。这一点很重要，因为一个独立的 HTTP 服务器可以服务于多个不同的域。当前我的服务器服务于 12 个域；其他的服务器可以服务于成百乃至上千个域。
+                  </td>
+               </tr>
+               <tr>
+                  <td width="12" valign="top" align="left"><a href="#oa.debug.1.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                  </td>
+                  <td valign="top" align="left">第三行是 <tt class="literal">User-Agent</tt> 头信息。在此你看到的是由 <tt class="filename">urllib</tt> 库默认添加的普通的 <tt class="literal">User-Agent</tt> 。在下一节，你会看到如何自定义它的更多细节。
+                  </td>
+               </tr>
+               <tr>
+                  <td width="12" valign="top" align="left"><a href="#oa.debug.1.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                  </td>
+                  <td valign="top" align="left">服务器用状态代码和一系列的头信息答复 (其中一些数据可能会被存储到 <tt class="varname">feeddata</tt> 变量中)。这里的状态代码是 <tt class="literal">200</tt>，意味着 “<span class="quote">一切正常，这就是您请求的数据</span>”。服务器也会告诉你响应请求的数据、一些有关服务器自身的信息，以及传给你的数据的内容类型。根据你的应用不同，这或许有用，或许没用。这充分确认了你所请求的是一个 Atom feed，瞧，你获得了 Atom feed (<tt class="literal">application/atom+xml</tt>，它是已经注册的有关 Atom feeds 的内容类型)。
+                  </td>
+               </tr>
+               <tr>
+                  <td width="12" valign="top" align="left"><a href="#oa.debug.1.7"><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12"></a> 
+                  </td>
+                  <td valign="top" align="left">当此 Atom feed 有最近的修改，服务器会告诉你 (本例中，大约发生在 13 分钟之前)。当下次请求同样的 feed 时，你可以这个日期再发送给服务器，服务器将做最近修改数据检查。</td>
+               </tr>
+               <tr>
+                  <td width="12" valign="top" align="left"><a href="#oa.debug.1.8"><img src="../images/callouts/8.png" alt="8" border="0" width="12" height="12"></a> 
+                  </td>
+                  <td valign="top" align="left">服务器也会告诉你这个 Atom feed 有一个值为 <tt class="literal">"e8284-68e0-4de30f80"</tt> 的 ETag hash。这个 hash 自身没有任何意义；除了在下次访问相同的 feed 时将它送还给服务器之外，你也不需要用它做什么。然后服务器使用它告诉你修改日期是否被改变了。
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="http_features.html">&lt;&lt;&nbsp;HTTP 的特性</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#oa.divein" title="11.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">2</a> <span class="divider">|</span> <a href="http_features.html" title="11.3.&nbsp;HTTP 的特性">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">5</a> <span class="divider">|</span> <a href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">6</a> <span class="divider">|</span> <a href="redirects.html" title="11.7.&nbsp;处理重定向">7</a> <span class="divider">|</span> <a href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">8</a> <span class="divider">|</span> <a href="alltogether.html" title="11.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="11.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="user_agent.html">设置 User-Agent&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

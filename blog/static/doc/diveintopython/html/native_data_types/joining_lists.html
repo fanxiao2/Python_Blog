@@ -1,0 +1,160 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>3.7.&nbsp;连接 list 与分割字符串</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;3&nbsp;章&nbsp;内置数据类型">
+      <link rel="previous" href="mapping_lists.html" title="3.6.&nbsp;映射 list">
+      <link rel="next" href="summary.html" title="3.8.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">内置数据类型</a>&nbsp;&gt;&nbsp;<span class="thispage">连接 list 与分割字符串</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="mapping_lists.html" title="上一页: “映射 list”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="odbchelper.join"></a>3.7.&nbsp;连接 list 与分割字符串
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="joining_lists.html#d0e8123">3.7.1. 字符串方法的历史注解</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>您有了一个形如 <tt class="literal"><i class="replaceable">key</i>=<i class="replaceable">value</i></tt> 的 key-value 对 list，并且想将它们合成为单个字符串。为了将任意包含字符串的 list 连接成单个字符串，可以使用字符串对象的 <tt class="function">join</tt> 方法。
+            </p>
+         </div>
+         <div class="informalexample">
+            <p>下面是一个在 <tt class="function">buildConnectionString</tt> 函数中连接 list 的例子：
+            </p><pre class="programlisting">
+    <span class='pykeyword'>return</span> <span class='pystring'>";"</span>.join([<span class='pystring'>"%s=%s"</span> % (k, v) <span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> params.items()])</pre></div>
+         <p>在我们继续之前有一个有趣的地方。我一直在重复函数是对象，字符串是对象，每个东西都是对象的概念。您也许认为我的意思是说字符串<span class="emphasis"><em>值</em></span> 是对象。但是不对，仔细地看一下这个例子，您将会看到字符串 <tt class="literal">";"</tt> 本身就是一个对象，您在调用它的 <tt class="function">join</tt> 方法。
+         </p>
+         <p>总之，这里的 <tt class="function">join</tt> 方法将 list 中的元素连接成单个字符串，每个元素用一个分号隔开。分隔符不必是一个分号；它甚至不必是单个字符。它可以是任何字符串。
+         </p><a name="tip.join"></a><table class="caution" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/caution.png" alt="小心" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%"><tt class="function">join</tt> 只能用于元素是字符串的 list；它不进行任何的强制类型转换。连接一个存在一个或多个非字符串元素的 list
+                   将引发一个异常。
+               </td>
+            </tr>
+         </table>
+         <div class="example"><a name="odbchelper.join.example"></a><h3 class="title">例&nbsp;3.27.&nbsp;<tt class="filename">odbchelper.py</tt> 的输出结果
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params = {<span class='pystring'>"server"</span>:<span class='pystring'>"mpilgrim"</span>, <span class='pystring'>"database"</span>:<span class='pystring'>"master"</span>, <span class='pystring'>"uid"</span>:<span class='pystring'>"sa"</span>, <span class='pystring'>"pwd"</span>:<span class='pystring'>"secret"</span>}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[<span class='pystring'>"%s=%s"</span> % (k, v) <span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> params.items()]</span>
+<span class="computeroutput">['server=mpilgrim', 'uid=sa', 'database=master', 'pwd=secret']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pystring'>";"</span>.join([<span class='pystring'>"%s=%s"</span> % (k, v) <span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> params.items()])</span>
+<span class="computeroutput">'server=mpilgrim;uid=sa;database=master;pwd=secret'</span></pre></div>
+         <p>上面的字符串是从 <tt class="function">odbchelper</tt> 函数返回的，被调用块打印出来，这样就给出了您开始阅读本章时令人感到吃惊的输出结果。
+         </p>
+         <p>您可能在想是否存在一个适当的方法来将字符串分割成一个 list。当然有，它叫做 <tt class="function">split</tt>。
+         </p>
+         <div class="example"><a name="odbchelper.split.example"></a><h3 class="title">例&nbsp;3.28.&nbsp;分割字符串</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = [<span class='pystring'>'server=mpilgrim'</span>, <span class='pystring'>'uid=sa'</span>, <span class='pystring'>'database=master'</span>, <span class='pystring'>'pwd=secret'</span>]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s = <span class='pystring'>";"</span>.join(li)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s</span>
+<span class="computeroutput">'server=mpilgrim;uid=sa;database=master;pwd=secret'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s.split(<span class='pystring'>";"</span>)</span>    <a name="odbchelper.join.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">['server=mpilgrim', 'uid=sa', 'database=master', 'pwd=secret']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s.split(<span class='pystring'>";"</span>, 1)</span> <a name="odbchelper.join.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">['server=mpilgrim', 'uid=sa;database=master;pwd=secret']</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.join.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">split</tt> 与 <tt class="function">join</tt> 正好相反，它将一个字符串分割成多元素 list。注意，分隔符 (“<span class="quote"><tt class="literal">;</tt></span>”) 被完全去掉了，它没有在返回的 list 中的任意元素中出现。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.join.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">split</tt> 接受一个可选的第二个参数，它是要分割的次数。(“<span class="quote">哦，可选参数……</span>”，您将会在下一章中学会如何在您自己的函数中使用它。)
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="tip.split"></a><table class="tip" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/tip.png" alt="提示" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%"><tt class="literal"><i class="replaceable">anystring</i>.<tt class="function">split</tt>(<i class="replaceable">delimiter</i>, 1)</tt> 是一个有用的技术，在您想要搜索一个子串，然后分别处理字符前半部分 (即 list 中第一个元素) 和后半部分 (即 list 中第二个元素) 时，使用这个技术。
+               </td>
+            </tr>
+         </table>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li><a href="http://www.faqts.com/knowledge-base/index.phtml/fid/199/"><span class="application">Python</span> Knowledge Base</a> 回答了<a href="http://www.faqts.com/knowledge-base/index.phtml/fid/480">关于字符串的常见问题</a>，并且有许多<a href="http://www.faqts.com/knowledge-base/index.phtml/fid/539">使用字符串的例子代码</a>。
+               </li>
+               <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 总结了<a href="http://www.python.org/doc/current/lib/string-methods.html">所有字符串方法</a>。
+               </li>
+               <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 提供了 <a href="http://www.python.org/doc/current/lib/module-string.html"><tt class="filename">string</tt> 模块</a>的文档。
+               </li>
+               <li><a href="http://www.python.org/doc/FAQ.html"><i class="citetitle">The Whole <span class="application">Python</span> <span class="acronym">FAQ</span></i></a> 解释了<a href="http://www.python.org/cgi-bin/faqw.py?query=4.96&querytype=simple&casefold=yes&req=search">为什么 <tt class="function">join</tt> 是字符串方法</a>而不是 list 方法。
+               </li>
+            </ul>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e8123"></a>3.7.1.&nbsp;字符串方法的历史注解
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>
+               当我开始学 <span class="application">Python</span> 时，我以为 <tt class="function">join</tt> 是 list 的方法，它会使用分隔符作为一个参数。很多人都有同样的感觉：在 <tt class="function">join</tt> 方法的背后有一段故事。在 <span class="application">Python</span> 1.6 之前，字符串完全没有这些有用的方法。有一个独立的 <tt class="filename">string</tt> 模块包含所有的字符串函数，每个函数使用一个字符串作为它的第一个参数。这些函数被认为足够重要，所以它们移到字符串中去了，这就使得诸如 <tt class="function">lower</tt>、<tt class="function">upper</tt> 和 <tt class="function">split</tt> 之类的函数是有意义的。但许多核心的 <span class="application">Python</span> 程序员反对新的 <tt class="function">join</tt> 方法，争论说应该换成是 list 的一个方法，或不应该移动而仅仅保留为旧的 <tt class="filename">string</tt> 模块 (现仍然还有许多有用的东西在里面) 的一部分。我只使用新的 <tt class="function">join</tt> 方法，但是您还是会看到其它写法。如果它真的使您感到麻烦，您可以使用旧的 <tt class="function">string.join</tt> 函数来替代。
+            </p>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="mapping_lists.html">&lt;&lt;&nbsp;映射 list</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#odbchelper.dict" title="3.1.&nbsp;Dictionary 介绍">1</a> <span class="divider">|</span> <a href="lists.html" title="3.2.&nbsp;List 介绍">2</a> <span class="divider">|</span> <a href="tuples.html" title="3.3.&nbsp;Tuple 介绍">3</a> <span class="divider">|</span> <a href="declaring_variables.html" title="3.4.&nbsp;变量声明">4</a> <span class="divider">|</span> <a href="formatting_strings.html" title="3.5.&nbsp;格式化字符串">5</a> <span class="divider">|</span> <a href="mapping_lists.html" title="3.6.&nbsp;映射 list">6</a> <span class="divider">|</span> <span class="thispage">7</span> <span class="divider">|</span> <a href="summary.html" title="3.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

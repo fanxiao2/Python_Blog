@@ -1,0 +1,5 @@
+{
+    "src": "static/images",
+    "dest": "qiniu:access_key=ZiM_8lVK_HW16dSlmWKRA51XKJqi06HGnbGNOH_0&secret_key=MFUmVhxRF62s7JxGQyp_8YBeiAoTxXTd7QSV1QBz&bucket=javachen-rs",
+    "debug_level": 1
+}

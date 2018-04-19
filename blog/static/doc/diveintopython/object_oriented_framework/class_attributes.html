@@ -1,0 +1,189 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>5.8.&nbsp;类属性介绍</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;5&nbsp;章&nbsp;对象和面向对象">
+      <link rel="previous" href="special_class_methods2.html" title="5.7.&nbsp;高级专用类方法">
+      <link rel="next" href="private_functions.html" title="5.9.&nbsp;私有函数">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">对象和面向对象</a>&nbsp;&gt;&nbsp;<span class="thispage">类属性介绍</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="special_class_methods2.html" title="上一页: “高级专用类方法”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="private_functions.html" title="下一页: “私有函数”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="fileinfo.classattributes"></a>5.8.&nbsp;类属性介绍
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你已经知道了<a href="userdict.html#fileinfo.userdict.init.example" title="例&nbsp;5.9.&nbsp;定义 UserDict 类">数据属性</a>，它们是被一个特定的类实例所拥有的变量。<span class="application">Python</span> 也支持类属性，它们是由类本身所拥有的。
+            </p>
+         </div>
+         <div class="example"><a name="fileinfo.classattributes.intro"></a><h3 class="title">例&nbsp;5.17.&nbsp;类属性介绍</h3><pre class="programlisting"><span class='pykeyword'>
+class</span> MP3FileInfo(FileInfo):
+    <span class='pystring'>"store ID3v1.0 MP3 tags"</span>
+    tagDataMap = {<span class='pystring'>"title"</span>   : (  3,  33, stripnulls),
+                  <span class='pystring'>"artist"</span>  : ( 33,  63, stripnulls),
+                  <span class='pystring'>"album"</span>   : ( 63,  93, stripnulls),
+                  <span class='pystring'>"year"</span>    : ( 93,  97, stripnulls),
+                  <span class='pystring'>"comment"</span> : ( 97, 126, stripnulls),
+                  <span class='pystring'>"genre"</span>   : (127, 128, ord)}</pre><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> fileinfo</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">fileinfo.MP3FileInfo</span>            <a name="fileinfo.classattributes.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">&lt;class fileinfo.MP3FileInfo at 01257FDC&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">fileinfo.MP3FileInfo.tagDataMap</span> <a name="fileinfo.classattributes.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">{'title': (3, 33, &lt;function stripnulls at 0260C8D4&gt;), 
+'genre': (127, 128, &lt;built-in function ord&gt;), 
+'artist': (33, 63, &lt;function stripnulls at 0260C8D4&gt;), 
+'year': (93, 97, &lt;function stripnulls at 0260C8D4&gt;), 
+'comment': (97, 126, &lt;function stripnulls at 0260C8D4&gt;), 
+'album': (63, 93, &lt;function stripnulls at 0260C8D4&gt;)}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">m = fileinfo.MP3FileInfo()</span>      <a name="fileinfo.classattributes.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">m.tagDataMap</span>
+<span class="computeroutput">{'title': (3, 33, &lt;function stripnulls at 0260C8D4&gt;), 
+'genre': (127, 128, &lt;built-in function ord&gt;), 
+'artist': (33, 63, &lt;function stripnulls at 0260C8D4&gt;), 
+'year': (93, 97, &lt;function stripnulls at 0260C8D4&gt;), 
+'comment': (97, 126, &lt;function stripnulls at 0260C8D4&gt;), 
+'album': (63, 93, &lt;function stripnulls at 0260C8D4&gt;)}</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.classattributes.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="classname">MP3FileInfo</tt> 是类本身，不是任何类的特别实例。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.classattributes.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">tagDataMap</tt> 是一个类属性：字面的意思，一个类的属性。它在创建任何类实例之前就有效了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.classattributes.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">类属性既可以通过直接对类的引用，也可以通过对类的任意实例的引用来使用。</td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="compare.classattr.java"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在 <span class="application">Java</span> 中，静态变量 (在 <span class="application">Python</span> 中叫类属性) 和实例变量 (在 <span class="application">Python</span> 中叫数据属性) 两者都是紧跟在类定义之后定义的 (一个有 <tt class="literal">static</tt> 关键字，一个没有)。在 <span class="application">Python</span> 中，只有类属性可以定义在这里，数据属性定义在 <tt class="function">__init__</tt> 方法中。
+               </td>
+            </tr>
+         </table>
+         <p>类属性可以作为类级别的常量来使用 (这就是为什么我们在 <tt class="classname">MP3FileInfo</tt> 中使用它们)，但是它们不是真正的常量。你也可以修改它们。
+         </p><a name="d0e13909"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在 <span class="application">Python</span> 中没有常量。如果你试图努力的话什么都可以改变。这一点满足 <span class="application">Python</span> 的核心原则之一：坏的行为应该被克服而不是被取缔。如果你真正想改变 <tt class="literal">None</tt> 的值，也可以做到，但当无法调试的时候别来找我。
+               </td>
+            </tr>
+         </table>
+         <div class="example"><a name="fileinfo.classattributes.writeable.example"></a><h3 class="title">例&nbsp;5.18.&nbsp;修改类属性</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>class</span><span class='pyclass'> counter</span>:</span>
+<tt class="prompt">...     </tt><span class="userinput">count = 0</span>                     <a name="fileinfo.classattributes.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>def</span><span class='pyclass'> __init__</span>(self):</span>
+<tt class="prompt">...     </tt><span class="userinput">    self.__class__.count += 1</span> <a name="fileinfo.classattributes.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">...     </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">counter</span>
+<span class="computeroutput">&lt;class __main__.counter at 010EAECC&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">counter.count</span>                     <a name="fileinfo.classattributes.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">0</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">c = counter()</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">c.count</span>                           <a name="fileinfo.classattributes.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">1</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">counter.count</span>
+<span class="computeroutput">1</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">d = counter()</span>                     <a name="fileinfo.classattributes.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">d.count</span>
+<span class="computeroutput">2</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">c.count</span>
+<span class="computeroutput">2</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">counter.count</span>
+<span class="computeroutput">2</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.classattributes.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">count</tt> 是 <tt class="classname">counter</tt> 类的一个类属性。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.classattributes.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">__class__</tt> 是每个类实例的一个内置属性 (也是每个类的)。它是一个类的引用，而 <tt class="varname">self</tt> 是一个类 (在本例中，是 <tt class="classname">counter</tt> 类) 的实例。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.classattributes.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">因为 <tt class="varname">count</tt> 是一个类属性，它可以在我们创建任何类实例之前，通过直接对类引用而得到。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.classattributes.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">创建一个类实例会调用 <tt class="function">__init__</tt> 方法，它会给类属性 <tt class="varname">count</tt> 加 <tt class="constant">1</tt>。这样会影响到类自身，不只是新创建的实例。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.classattributes.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">创建第二个实例将再次增加类属性 <tt class="varname">count</tt>。注意类属性是如何被类和所有类实例所共享的。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="special_class_methods2.html">&lt;&lt;&nbsp;高级专用类方法</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#fileinfo.divein" title="5.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="importing_modules.html" title="5.2.&nbsp;使用 from module import 导入模块">2</a> <span class="divider">|</span> <a href="defining_classes.html" title="5.3.&nbsp;类的定义">3</a> <span class="divider">|</span> <a href="instantiating_classes.html" title="5.4.&nbsp;类的实例化">4</a> <span class="divider">|</span> <a href="userdict.html" title="5.5.&nbsp;探索 UserDict：一个封装类">5</a> <span class="divider">|</span> <a href="special_class_methods.html" title="5.6.&nbsp;专用类方法">6</a> <span class="divider">|</span> <a href="special_class_methods2.html" title="5.7.&nbsp;高级专用类方法">7</a> <span class="divider">|</span> <span class="thispage">8</span> <span class="divider">|</span> <a href="private_functions.html" title="5.9.&nbsp;私有函数">9</a> <span class="divider">|</span> <a href="summary.html" title="5.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="private_functions.html">私有函数&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

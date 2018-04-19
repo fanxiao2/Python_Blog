@@ -1,0 +1,354 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>7.6.&nbsp;个案研究：解析电话号码</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;7&nbsp;章&nbsp;正则表达式">
+      <link rel="previous" href="verbose.html" title="7.5.&nbsp;松散正则表达式">
+      <link rel="next" href="summary.html" title="7.7.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">正则表达式</a>&nbsp;&gt;&nbsp;<span class="thispage">个案研究：解析电话号码</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="verbose.html" title="上一页: “松散正则表达式”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="re.phone"></a>7.6.&nbsp;个案研究：解析电话号码
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>迄今为止，你主要是匹配整个模式，不论是匹配上，还是没有匹配上。但是正则表达式还有比这更为强大的功能。当一个模式<span class="emphasis"><em>确实</em></span> 匹配上时，你可以获取模式中特定的片断，你可以发现具体匹配的位置。
+            </p>
+         </div>
+         <p>这个例子来源于我遇到的另一个现实世界的问题，也是在以前的工作中遇到的。问题是：解析一个美国电话号码。客户要能 (在一个单一的区域中) 输入任何数字，然后存储区号、干线号、电话号和一个可选的独立的分机号到公司数据库里。为此，我通过网络找了很多正则表达式的例子，但是没有一个能够完全满足我的要求。</p>
+         <p>这里列举了我必须能够接受的电话号码：</p>
+         <div class="itemizedlist">
+            <ul>
+               <li><tt class="literal">800-555-1212</tt></li>
+               <li><tt class="literal">800 555 1212</tt></li>
+               <li><tt class="literal">800.555.1212</tt></li>
+               <li><tt class="literal">(800) 555-1212</tt></li>
+               <li><tt class="literal">1-800-555-1212</tt></li>
+               <li><tt class="literal">800-555-1212-1234</tt></li>
+               <li><tt class="literal">800-555-1212x1234</tt></li>
+               <li><tt class="literal">800-555-1212 ext. 1234</tt></li>
+               <li><tt class="literal">work 1-(800) 555.1212 #1234</tt></li>
+            </ul>
+         </div>
+         <p>格式可真够多的！我需要知道区号是 <tt class="literal">800</tt>，干线号是 <tt class="literal">555</tt>，电话号的其他数字为 <tt class="literal">1212</tt>。对于那些有分机号的，我需要知道分机号为 <tt class="literal">1234</tt>。
+         </p>
+         <p>让我们完成电话号码解析这个工作，这个例子展示第一步。</p>
+         <div class="example"><a name="re.phone.example"></a><h3 class="title">例&nbsp;7.10.&nbsp;发现数字</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern = re.compile(r<span class='pystring'>'^(\d{3})-(\d{3})-(\d{4})$'</span>)</span> <a name="re.phone.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212'</span>).groups()</span>            <a name="re.phone.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212-1234'</span>)</span>                <a name="re.phone.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我们通常从左到右阅读正则表达式。这个正则表达式匹配字符串的开始，接着匹配 <tt class="literal">(\d{3})</tt>。<tt class="literal">\d{3}</tt> 是什么呢？好吧，<tt class="literal">{3}</tt> 的含义是“<span class="quote">精确匹配三个数字</span>”；这是曾在前面见到过的 <a href="n_m_syntax.html" title="7.4.&nbsp;使用 {n,m} 语法"><tt class="literal">{n,m}</tt></a> 语法的一种变形。<tt class="literal">\d</tt> 的含义是 “<span class="quote">任何一个数字</span>” (<tt class="literal">0</tt> 到 <tt class="literal">9</tt>)。把它们放大括号中意味着要“<span class="quote">精确匹配三个数字位，<span class="emphasis"><em>接着把它们作为一个组保存下来，以便后面的调用</em></span></span>”。接着匹配一个连字符，接着是另外一个精确匹配三个数字位的组，接着另外一个连字符，接着另外一个精确匹配四个数字为的组，接着匹配字符串的结尾。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">为了访问正则表达式解析过程中记忆下来的多个组，我们使用 <tt class="function">search</tt> 函数返回对象的 <tt class="function">groups()</tt> 函数。这个函数将返回一个元组，元组中的元素就是正则表达式中定义的组。在这个例子中，定义了三个组，第一个组有三个数字位，第二个组有三个数字位，第三个组有四个数字位。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个正则表达式不是最终的答案，因为它不能处理在电话号码结尾有分机号的情况，为此，我们需要扩展这个正则表达式。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e19229"></a><h3 class="title">例&nbsp;7.11.&nbsp;发现分机号</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern = re.compile(r<span class='pystring'>'^(\d{3})-(\d{3})-(\d{4})-(\d+)$'</span>)</span> <a name="re.phone.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212-1234'</span>).groups()</span>             <a name="re.phone.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '1234')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800 555 1212 1234'</span>)</span>                      <a name="re.phone.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212'</span>)</span>                           <a name="re.phone.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个正则表达式和上一个几乎相同，正像前面的那样，匹配字符串的开始，接着匹配一个有三个数字位的组并记忆下来，接着是一个连字符，接着是一个有三个数字位的组并记忆下来，接着是一个连字符，接着是一个有四个数字位的组并记忆下来。不同的地方是你接着又匹配了另一个连字符，然后是一个有一个或者多个数字位的组并记忆下来，最后是字符串的结尾。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">函数 <tt class="function">groups()</tt> 现在返回一个有四个元素的元组，由于正则表达式中定义了四个记忆的组。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">不幸的是，这个正则表达式也不是最终的答案，因为它假设电话号码的不同部分是由连字符分割的。如果一个电话号码是由空格符、逗号或者点号分割呢？你需要一个更一般的解决方案来匹配几种不同的分割类型。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">啊呀！这个正则表达式不仅不能解决你想要的任何问题，反而性能更弱了，因为现在你甚至不能解析一个没有分机号的电话号码了。这根本不是你想要的，如果有分机号，你要知道分机号是什么，如果没有分机号，你仍然想要知道主电话号码的其他部分是什么。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>下一个例子展示正则表达式处理一个电话号码内部，采用不同分隔符的情况。</p>
+         <div class="example"><a name="d0e19289"></a><h3 class="title">例&nbsp;7.12.&nbsp;处理不同分隔符</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern = re.compile(r<span class='pystring'>'^(\d{3})\D+(\d{3})\D+(\d{4})\D+(\d+)$'</span>)</span> <a name="re.phone.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800 555 1212 1234'</span>).groups()</span>                   <a name="re.phone.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '1234')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212-1234'</span>).groups()</span>                   <a name="re.phone.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '1234')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'80055512121234'</span>)</span>                               <a name="re.phone.3.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212'</span>)</span>                                 <a name="re.phone.3.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">当心啦！你首先匹配字符串的开始，接着是一个三个数字位的组，接着是 <tt class="literal">\D+</tt>，这是个什么东西？好吧，<tt class="literal">\D</tt> 匹配任意字符，<span class="emphasis"><em>除了</em></span> 数字位，<tt class="literal">+</tt> 表示“<span class="quote">1 个或者多个</span>”，因此 <tt class="literal">\D+</tt> 匹配一个或者多个不是数字位的字符。这就是你替换连字符为了匹配不同分隔符所用的方法。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用 <tt class="literal">\D+</tt> 代替 <tt class="literal">-</tt> 意味着现在你可以匹配中间是空格符分割的电话号码了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">当然，用连字符分割的电话号码也能够被识别。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">不幸的是，这个正则表达式仍然不是最终答案，因为它假设电话号码一定有分隔符。如果电话号码中间没有空格符或者连字符的情况会怎样哪？</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我的天！这个正则表达式也没有达到我们对于分机号识别的要求。现在你共有两个问题，但是你可以利用相同的技术来解决它们。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>下一个例子展示正则表达式处理<span class="emphasis"><em>没有</em></span> 分隔符的电话号码的情况。
+         </p>
+         <div class="example"><a name="d0e19386"></a><h3 class="title">例&nbsp;7.13.&nbsp;处理没有分隔符的数字</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern = re.compile(r<span class='pystring'>'^(\d{3})\D*(\d{3})\D*(\d{4})\D*(\d*)$'</span>)</span> <a name="re.phone.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'80055512121234'</span>).groups()</span>                      <a name="re.phone.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '1234')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800.555.1212 x1234'</span>).groups()</span>                  <a name="re.phone.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '1234')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212'</span>).groups()</span>                        <a name="re.phone.4.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'(800)5551212 x1234'</span>)</span>                           <a name="re.phone.4.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">和上一步相比，你所做的唯一变化就是把所有的 <tt class="literal">+</tt> 变成 <tt class="literal">*</tt>。在电话号码的不同部分之间不再匹配 <tt class="literal">\D+</tt>，而是匹配 <tt class="literal">\D*</tt> 了。还记得 <tt class="literal">+</tt> 的含义是“<span class="quote">1 或者多个</span>”吗? 好的，<tt class="literal">*</tt> 的含义是“<span class="quote">0 或者多个</span>”。因此，现在你应该能够解析没有分隔符的电话号码了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你瞧，它真的可以胜任。为什么？首先匹配字符串的开始，接着是一个有三个数字位 (<tt class="literal">800</tt>) 的组，接着是 0 个非数字字符，接着是一个有三个数字位 (<tt class="literal">555</tt>) 的组，接着是 0 个非数字字符，接着是一个有四个数字位 (<tt class="literal">1212</tt>) 的组，接着是 0 个非数字字符，接着是一个有任意数字位 (<tt class="literal">1234</tt>) 的组，最后是字符串的结尾。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">对于其他的变化也能够匹配：比如点号分隔符，在分机号前面既有空格符又有 <tt class="literal">x</tt> 符号的情况也能够匹配。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.4.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">最后，你已经解决了长期存在的一个问题：现在分机号是可选的了。如果没有发现分机号，<tt class="function">groups()</tt> 函数仍然返回一个有四个元素的元组，但是第四个元素只是一个空字符串。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.4.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我不喜欢做一个坏消息的传递人，此时你还没有完全结束这个问题。还有什么问题呢？当在区号前面还有一个额外的字符时，而正则表达式假设区号是一个字符串的开始，因此不能匹配。这个不是问题，你可以利用相同的技术“<span class="quote">0或者多个非数字字符</span>”来跳过区号前面的字符。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>下一个例子展示如何解决电话号码前面有其他字符的情况。</p>
+         <div class="example"><a name="d0e19501"></a><h3 class="title">例&nbsp;7.14.&nbsp;处理开始字符</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern = re.compile(r<span class='pystring'>'^\D*(\d{3})\D*(\d{3})\D*(\d{4})\D*(\d*)$'</span>)</span> <a name="re.phone.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'(800)5551212 ext. 1234'</span>).groups()</span>                 <a name="re.phone.5.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '1234')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212'</span>).groups()</span>                           <a name="re.phone.5.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'work 1-(800) 555.1212 #1234'</span>)</span>                     <a name="re.phone.5.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个正则表达式和前面的几乎相同，但它在第一个记忆组 (区号) 前面匹配 <tt class="literal">\D*</tt>，0 或者多个非数字字符。注意，此处你没有记忆这些非数字字符 (它们没有被括号括起来)。如果你发现它们，只是跳过它们，接着只要匹配上就开始记忆区号。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.5.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以成功地解析电话号码，即使在区号前面有一个左括号。(在区号后面的右括号也已经被处理，它被看成非数字字符分隔符，由第一个记忆组后面的 <tt class="literal">\D*</tt> 匹配。)
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.5.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">进行仔细的检查，保证你没有破坏前面能够匹配的任何情况。由于首字符是完全可选的，这个模式匹配字符串的开始，接着是 0 个非数字字符，接着是一个有三个数字字符的记忆组 (<tt class="literal">800</tt>)，接着是 1 个非数字字符 (连字符)，接着是一个有三个数字字符的记忆组 (<tt class="literal">555</tt>)，接着是 1 个非数字字符 (连字符)，接着是一个有四个数字字符的记忆组 (<tt class="literal">1212</tt>)，接着是 0 个非数字字符，接着是一个有 0 个数字位的记忆组，最后是字符串的结尾。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.5.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">此处是正则表达式让我产生了找一个硬东西挖出自己的眼睛的冲动。为什么这个电话号码没有匹配上？因为在它的区号前面有一个 <tt class="literal">1</tt>，但是你认为在区号前面的所有字符都是非数字字符 (<tt class="literal">\D*</tt>)。唉！
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>让我们往回看一下。迄今为止，正则表达式总是从一个字符串的开始匹配。但是现在你看到了，有很多不确定的情况需要你忽略。与其尽力全部匹配它们，还不如全部跳过它们，让我们采用一个不同的方法：根本不显式地匹配字符串的开始。下面的这个例子展示这个方法。</p>
+         <div class="example"><a name="d0e19579"></a><h3 class="title">例&nbsp;7.15.&nbsp;电话号码，无论何时我都要找到它</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern = re.compile(r<span class='pystring'>'(\d{3})\D*(\d{3})\D*(\d{4})\D*(\d*)$'</span>)</span> <a name="re.phone.6.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'work 1-(800) 555.1212 #1234'</span>).groups()</span>        <a name="re.phone.6.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '1234')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212'</span>)</span>                                <a name="re.phone.6.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'80055512121234'</span>)</span>                              <a name="re.phone.6.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '1234')</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.6.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">注意，在这个正则表达式的开始少了一个 <tt class="literal">^</tt> 字符。你不再匹配字符串的开始了，也就是说，你需要用你的正则表达式匹配整个输入字符串，除此之外没有别的意思了。正则表达式引擎将要努力计算出开始匹配输入字符串的位置，并且从这个位置开始匹配。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.6.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在你可以成功解析一个电话号码了，无论这个电话号码的首字符是不是数字，无论在电话号码各部分之间有多少任意类型的分隔符。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.6.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">仔细检查，这个正则表达式仍然工作的很好。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.6.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">还是能够工作。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>看看一个正则表达式能够失控得多快？回头看看前面的例子，你还能区别它们么？</p>
+         <p>当你还能够理解这个最终答案的时候 (这个正则表达式就是最终答案，即使你发现一种它不能处理的情况，我也真的不想知道它了)，在你忘记为什么你这么选择之前，让我们把它写成松散正则表达式的形式。</p>
+         <div class="example"><a name="d0e19641"></a><h3 class="title">例&nbsp;7.16.&nbsp;解析电话号码 (最终版本)</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern = re.compile(r<span class='pystring'>'''
+                # don't match beginning of string, number can start anywhere
+    (\d{3})     # area code is 3 digits (e.g. '800')
+    \D*         # optional separator is any number of non-digits
+    (\d{3})     # trunk is 3 digits (e.g. '555')
+    \D*         # optional separator
+    (\d{4})     # rest of number is 4 digits (e.g. '1212')
+    \D*         # optional separator
+    (\d*)       # extension is optional and can be any number of digits
+    $           # end of string
+    '''</span>, re.VERBOSE)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'work 1-(800) 555.1212 #1234'</span>).groups()</span>        <a name="re.phone.7.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '1234')</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">phonePattern.search(<span class='pystring'>'800-555-1212'</span>)</span>                                <a name="re.phone.7.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">('800', '555', '1212', '')</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.7.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">除了被分成多行，这个正则表达式和最后一步的那个完全相同，因此它能够解析相同的输入一点也不奇怪。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.phone.7.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">进行最后的仔细检查。很好，仍然工作。你终于完成了这件任务。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="furtherreading">
+            <h3>关于正则表达式的进一步阅读</h3>
+            <ul>
+               <li><a href="http://py-howto.sourceforge.net/regex/regex.html">Regular Expression HOWTO</a> 讲解正则表达式和如何在 <span class="application">Python</span> 中使用正则表达式。
+               </li>
+               <li><a href="http://www.python.org/doc/current/lib/"><i class="citetitle"><span class="application">Python</span> Library Reference</i></a> 概述了 <a href="http://www.python.org/doc/current/lib/module-re.html"><tt class="filename">re</tt> module</a>。
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="verbose.html">&lt;&lt;&nbsp;松散正则表达式</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#re.intro" title="7.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="street_addresses.html" title="7.2.&nbsp;个案研究：街道地址">2</a> <span class="divider">|</span> <a href="roman_numerals.html" title="7.3.&nbsp;个案研究：罗马字母">3</a> <span class="divider">|</span> <a href="n_m_syntax.html" title="7.4.&nbsp;使用 {n,m} 语法">4</a> <span class="divider">|</span> <a href="verbose.html" title="7.5.&nbsp;松散正则表达式">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="summary.html" title="7.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

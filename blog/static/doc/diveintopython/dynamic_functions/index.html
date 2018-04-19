@@ -1,0 +1,111 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;17&nbsp;章&nbsp;动态函数</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../functional_programming/summary.html" title="16.8.&nbsp;小结">
+      <link rel="next" href="stage1.html" title="17.2.&nbsp;plural.py, 第 1 阶段">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">动态函数</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../functional_programming/summary.html" title="上一页: “小结”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="stage1.html" title="下一页: “plural.py, 第 1 阶段”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="plural"></a>第&nbsp;17&nbsp;章&nbsp;动态函数
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#plural.divein">17.1. 概览</a></span></li>
+               <li><span class="section"><a href="stage1.html">17.2. plural.py, 第 1 阶段</a></span></li>
+               <li><span class="section"><a href="stage2.html">17.3. plural.py, 第 2 阶段</a></span></li>
+               <li><span class="section"><a href="stage3.html">17.4. plural.py, 第 3 阶段</a></span></li>
+               <li><span class="section"><a href="stage4.html">17.5. plural.py, 第 4 阶段</a></span></li>
+               <li><span class="section"><a href="stage5.html">17.6. plural.py, 第 5 阶段</a></span></li>
+               <li><span class="section"><a href="stage6.html">17.7. plural.py, 第 6 阶段</a></span></li>
+               <li><span class="section"><a href="summary.html">17.8. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="plural.divein"></a>17.1.&nbsp;概览
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="abstract">
+               <p>我想谈谈名词复数。还有，返回其它函数的函数，高级的正则表达式和生成器 (Generator)。生成器是 <span class="application">Python</span> 2.3 新引入的。但首先还是让我们先来谈谈如何生成名词复数。
+               </p>
+            </div>
+            <p>如果你还没有看过 <a href="../regular_expressions/index.html" title="第&nbsp;7&nbsp;章&nbsp;正则表达式">第&nbsp;7&nbsp;章 <i>正则表达式</i></a>，现在是个绝佳的机会。这章中假定你已理解了正则表达式的基础内容并迅速深入更高级的应用。
+            </p>
+            <p>英语是一个吸收很多外来语而令人疯掉的语言，把单数名词变成复数的规则则是复杂而又多变的。有规则，有例外，更有例外的例外。</p>
+            <p>如果你在英语国家长大或是在正规学校学习了英语，你可能对下面的基本规则很熟悉：</p>
+            <div class="orderedlist">
+               <ol type="1">
+                  <li>如果一个词以 S, X 或 Z 结尾，加 ES。如 “<span class="quote">Bass</span>” 变成 “<span class="quote">basses</span>”，“<span class="quote">fax</span>” 变成 “<span class="quote">faxes</span>”，还有 “<span class="quote">waltz</span>” 变成 “<span class="quote">waltzes</span>”。
+                  </li>
+                  <li>如果一个词以发音的 H 结尾，加 ES；若以不发音的 H 结尾，加 S。什么是发音的 H？和其他字母混合在一起发出一个你可以听到的声音。那么，“<span class="quote">coach</span>” 变成 “<span class="quote">coaches</span>” ，“<span class="quote">rash</span>” 变成 “<span class="quote">rashes</span>”，因为在读出来时，你可以听到 CH 和 SH 的声音。但是，“<span class="quote">cheetah</span>” 变成 “<span class="quote">cheetahs</span>”，因为 H 不发音。
+                  </li>
+                  <li>如果一个词以发 I 音的 Y 结尾，把 Y 变成 IES；如果 Y 与元音搭配在一起发出其他声音则只添加 S。因此，“<span class="quote">vacancy</span>” 变成 “<span class="quote">vacancies</span>”，但 “<span class="quote">day</span>” 变成 “<span class="quote">days</span>”。
+                  </li>
+                  <li>如果一切规则都不适用，就只添加 S 并祈祷不会错。</li>
+               </ol>
+            </div>
+            <p>(我知道有很多例外情况，比如：“<span class="quote">Man</span>” 变成 “<span class="quote">men</span>”，“<span class="quote">woman</span>” 变成 “<span class="quote">women</span>”，但是，“<span class="quote">human</span>” 却变成 “<span class="quote">humans</span>”。“<span class="quote">Mouse</span>” 变成 “<span class="quote">mice</span>”，“<span class="quote">louse</span>” 变成 “<span class="quote">lice</span>”，但是，“<span class="quote">house</span>” 却变成 “<span class="quote">houses</span>”。“<span class="quote">Knife</span>” 变成 “<span class="quote">knives</span>”，“<span class="quote">wife</span>” 变成 “<span class="quote">wives</span>”，但是 “<span class="quote">lowlife</span>” 却变成 “<span class="quote">lowlifes</span>”。更不要说那些复数根本就不需要变化的词了，比如 “<span class="quote">sheep</span>”, “<span class="quote">deer</span>” 和 “<span class="quote">haiku</span>”。)
+            </p>
+            <p>其他的语言当然完全不同。</p>
+            <p>让我们来设计一个复数化名词的模块吧！从英语名词开始，仅考虑上面的四种规则，但是记得你将来需要不断添加规则，更可能最后添加进更多的语言。</p>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../functional_programming/summary.html">&lt;&lt;&nbsp;小结</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="stage1.html" title="17.2.&nbsp;plural.py, 第 1 阶段">2</a> <span class="divider">|</span> <a href="stage2.html" title="17.3.&nbsp;plural.py, 第 2 阶段">3</a> <span class="divider">|</span> <a href="stage3.html" title="17.4.&nbsp;plural.py, 第 3 阶段">4</a> <span class="divider">|</span> <a href="stage4.html" title="17.5.&nbsp;plural.py, 第 4 阶段">5</a> <span class="divider">|</span> <a href="stage5.html" title="17.6.&nbsp;plural.py, 第 5 阶段">6</a> <span class="divider">|</span> <a href="stage6.html" title="17.7.&nbsp;plural.py, 第 6 阶段">7</a> <span class="divider">|</span> <a href="summary.html" title="17.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="stage1.html">plural.py, 第 1 阶段&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,135 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>17.6.&nbsp;plural.py, 第 5 阶段</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;17&nbsp;章&nbsp;动态函数">
+      <link rel="previous" href="stage4.html" title="17.5.&nbsp;plural.py, 第 4 阶段">
+      <link rel="next" href="stage6.html" title="17.7.&nbsp;plural.py, 第 6 阶段">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">动态函数</a>&nbsp;&gt;&nbsp;<span class="thispage">plural.py, 第 5 阶段</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="stage4.html" title="上一页: “plural.py, 第 4 阶段”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="stage6.html" title="下一页: “plural.py, 第 6 阶段”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="plural.stage5"></a>17.6.&nbsp;<tt class="filename">plural.py</tt>, 第 5 阶段
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你已经精炼了所有重复代码，也尽可能地把复数规则提炼到定义一个字符串列表。接下来的步骤是把这些字符串提出来放在另外的文件中，从而可以和使用它们的代码分开来维护。</p>
+         </div>
+         <p>首先，让我们建立一个包含你需要的所有规则的文本文件。没有什么特别的结构，不过是以空格 (或者制表符) 把字符串列成三列。你把它命名为 <tt class="filename">rules.en</tt>，“<span class="quote">en</span>” 是英语的意思。这些是英语名词复数的规则，你以后可以为其它语言添加规则文件。
+         </p>
+         <div class="example"><a name="d0e38298"></a><h3 class="title">例&nbsp;17.15.&nbsp;<tt class="filename">rules.en</tt></h3><pre class="programlisting">
+[sxz]$                  $               es
+[^aeioudgkprt]h$        $               es
+[^aeiou]y$              y$              ies
+$                       $               s
+</pre></div>
+         <p>现在来看看如何使用规则文件。</p>
+         <div class="example"><a name="d0e38306"></a><h3 class="title">例&nbsp;17.16.&nbsp;<tt class="filename">plural5.py</tt></h3><pre class="programlisting"><span class='pykeyword'>
+import</span> re
+<span class='pykeyword'>import</span> string                                                                     
+
+<span class='pykeyword'>def</span><span class='pyclass'> buildRule</span>((pattern, search, replace)):                                        
+    <span class='pykeyword'>return</span> <span class='pykeyword'>lambda</span> word: re.search(pattern, word) <span class='pykeyword'>and</span> re.sub(search, replace, word) <a name="plural.stage5.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+
+<span class='pykeyword'>def</span><span class='pyclass'> plural</span>(noun, language=<span class='pystring'>'en'</span>):                             <a name="plural.stage5.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    lines = file(<span class='pystring'>'rules.%s'</span> % language).readlines()          <a name="plural.stage5.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+    patterns = map(string.split, lines)                      <a name="plural.stage5.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+    rules = map(buildRule, patterns)                         <a name="plural.stage5.1.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+    <span class='pykeyword'>for</span> rule <span class='pykeyword'>in</span> rules:                                      
+        result = rule(noun)                                  <a name="plural.stage5.1.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> result: <span class='pykeyword'>return</span> result                            
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage5.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在这里你还将使用闭合技术 (动态构建函数时使用函数外部定义的变量)，但是现在你把原来分开的匹配函数和规则应用函数合二为一 (你将在下一节中明了其原因)。你很快会看到，这与分别调用两个函数效果相同，只是调用的方法稍有不同。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage5.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">咱们的 <tt class="function">plural</tt> 函数现在接受的第二个参数是默认值为 <tt class="literal">en</tt> 的可选参数 <tt class="varname">language</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage5.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你使用 <tt class="varname">language</tt> 参数命名一个文件，打开这个文件并读取其中的内容到一个列表。如果 <tt class="varname">language</tt> 是 <tt class="literal">en</tt>，那么你将打开 <tt class="filename">rules.en</tt> 文件，读取全部内容，以其中的回车符作为分隔构建一个列表。文件的每一行将成为列表的一个元素。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage5.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如你所见，文件的每一行都有三个值，但是它们是以空白字符 (制表符或者空格符，这没什么区别) 分割。用 <tt class="function">string.split</tt> 函数映射列表来创建一个每个元素都是三元素元组的新列表。因此，像 <tt class="literal">[sxz]$ $ es</tt> 这样的一行将被打碎并放入 <tt class="literal">('[sxz]$', '$', 'es')</tt> 这样的元组。这意味着 <tt class="varname">patterns</tt> 将最终变成元组列表的形式，就像<a href="stage4.html" title="17.5.&nbsp;plural.py, 第 4 阶段">第 4 阶段</a>实打实编写的那样。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage5.1.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果 <tt class="varname">patterns</tt> 是一个元组列表，那么 <tt class="varname">rules</tt> 就可以通过一个个调用 <tt class="function">buildRule</tt> 动态地生成函数列表。调用 <tt class="function">buildRule(('[sxz]$', '$', 'es'))</tt> 返回一个接受单参数 <tt class="varname">word</tt> 的函数。当返回的函数被调用，则将执行 <tt class="literal">re.search('[sxz]$', word) and re.sub('$', 'es', word)</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage5.1.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">因为你现在构建的是一个匹配和规则应用合一的函数，你需要分别调用它们。仅仅是调用函数，如果返回了内容，那么返回的便是复数；如果没有返回 (也就是返回了<tt class="literal">None</tt>)，那么该规则未能匹配，就应该尝试其他规则。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>这里的进步是你把复数规则完全分离到另外的文件中。不但这个文件可以独立于代码单独维护，而且你建立了一个命名规划使 <tt class="function">plural</tt> 函数可以根据 <tt class="varname">language</tt> 参数使用不同的规则文件。
+         </p>
+         <p>这里的缺陷是每次调用 <tt class="function">plural</tt> 函数都需要去读取一次文件。我想我可以在整本书中都不使用 “<span class="quote">留给读者去练习</span>”，但是这里：为特定的语言规则文件建立一个缓存机制，并在调用期间规则文件改变时自动刷新<span class="emphasis"><em>留给读者作为练习</em></span>。祝你顺利。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="stage4.html">&lt;&lt;&nbsp;plural.py, 第 4 阶段</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#plural.divein" title="17.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="stage1.html" title="17.2.&nbsp;plural.py, 第 1 阶段">2</a> <span class="divider">|</span> <a href="stage2.html" title="17.3.&nbsp;plural.py, 第 2 阶段">3</a> <span class="divider">|</span> <a href="stage3.html" title="17.4.&nbsp;plural.py, 第 3 阶段">4</a> <span class="divider">|</span> <a href="stage4.html" title="17.5.&nbsp;plural.py, 第 4 阶段">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="stage6.html" title="17.7.&nbsp;plural.py, 第 6 阶段">7</a> <span class="divider">|</span> <a href="summary.html" title="17.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="stage6.html">plural.py, 第 6 阶段&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

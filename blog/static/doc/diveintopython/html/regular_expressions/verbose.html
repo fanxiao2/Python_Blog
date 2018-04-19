@@ -1,0 +1,127 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>7.5.&nbsp;松散正则表达式</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;7&nbsp;章&nbsp;正则表达式">
+      <link rel="previous" href="n_m_syntax.html" title="7.4.&nbsp;使用 {n,m} 语法">
+      <link rel="next" href="phone_numbers.html" title="7.6.&nbsp;个案研究：解析电话号码">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">正则表达式</a>&nbsp;&gt;&nbsp;<span class="thispage">松散正则表达式</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="n_m_syntax.html" title="上一页: “使用 {n,m} 语法”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="phone_numbers.html" title="下一页: “个案研究：解析电话号码”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="re.verbose"></a>7.5.&nbsp;松散正则表达式
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>迄今为止，你只是处理过被我称之为“<span class="quote">紧凑</span>”类型的正则表达式。正如你曾看到的，它们难以阅读，即使你清楚正则表达式的含义，你也不能保证六个月以后你还能理解它。你真正所需的就是利用内联文档 (inline documentation)。
+            </p>
+         </div>
+         <p><span class="application">Python</span> 允许用户利用所谓的<span class="emphasis"><em>松散正则表达式</em></span> 来完成这个任务。一个松散正则表达式和一个紧凑正则表达式主要区别表现在两个方面：
+         </p>
+         <div class="itemizedlist">
+            <ul>
+               <li>忽略空白符。空格符，制表符，回车符不匹配它们自身，它们根本不参与匹配。(如果你想在松散正则表达式中匹配一个空格符，你必须在它前面添加一个反斜线符号对它进行转义。)</li>
+               <li>忽略注释。在松散正则表达式中的注释和在普通 <span class="application">Python</span> 代码中的一样：开始于一个<tt class="literal">#</tt>符号，结束于行尾。这种情况下，采用在一个多行字符串中注释，而不是在源代码中注释，它们以相同的方式工作。
+               </li>
+            </ul>
+         </div>
+         <p>用一个例子可以解释得更清楚。让我们重新来看前面的紧凑正则表达式，利用松散正则表达式重新表达。下面的例子显示实现方法。</p>
+         <div class="example"><a name="d0e18954"></a><h3 class="title">例&nbsp;7.9.&nbsp;带有内联注释 (Inline Comments) 的正则表达式</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">pattern = <span class='pystring'>"""
+    ^                   # beginning of string
+    M{0,3}              # thousands - 0 to 3 M's
+    (CM|CD|D?C{0,3})    # hundreds - 900 (CM), 400 (CD), 0-300 (0 to 3 C's),
+                        #            or 500-800 (D, followed by 0 to 3 C's)
+    (XC|XL|L?X{0,3})    # tens - 90 (XC), 40 (XL), 0-30 (0 to 3 X's),
+                        #        or 50-80 (L, followed by 0 to 3 X's)
+    (IX|IV|V?I{0,3})    # ones - 9 (IX), 4 (IV), 0-3 (0 to 3 I's),
+                        #        or 5-8 (V, followed by 0 to 3 I's)
+    $                   # end of string
+    """</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.search(pattern, <span class='pystring'>'M'</span>, re.VERBOSE)</span>                <a name="re.verbose.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">&lt;_sre.SRE_Match object at 0x008EEB48&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.search(pattern, <span class='pystring'>'MCMLXXXIX'</span>, re.VERBOSE)</span>        <a name="re.verbose.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">&lt;_sre.SRE_Match object at 0x008EEB48&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.search(pattern, <span class='pystring'>'MMMDCCCLXXXVIII'</span>, re.VERBOSE)</span>  <a name="re.verbose.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">&lt;_sre.SRE_Match object at 0x008EEB48&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.search(pattern, <span class='pystring'>'M'</span>)</span>                            <a name="re.verbose.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.verbose.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">当使用松散正则表达式时，最重要的一件事情就是：必须传递一个额外的参数 <tt class="literal">re.VERBOSE</tt>，该参数是定义在 <tt class="filename">re</tt> 模块中的一个常量，标志着待匹配的正则表达式是一个松散正则表达式。正如你看到的，这个模式中，有很多空格 (所有的空格都被忽略)，和几个注释 (所有的注释也被忽略)。如果忽略所有的空格和注释，它就和<a href="n_m_syntax.html" title="7.4.&nbsp;使用 {n,m} 语法">前面章节</a>里的正则表达式完全相同，但是具有更好的可读性。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.verbose.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个模式匹配字符串的开始，接着匹配三个可选 <tt class="literal">M</tt> 字符中的一个，接着匹配 <tt class="literal">CM</tt>，接着是字符 <tt class="literal">L</tt> 和三个可选 <tt class="literal">X</tt> 字符的所有字符，接着是 <tt class="literal">IX</tt>，然后是字符串的结尾。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.verbose.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个模式匹配字符串的开始，接着是三个可选的 <tt class="literal">M</tt> 字符的所有字符，接着匹配 <tt class="literal">D?C{0,3}</tt>，此处为一个字符 <tt class="literal">D</tt> 和三个可选 <tt class="literal">C</tt> 字符中所有字符，接着匹配 <tt class="literal">L?X{0,3}</tt>，此处为一个 <tt class="literal">L</tt> 字符和三个可选 <tt class="literal">X</tt> 字符中所有字符，接着匹配 <tt class="literal">V?I{0,3}</tt>，此处为一个字符 <tt class="literal">V</tt> 和三个可选 <tt class="literal">I</tt> 字符中所有字符，接着匹配字符串的结尾。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#re.verbose.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个没有匹配。为什么呢？因为没有 <tt class="literal">re.VERBOSE</tt> 标记，所以 <tt class="function">re.search</tt> 函数把模式作为一个紧凑正则表达式进行匹配。<span class="application">Python</span> 不能自动检测一个正则表达式是为松散类型还是紧凑类型。<span class="application">Python</span> 默认每一个正则表达式都是紧凑类型的，除非你显式地标明一个正则表达式为松散类型。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="n_m_syntax.html">&lt;&lt;&nbsp;使用 {n,m} 语法</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#re.intro" title="7.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="street_addresses.html" title="7.2.&nbsp;个案研究：街道地址">2</a> <span class="divider">|</span> <a href="roman_numerals.html" title="7.3.&nbsp;个案研究：罗马字母">3</a> <span class="divider">|</span> <a href="n_m_syntax.html" title="7.4.&nbsp;使用 {n,m} 语法">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="phone_numbers.html" title="7.6.&nbsp;个案研究：解析电话号码">6</a> <span class="divider">|</span> <a href="summary.html" title="7.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="phone_numbers.html">个案研究：解析电话号码&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

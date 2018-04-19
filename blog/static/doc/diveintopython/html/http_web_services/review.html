@@ -1,0 +1,99 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>11.2.&nbsp;避免通过 HTTP 重复地获取数据</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务">
+      <link rel="previous" href="index.html" title="第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务">
+      <link rel="next" href="http_features.html" title="11.3.&nbsp;HTTP 的特性">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTTP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">避免通过 HTTP 重复地获取数据</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="index.html" title="上一页: “HTTP Web 服务”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="http_features.html" title="下一页: “HTTP 的特性”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="oa.review"></a>11.2.&nbsp;避免通过 HTTP 重复地获取数据
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>假如说你想用 HTTP 下载资源，例如一个 Atom feed 汇聚。你不仅仅想下载一次；而是想一次又一次地下载它，如每小时一次，从提供 news feed 的站点获得最新的消息。让我们首先用一种直接而原始的方法来实现它，然后看看如何改进它。
+               
+            </p>
+         </div>
+         <div class="example"><a name="d0e27729"></a><h3 class="title">例&nbsp;11.2.&nbsp;用直接而原始的方法下载 feed</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> urllib</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">data = urllib.urlopen(<span class='pystring'>'http://diveintomark.org/xml/atom.xml'</span>).read()</span>    <a name="oa.review.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> data</span>
+<span class="computeroutput">&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;feed version="0.3"
+  xmlns="http://purl.org/atom/ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xml:lang="en"&gt;
+  &lt;title mode="escaped"&gt;dive into mark&lt;/title&gt;
+  &lt;link rel="alternate" type="text/html" href="http://diveintomark.org/"/&gt;
+  &lt;-- rest of feed omitted for brevity --&gt;</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.review.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用 <span class="application">Python</span> 通过 HTTP 下载任何东西都简单得令人难以置信；实际上，只需要一行代码。<tt class="filename">urllib</tt> 模块有一个便利的 <tt class="function">urlopen</tt> 函数，它接受您所要获取的页面地址，然后返回一个类文件对象，您仅仅使用 <tt class="function">read()</tt> 便可获得页面的全部内容。这再简单不过了。
+                        
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>那么这种方法有何不妥之处吗？当然，在测试或开发中一次性的使用没有什么不妥。我经常这样。我想要 feed 汇聚的内容，我就获取 feed 的内容。这种方法对其他 web 页面同样有效。但是一旦你开始按照 web 服务的方式去思考有规则的访问需求时
+            (记住，你说你计划每小时一次地重复获取这样的 feed ) 就会发现这样的做法效率实在是太低了，并且对服务器来说也太笨了。
+            
+         </p>
+         <p>下面先谈论一些 HTTP 的基本特性。</p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="index.html">&lt;&lt;&nbsp;HTTP Web 服务</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#oa.divein" title="11.1.&nbsp;概览">1</a> <span class="divider">|</span> <span class="thispage">2</span> <span class="divider">|</span> <a href="http_features.html" title="11.3.&nbsp;HTTP 的特性">3</a> <span class="divider">|</span> <a href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">4</a> <span class="divider">|</span> <a href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">5</a> <span class="divider">|</span> <a href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">6</a> <span class="divider">|</span> <a href="redirects.html" title="11.7.&nbsp;处理重定向">7</a> <span class="divider">|</span> <a href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">8</a> <span class="divider">|</span> <a href="alltogether.html" title="11.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="11.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="http_features.html">HTTP 的特性&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

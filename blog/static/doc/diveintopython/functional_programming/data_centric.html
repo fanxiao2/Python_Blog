@@ -1,0 +1,82 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>16.5.&nbsp;数据中心思想编程</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;16&nbsp;章&nbsp;函数编程">
+      <link rel="previous" href="mapping_lists.html" title="16.4.&nbsp;重识列表映射">
+      <link rel="next" href="dynamic_import.html" title="16.6.&nbsp;动态导入模块">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">函数编程</a>&nbsp;&gt;&nbsp;<span class="thispage">数据中心思想编程</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="mapping_lists.html" title="上一页: “重识列表映射”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="dynamic_import.html" title="下一页: “动态导入模块”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="regression.datacentric"></a>16.5.&nbsp;数据中心思想编程
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>现在的你，可能正抓耳挠腮地狠想，为什么这样比使用 <tt class="literal">for</tt> 循环和直接调用函数好。这是一个非常好的问题。通常这是一个程序观问题。使用 <tt class="function">map</tt> 和 <tt class="function">filter</tt> 强迫你围绕数据进行思考。
+            </p>
+         </div>
+         <p>就此而言，你从没有数据开始，你所做的第一件事是<a href="finding_the_path.html" title="16.2.&nbsp;找到路径">获得当前脚本的目录路径</a>，并获得该目录中的文件列表。这就是关键的一步，使你有了待处理的真实数据：文件名列表。
+         </p>
+         <p>当然，你知道你并不关心所有的文件，而只关心测试套件。你有<span class="emphasis"><em>太多数据</em></span>，因此你需要过滤(<tt class="function">filter</tt>)数据。你如何知道哪些数据应该保留？你需要一个测试来确定，因此你定义一个测试并把它传给 <tt class="function">filter</tt> 函数。这里你应用了一个正则表达式来确定，但无论如何构建测试，原则是一样的。
+         </p>
+         <p>现在你有了每个测试套件的文件名 (且局限于测试套件，因为所有其他内容都被过滤掉了)，但是你还需要以模块名来替代之。你有正确数量的数据，只是<span class="emphasis"><em>格式不正确</em></span>。因此，你定义了一个函数来将文件名转换为模块名，并使用这个函数映射整个列表。从一个文件名，你可以获得一个模块名，从一个文件名列表，你可以获得一个模块名列表。
+         </p>
+         <p>如果不应用 <tt class="function">filter</tt>，你也可以使用 <tt class="literal">for</tt> 循环结合一个 <tt class="literal">if</tt> 语句的方法。<tt class="function">map</tt> 的使用则可以由一个 <tt class="literal">for</tt> 循环和一个函数调用来取代。但是 <tt class="literal">for</tt> 循环看起来像是个繁重的工作。至少，简单讲是在浪费时间，糟糕的话还会隐埋 Bug。例如，你需要弄清楚如何测试这样一个条件：“<span class="quote">这个文件是测试套件吗？</span>”这是应用特定的逻辑，没有哪个语言能自动为我们写出其代码。但是一旦你搞清楚了，你还需要费尽周折地定义一个新的空列表，写一个  <tt class="literal">for</tt> 循环以及一个 <tt class="literal">if</tt> 语句并手工地调用 <tt class="function">append</tt> 将符合条件的元素一个个添加到新列表中，然后一路上注意区分哪个变量里放着过滤后的数据，哪个变量里放着未过滤的老数据。为什么不直接定义测试条件，然后由 <span class="application">Python</span> 为你完成接下来的工作呢？
+         </p>
+         <p>当然啦，你可以尝试眩一点的做法，去删除列表中的元素而不新建一个列表。但是你以前吃过这样的亏。试图在循环中改变数据结构是很容易出问题的。<span class="application">Python</span> 是一个这样工作的语言吗？用多长时间你才能搞清这一点？你能确定记得你第二次这样尝试的安全性？程序员在和这类纯技术课题较劲的过程中，花费了太多的时间，犯了太多的错误，却并没有什么意义。这样并不可能令你的程序有所进步，只不过是费力不讨好。
+         </p>
+         <p>我在第一次学习 <span class="application">Python</span> 时是抵触列表解析的，而且我抗拒 <tt class="function">filter</tt> 和 <tt class="function">map</tt> 的时间更长。我坚持着我更艰难的生活，固守着类似于 <tt class="literal">for</tt> 循环和 <tt class="literal">if</tt> 语句以及一步步地以代码为中心的编程方式。而且我的 <span class="application">Python</span> 程序看起来很像是 <span class="application">Visual Basic</span> 程序，细化每一个函数中的每一个操作步骤。它们却有着同样的小错误和隐蔽的 Bug。这一切其实都没有意义。
+         </p>
+         <p>让这一切都远去吧。费力不讨好的编程不重要，数据重要。并且数据并不麻烦，它们不过就是数据。如果多了，就过滤。如果不是我们要的，就映射。聚焦在数据上，摒弃费力的劳作。</p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="mapping_lists.html">&lt;&lt;&nbsp;重识列表映射</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#regression.divein" title="16.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="finding_the_path.html" title="16.2.&nbsp;找到路径">2</a> <span class="divider">|</span> <a href="filtering_lists.html" title="16.3.&nbsp;重识列表过滤">3</a> <span class="divider">|</span> <a href="mapping_lists.html" title="16.4.&nbsp;重识列表映射">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="dynamic_import.html" title="16.6.&nbsp;动态导入模块">6</a> <span class="divider">|</span> <a href="all_together.html" title="16.7.&nbsp;全部放在一起">7</a> <span class="divider">|</span> <a href="summary.html" title="16.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="dynamic_import.html">动态导入模块&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

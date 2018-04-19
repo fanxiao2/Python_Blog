@@ -1,0 +1,365 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;10&nbsp;章&nbsp;脚本和流</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../xml_processing/summary.html" title="9.7.&nbsp;Segue ">
+      <link rel="next" href="stdin_stdout_stderr.html" title="10.2.&nbsp;标准输入、输出和错误">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">脚本和流</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../xml_processing/summary.html" title="上一页: “Segue ”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="stdin_stdout_stderr.html" title="下一页: “标准输入、输出和错误”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="streams"></a>第&nbsp;10&nbsp;章&nbsp;脚本和流
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#kgp.openanything">10.1. 抽象输入源</a></span></li>
+               <li><span class="section"><a href="stdin_stdout_stderr.html">10.2. 标准输入、输出和错误</a></span></li>
+               <li><span class="section"><a href="caching.html">10.3. 查询缓冲节点</a></span></li>
+               <li><span class="section"><a href="child_nodes.html">10.4. 查找节点的直接子节点</a></span></li>
+               <li><span class="section"><a href="handlers_by_node_type.html">10.5. 根据节点类型创建不同的处理器</a></span></li>
+               <li><span class="section"><a href="command_line_arguments.html">10.6. 处理命令行参数</a></span></li>
+               <li><span class="section"><a href="all_together.html">10.7. 全部放在一起</a></span></li>
+               <li><span class="section"><a href="summary.html">10.8. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="kgp.openanything"></a>10.1.&nbsp;抽象输入源
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="abstract">
+               <p><span class="application">Python</span> 的最强大力量之一是它的动态绑定，而动态绑定最强大的用法之一是<span class="emphasis"><em>类文件(file-like)对象</em></span>。
+               </p>
+            </div>
+            <p>许多需要输入源的函数可以只接收一个文件名，并以读方式打开文件，读取文件，处理完成后关闭它。其实它们不是这样的，而是接收一个<span class="emphasis"><em>类文件对象</em></span>。
+            </p>
+            <p>在最简单的例子中，<span class="emphasis"><em>类文件对象</em></span> 是任意一个带有 <tt class="function">read</tt> 方法的对象，这个方法带有一个可选的 <tt class="varname">size</tt> 参数，并返回一个字符串。调用时如果没有 <tt class="varname">size</tt> 参数，它从输入源中读取所有东西并将所有数据作为单个字符串返回；调用时如果指定了 <tt class="varname">size</tt> 参数，它将从输入源中读取 <tt class="varname">size</tt> 大小的数据并返回这些数据；再次调用的时候，它从余下的地方开始并返回下一块数据。
+            </p>
+            <p>这就是<a href="../file_handling/file_objects.html" title="6.2.&nbsp;与文件对象共事">从真实文件读取数据</a>的工作方式；区别在于你不用把自己局限于真实的文件。输入源可以是任何东西：磁盘上的文件，甚至是一个硬编码的字符串。只要你将一个类文件对象传递给函数，函数只是调用对象的 <tt class="function">read</tt> 方法，就可以处理任何类型的输入源，而不需要为处理每种类型分别编码。
+               
+            </p>
+            <p>你可能会纳闷，这和 <span class="acronym">XML</span> 处理有什么关系。其实 <tt class="function">minidom.parse</tt> 就是一个可以接收类文件对象的函数。
+            </p>
+            <div class="example"><a name="d0e25300"></a><h3 class="title">例&nbsp;10.1.&nbsp;从文件中解析 <span class="acronym">XML</span></h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> xml.dom <span class='pykeyword'>import</span> minidom</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">fsock = open(<span class='pystring'>'binary.xml'</span>)</span>    <a name="kgp.openanything.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc = minidom.parse(fsock)</span> <a name="kgp.openanything.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">fsock.close()</span>                 <a name="kgp.openanything.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> xmldoc.toxml()</span>          <a name="kgp.openanything.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">&lt;?xml version="1.0" ?&gt;
+&lt;grammar&gt;
+&lt;ref id="bit"&gt;
+  &lt;p&gt;0&lt;/p&gt;
+  &lt;p&gt;1&lt;/p&gt;
+&lt;/ref&gt;
+&lt;ref id="byte"&gt;
+  &lt;p&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;\
+&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;/p&gt;
+&lt;/ref&gt;
+&lt;/grammar&gt;</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">首先，你要打开一个磁盘上的文件。这会提供给你一个<a href="../file_handling/file_objects.html" title="6.2.&nbsp;与文件对象共事">文件对象</a>。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">将文件对象传递给 <tt class="function">minidom.parse</tt>，它调用 <tt class="varname">fsock</tt> 的 <tt class="function">read</tt> 方法并从磁盘上的文件读取 <span class="acronym">XML</span> 文档。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">确保处理完文件后调用 <tt class="function">close</tt> 方法。<tt class="function">minidom.parse</tt>不会替你做这件事。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">在返回的 <span class="acronym">XML</span> 文档上调用 <tt class="methodname">toxml()</tt> 方法，打印出整个文档的内容。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>哦，所有这些看上去像是在浪费大量的时间。毕竟，你已经看到，<tt class="function">minidom.parse</tt> 可以只接收文件名，并自动执行所有打开文件和关闭无用文件的行为。不错，如果你知道正要解析的是一个本地文件，你可以传递文件名而且 <tt class="function">minidom.parse</tt> 可以足够聪明地做正确的事情 (<span class="trademark">Do The Right Thing</span>™<sup>[<a name="d0e25392" href="#ftn.d0e25392">10</a>]</sup>)，这一切都不会有问题。但是请注意，使用类文件，会使分析直接从 Internet 上来的 <span class="acronym">XML</span> 文档变得多么相似和容易！
+            </p>
+            <div class="example"><a name="kgp.openanything.urllib"></a><h3 class="title">例&nbsp;10.2.&nbsp;解析来自 <span class="acronym">URL</span> 的 <span class="acronym">XML</span></h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> urllib</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">usock = urllib.urlopen(<span class='pystring'>'http://slashdot.org/slashdot.rdf'</span>)</span> <a name="kgp.openanything.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc = minidom.parse(usock)</span>                              <a name="kgp.openanything.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">usock.close()</span>                                              <a name="kgp.openanything.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> xmldoc.toxml()</span>                                       <a name="kgp.openanything.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">&lt;?xml version="1.0" ?&gt;
+&lt;rdf:RDF xmlns="http://my.netscape.com/rdf/simple/0.9/"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;
+
+&lt;channel&gt;
+&lt;title&gt;Slashdot&lt;/title&gt;
+&lt;link&gt;http://slashdot.org/&lt;/link&gt;
+&lt;description&gt;News for nerds, stuff that matters&lt;/description&gt;
+&lt;/channel&gt;
+
+&lt;image&gt;
+&lt;title&gt;Slashdot&lt;/title&gt;
+&lt;url&gt;http://images.slashdot.org/topics/topicslashdot.gif&lt;/url&gt;
+&lt;link&gt;http://slashdot.org/&lt;/link&gt;
+&lt;/image&gt;
+
+&lt;item&gt;
+&lt;title&gt;To HDTV or Not to HDTV?&lt;/title&gt;
+&lt;link&gt;http://slashdot.org/article.pl?sid=01/12/28/0421241&lt;/link&gt;
+&lt;/item&gt;
+
+[...snip...]</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">正如在<a href="../html_processing/extracting_data.html#dialect.extract.urllib" title="例&nbsp;8.5.&nbsp;urllib 介绍">前一章</a>中所看到的，<tt class="function">urlopen</tt> 接收一个 web 页面的 <span class="acronym">URL</span> 作为参数并返回一个类文件对象。最重要的是，这个对象有一个 <tt class="function">read</tt> 方法，它可以返回 web 页面的 <span class="acronym">HTML</span> 源代码。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">现在把类文件对象传递给 <tt class="function">minidom.parse</tt>，它顺从地调用对象的 <tt class="function">read</tt> 方法并解析 <tt class="function">read</tt> 方法返回的 <span class="acronym">XML</span> 数据。这与 <span class="acronym">XML</span> 数据现在直接来源于 web 页面的事实毫不相干。<tt class="function">minidom.parse</tt> 并不知道 web 页面，它也不关心 web 页面；它只知道类文件对象。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">到这里已经处理完毕了，确保将 <tt class="function">urlopen</tt> 提供给你的类文件对象关闭。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">顺便提一句，这个 <span class="acronym">URL</span> 是真实的，它真的是一个 <span class="acronym">XML</span>。它是 <a href="http://slashdot.org/">Slashdot</a> 站点 (一个技术新闻和随笔站点) 上当前新闻提要的 <span class="acronym">XML</span> 表示。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <div class="example"><a name="d0e25505"></a><h3 class="title">例&nbsp;10.3.&nbsp;解析字符串 <span class="acronym">XML</span> (容易但不灵活的方式)
+               </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">contents = <span class='pystring'>"&lt;grammar&gt;&lt;ref id='bit'&gt;&lt;p&gt;0&lt;/p&gt;&lt;p&gt;1&lt;/p&gt;&lt;/ref&gt;&lt;/grammar&gt;"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc = minidom.parseString(contents)</span> <a name="kgp.openanything.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> xmldoc.toxml()</span>
+<span class="computeroutput">&lt;?xml version="1.0" ?&gt;
+&lt;grammar&gt;&lt;ref id="bit"&gt;&lt;p&gt;0&lt;/p&gt;&lt;p&gt;1&lt;/p&gt;&lt;/ref&gt;&lt;/grammar&gt;</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="filename">minidom</tt> 有一个方法，<tt class="function">parseString</tt>，它接收一个字符串形式的完整 <span class="acronym">XML</span> 文档作为参数并解析这个参数。如果你已经将整个 <span class="acronym">XML</span> 文档放入一个字符串，你可以使用它代替 <tt class="function">minidom.parse</tt>。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>好吧，所以你可以使用 <tt class="function">minidom.parse</tt> 函数来解析本地文件和远端 <span class="acronym">URL</span>，但对于解析字符串，你使用……另一个函数。这就是说，如果你要从文件、<span class="acronym">URL</span> 或者字符串接收输入，就需要特别的逻辑来判断参数是否是字符串，然后调用 <tt class="function">parseString</tt>。多不让人满意。
+            </p>
+            <p>如果有一个方法可以把字符串转换成类文件对象，那么你只要这个对象传递给 <tt class="function">minidom.parse</tt> 就可以了。事实上，有一个模块专门设计用来做这件事：<tt class="filename">StringIO</tt>。
+            </p>
+            <div class="example"><a name="kgp.openanything.stringio.example"></a><h3 class="title">例&nbsp;10.4.&nbsp;<tt class="filename">StringIO</tt> 介绍
+               </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">contents = <span class='pystring'>"&lt;grammar&gt;&lt;ref id='bit'&gt;&lt;p&gt;0&lt;/p&gt;&lt;p&gt;1&lt;/p&gt;&lt;/ref&gt;&lt;/grammar&gt;"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> StringIO</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock = StringIO.StringIO(contents)</span>   <a name="kgp.openanything.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock.read()</span>                          <a name="kgp.openanything.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">"&lt;grammar&gt;&lt;ref id='bit'&gt;&lt;p&gt;0&lt;/p&gt;&lt;p&gt;1&lt;/p&gt;&lt;/ref&gt;&lt;/grammar&gt;"</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock.read()</span>                          <a name="kgp.openanything.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">''</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock.seek(0)</span>                         <a name="kgp.openanything.4.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock.read(15)</span>                        <a name="kgp.openanything.4.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="computeroutput">'&lt;grammar&gt;&lt;ref i'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock.read(15)</span>
+<span class="computeroutput">"d='bit'&gt;&lt;p&gt;0&lt;/p"</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock.read()</span>
+<span class="computeroutput">'&gt;&lt;p&gt;1&lt;/p&gt;&lt;/ref&gt;&lt;/grammar&gt;'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock.close()</span>                         <a name="kgp.openanything.4.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="filename">StringIO</tt> 模块只包含了一个类，也叫 <tt class="filename">StringIO</tt>，它允许你将一个字符串转换为一个类文件对象。 <tt class="filename">StringIO</tt> 类在创建实例时接收字符串作为参数。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"> 现在你有了一个类文件对象，你可用它做类文件的所有事情。比如 <tt class="function">read</tt> 可以返回原始字符串。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">再次调用 <tt class="function">read</tt> 返回空字符串。真实文件对象的工作方式也是这样的；一旦你读取了整个文件，如果不显式定位到文件的开始位置，就不可能读取到任何其他数据。<tt class="classname">StringIO</tt> 对象以相同的方式进行工作。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.4.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">使用 <tt class="classname">StringIO</tt> 对象的 <tt class="function">seek</tt> 方法，你可以显式地定位到字符串的开始位置，就像在文件中定位一样。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.4.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">将一个 <tt class="varname">size</tt> 参数传递给 <tt class="function">read</tt> 方法，你还可以以块的形式读取字符串。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.4.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">任何时候，<tt class="function">read</tt> 都将返回字符串的未读部分。所有这些严格地按文件对象的方式工作；这就是术语<span class="emphasis"><em>类文件对象</em></span> 的来历。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <div class="example"><a name="d0e25709"></a><h3 class="title">例&nbsp;10.5.&nbsp;解析字符串 <span class="acronym">XML</span> (类文件对象方式)
+               </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">contents = <span class='pystring'>"&lt;grammar&gt;&lt;ref id='bit'&gt;&lt;p&gt;0&lt;/p&gt;&lt;p&gt;1&lt;/p&gt;&lt;/ref&gt;&lt;/grammar&gt;"</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock = StringIO.StringIO(contents)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc = minidom.parse(ssock)</span> <a name="kgp.openanything.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">ssock.close()</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> xmldoc.toxml()</span>
+<span class="computeroutput">&lt;?xml version="1.0" ?&gt;
+&lt;grammar&gt;&lt;ref id="bit"&gt;&lt;p&gt;0&lt;/p&gt;&lt;p&gt;1&lt;/p&gt;&lt;/ref&gt;&lt;/grammar&gt;</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">现在你可以把类文件对象 (实际是一个 <tt class="classname">StringIO</tt>) 传递给 <tt class="function">minidom.parse</tt>，它将调用对象的 <tt class="function">read</tt> 方法并高兴地开始解析，绝不会知道它的输入源自一个硬编码的字符串。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>那么现在你知道了如何使用同一个函数，<tt class="function">minidom.parse</tt>，来解析一个保存在 web 页面上、本地文件中或硬编码字符串中的 <span class="acronym">XML</span> 文档。对于一个 web 页面，使用 <tt class="function">urlopen</tt> 得到类文件对象；对于本地文件，使用 <tt class="function">open</tt>；对于字符串，使用 <tt class="classname">StringIO</tt>。现在让我们进一步并归纳一下<span class="emphasis"><em>这些</em></span> 不同。
+            </p>
+            <div class="example"><a name="kgp.openanything.example"></a><h3 class="title">例&nbsp;10.6.&nbsp;<tt class="function">openAnything</tt></h3><pre class="programlisting"><span class='pykeyword'>
+def</span> openAnything(source):                  <a name="kgp.openanything.6.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pycomment'># try to open with urllib (if source is http, ftp, or file URL)</span>
+    <span class='pykeyword'>import</span> urllib                         
+    <span class='pykeyword'>try</span>:                                  
+        <span class='pykeyword'>return</span> urllib.urlopen(source)      <a name="kgp.openanything.6.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    <span class='pykeyword'>except</span> (IOError, OSError):            
+        <span class='pykeyword'>pass</span>                              
+
+    <span class='pycomment'># try to open with native open function (if source is pathname)</span>
+    <span class='pykeyword'>try</span>:                                  
+        <span class='pykeyword'>return</span> open(source)                <a name="kgp.openanything.6.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+    <span class='pykeyword'>except</span> (IOError, OSError):            
+        <span class='pykeyword'>pass</span>                              
+
+    <span class='pycomment'># treat source as string</span>
+    <span class='pykeyword'>import</span> StringIO                       
+    <span class='pykeyword'>return</span> StringIO.StringIO(str(source))  <a name="kgp.openanything.6.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.6.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="function">openAnything</tt> 函数接受单个参数，<tt class="varname">source</tt>，并返回类文件对象。<tt class="varname">source</tt> 是某种类型的字符串；它可能是一个 <span class="acronym">URL</span> (例如 <tt class="literal">'http://slashdot.org/slashdot.rdf'</tt>)，一个本地文件的完整或者部分路径名 (例如 <tt class="literal">'binary.xml'</tt>)，或者是一个包含了待解析 <span class="acronym">XML</span> 数据的字符串。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.6.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">首先，检查 <tt class="varname">source</tt> 是否是一个 <span class="acronym">URL</span>。这里通过强制方式进行：尝试把它当作一个 <span class="acronym">URL</span> 打开并静静地忽略打开非 <span class="acronym">URL</span> 引起的错误。这样做非常好，因为如果 <tt class="filename">urllib</tt> 将来支持更多的 <span class="acronym">URL</span> 类型，不用重新编码就可以支持它们。如果 <tt class="filename">urllib</tt> 能够打开 <tt class="varname">source</tt>，那么 <tt class="literal">return</tt> 可以立刻把你踢出函数，下面的 <tt class="literal">try</tt> 语句将不会执行。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.6.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">另一方面，如果 <tt class="filename">urllib</tt> 向你呼喊并告诉你 <tt class="varname">source</tt> 不是一个有效的 <span class="acronym">URL</span>，你假设它是一个磁盘文件的路径并尝试打开它。再一次，你不用做任何特别的事来检查 <tt class="varname">source</tt> 是否是一个有效的文件名 (在不同的平台上，判断文件名有效性的规则变化很大，因此不管怎样做都可能会判断错)。反而，只要盲目地打开文件并静静地捕获任何错误就可以了。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#kgp.openanything.6.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">到这里，你需要假设 <tt class="varname">source</tt> 是一个其中有硬编码数据的字符串 (因为没有别的可以判断的了)，所以你可以使用 <tt class="classname">StringIO</tt> 从中创建一个类文件对象并将它返回。(实际上，由于使用了 <tt class="function">str</tt> 函数，所以 <tt class="varname">source</tt> 没有必要一定是字符串；它可以是任何对象，你可以使用它的字符串表示形式，只要定义了它的 <tt class="function">__str__</tt> <a href="../object_oriented_framework/special_class_methods2.html" title="5.7.&nbsp;高级专用类方法">专用方法</a>。)
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>现在你可以使用这个 <tt class="function">openAnything</tt> 函数联合 <tt class="function">minidom.parse</tt> 构造一个函数，接收一个指向 <span class="acronym">XML</span> 文档的 <tt class="varname">source</tt>，而且无需知道这个 <tt class="varname">source</tt> 的含义 (可以是一个 <span class="acronym">URL</span> 或是一个本地文件名，或是一个硬编码 <span class="acronym">XML</span> 文档的字符串形式)，然后解析它。
+            </p>
+            <div class="example"><a name="d0e25908"></a><h3 class="title">例&nbsp;10.7.&nbsp;在 <tt class="filename">kgp.py</tt> 中使用 <tt class="function">openAnything</tt></h3><pre class="programlisting"><span class='pykeyword'>
+class</span> KantGenerator:
+    <span class='pykeyword'>def</span><span class='pyclass'> _load</span>(self, source):
+        sock = toolbox.openAnything(source)
+        xmldoc = minidom.parse(sock).documentElement
+        sock.close()
+        <span class='pykeyword'>return</span> xmldoc</pre></div>
+         </div>
+         <div class="footnotes">
+            <h3 class="footnotetitle">Footnotes</h3>
+            <div class="footnote">
+               <p><sup>[<a name="ftn.d0e25392" href="#d0e25392">10</a>] </sup>这是一部著名的电影。――译注
+               </p>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../xml_processing/summary.html">&lt;&lt;&nbsp;Segue </a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="stdin_stdout_stderr.html" title="10.2.&nbsp;标准输入、输出和错误">2</a> <span class="divider">|</span> <a href="caching.html" title="10.3.&nbsp;查询缓冲节点">3</a> <span class="divider">|</span> <a href="child_nodes.html" title="10.4.&nbsp;查找节点的直接子节点">4</a> <span class="divider">|</span> <a href="handlers_by_node_type.html" title="10.5.&nbsp;根据节点类型创建不同的处理器">5</a> <span class="divider">|</span> <a href="command_line_arguments.html" title="10.6.&nbsp;处理命令行参数">6</a> <span class="divider">|</span> <a href="all_together.html" title="10.7.&nbsp;全部放在一起">7</a> <span class="divider">|</span> <a href="summary.html" title="10.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="stdin_stdout_stderr.html">标准输入、输出和错误&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

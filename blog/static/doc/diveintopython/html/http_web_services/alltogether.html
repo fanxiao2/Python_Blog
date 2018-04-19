@@ -1,0 +1,257 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>11.9.&nbsp;全部放在一起</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务">
+      <link rel="previous" href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">
+      <link rel="next" href="summary.html" title="11.10.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTTP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">全部放在一起</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="gzip_compression.html" title="上一页: “处理压缩数据”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="oa.alltogether"></a>11.9.&nbsp;全部放在一起
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你已经看到了构造一个智能的 HTTP web 客户端的所有片断。现在让我们看看如何将它们整合到一起。</p>
+         </div>
+         <div class="example"><a name="d0e29670"></a><h3 class="title">例&nbsp;11.17.&nbsp;<tt class="function">openanything</tt> 函数
+            </h3>
+            <p>这个函数定义在 <tt class="filename">openanything.py</tt> 中。
+            </p><pre class="programlisting"><span class='pykeyword'>
+def</span> openAnything(source, etag=None, lastmodified=None, agent=USER_AGENT):
+    <span class='pycomment'># non-HTTP code omitted for brevity</span>
+    <span class='pykeyword'>if</span> urlparse.urlparse(source)[0] == <span class='pystring'>'http'</span>:                                       <a name="oa.alltogether.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        <span class='pycomment'># open URL with urllib2                                                     </span>
+        request = urllib2.Request(source)                                           
+        request.add_header(<span class='pystring'>'User-Agent'</span>, agent)                                      <a name="oa.alltogether.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> etag:                                                                    
+            request.add_header(<span class='pystring'>'If-None-Match'</span>, etag)                                <a name="oa.alltogether.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> lastmodified:                                                            
+            request.add_header(<span class='pystring'>'If-Modified-Since'</span>, lastmodified)                    <a name="oa.alltogether.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+        request.add_header(<span class='pystring'>'Accept-encoding'</span>, <span class='pystring'>'gzip'</span>)                                <a name="oa.alltogether.1.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+        opener = urllib2.build_opener(SmartRedirectHandler(), DefaultErrorHandler()) <a name="oa.alltogether.1.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12">
+        <span class='pykeyword'>return</span> opener.open(request)                                                  <a name="oa.alltogether.1.7"></a><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">urlparse</tt> 是一个解析 URL 的便捷的工具模块。它的主要函数也叫 <tt class="function">urlparse</tt>，接受一个 URL 并将其拆分为 tuple (scheme (协议), domain (域名), path (路径), params (参数), query string parameters (请求字符串参数), fragment identifier
+                        (片段效验符))。当然，你唯一需要注意的就是 scheme，确认你处理的是一个 HTTP URL (<tt class="filename">urllib2</tt> 才能处理)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">通过调用函数使用 <tt class="literal">User-Agent</tt> 向 HTTP 服务器确定你的身份。如果没有 <tt class="literal">User-Agent</tt> 被指定，你会使用一个默认的，就是定义在早期的 <tt class="filename">openanything.py</tt> 模块中的那个。你从来不会使用到默认的定义在 <tt class="filename">urllib2</tt> 中的那个。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果给出了 <tt class="literal">ETag</tt>，要在 <tt class="literal">If-None-Match</tt> 头信息中发送它。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果给出了最近修改日期，要在 <tt class="literal">If-Modified-Since</tt> 头信息中发送它。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.1.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果可能要告诉服务器你要获取压缩数据。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.1.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用<span class="emphasis"><em>两个</em></span> 自定义 URL 处理器创建一个 URL 开启器：<tt class="classname">SmartRedirectHandler</tt> 终于处理 <tt class="literal">301</tt> 和 <tt class="literal">302</tt> 重定向，而 <tt class="classname">DefaultErrorHandler</tt> 用于处理 <tt class="literal">304</tt>, <tt class="literal">404</tt> 以及其它的错误条件。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.1.7"><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">就是这样！打开 URL 并返回一个类文件对象给调用者。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e29768"></a><h3 class="title">例&nbsp;11.18.&nbsp;<tt class="function">fetch</tt> 函数
+            </h3>
+            <p>这个函数定义在 <tt class="filename">openanything.py</tt> 中。
+            </p><pre class="programlisting"><span class='pykeyword'>
+def</span> fetch(source, etag=None, last_modified=None, agent=USER_AGENT):  
+    <span class='pystring'>'''Fetch data and metadata from a URL, file, stream, or string'''</span>
+    result = {}                                                      
+    f = openAnything(source, etag, last_modified, agent)              <a name="oa.alltogether.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    result[<span class='pystring'>'data'</span>] = f.read()                                         <a name="oa.alltogether.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    <span class='pykeyword'>if</span> hasattr(f, <span class='pystring'>'headers'</span>):                                        
+        <span class='pycomment'># save ETag, if the server sent one                          </span>
+        result[<span class='pystring'>'etag'</span>] = f.headers.get(<span class='pystring'>'ETag'</span>)                        <a name="oa.alltogether.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        <span class='pycomment'># save Last-Modified header, if the server sent one          </span>
+        result[<span class='pystring'>'lastmodified'</span>] = f.headers.get(<span class='pystring'>'Last-Modified'</span>)       <a name="oa.alltogether.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> f.headers.get(<span class='pystring'>'content-encoding'</span>, <span class='pystring'>''</span>) == <span class='pystring'>'gzip'</span>:           <a name="oa.alltogether.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+            <span class='pycomment'># data came back gzip-compressed, decompress it          </span>
+            result[<span class='pystring'>'data'</span>] = gzip.GzipFile(fileobj=StringIO(result[<span class='pystring'>'data'</span>]])).read()
+    <span class='pykeyword'>if</span> hasattr(f, <span class='pystring'>'url'</span>):                                             <a name="oa.alltogether.2.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12">
+        result[<span class='pystring'>'url'</span>] = f.url                                        
+        result[<span class='pystring'>'status'</span>] = 200                                       
+    <span class='pykeyword'>if</span> hasattr(f, <span class='pystring'>'status'</span>):                                          <a name="oa.alltogether.2.7"></a><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12">
+        result[<span class='pystring'>'status'</span>] = f.status                                  
+    f.close()                                                        
+    <span class='pykeyword'>return</span> result                                                    
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">首先，你用 URL、<tt class="literal">ETag</tt> hash、<tt class="literal">Last-Modified</tt> 日期和 <tt class="literal">User-Agent</tt> 调用 <tt class="function">openAnything</tt> 函数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">读取从服务器返回的真实数据。这可能是被压缩的；如果是，将在后面进行解压缩。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">保存从服务器返回的 <tt class="literal">ETag</tt> hash，这样主调程序下一次就能把它传递给你，然后再传递给 <tt class="function">openAnything</tt>，放到 <tt class="literal">If-None-Match</tt> 头信息里发送给远程服务器。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">也要保存 <tt class="literal">Last-Modified</tt> 数据。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果服务器说它发送的是压缩数据，就执行解压缩。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.2.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果你的服务器返回一个 URL 就保存它，并在查明之前假定状态代码为 <tt class="literal">200</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.2.7"><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果其中一个自定义 URL 处理器捕获了一个状态代码，也要保存下来。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e29843"></a><h3 class="title">例&nbsp;11.19.&nbsp;使用 <tt class="filename">openanything.py</tt></h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> openanything</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">useragent = <span class='pystring'>'MyHTTPWebServicesApp/1.0'</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">url = <span class='pystring'>'http://diveintopython.org/redir/example301.xml'</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params = openanything.fetch(url, agent=useragent)</span>              <a name="oa.alltogether.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params</span>                                                         <a name="oa.alltogether.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">{'url': 'http://diveintomark.org/xml/atom.xml', 
+'lastmodified': 'Thu, 15 Apr 2004 19:45:21 GMT', 
+'etag': '"e842a-3e53-55d97640"', 
+'status': 301,
+'data': '&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;feed version="0.3"
+&lt;-- rest of data omitted for brevity --&gt;'}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>if</span> params[<span class='pystring'>'status'</span>] == 301:</span>                                    <a name="oa.alltogether.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput">url = params[<span class='pystring'>'url'</span>]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">newparams = openanything.fetch(</span>
+<tt class="prompt">...     </tt><span class="userinput">url, params[<span class='pystring'>'etag'</span>], params[<span class='pystring'>'lastmodified'</span>], useragent)</span>    <a name="oa.alltogether.3.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">newparams</span>
+<span class="computeroutput">{'url': 'http://diveintomark.org/xml/atom.xml', 
+'lastmodified': None, 
+'etag': '"e842a-3e53-55d97640"', 
+'status': 304,
+'data': ''}</span>                                                        <a name="oa.alltogether.3.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">第一次获取资源时，你没有 <tt class="literal">ETag</tt> hash 或 <tt class="literal">Last-Modified</tt> 日期，所以你不用使用这些参数。 (它们是<a href="../power_of_introspection/optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">可选参数</a>。)
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你获得了一个 dictionary，它包括几个有用的头信息、HTTP 状态代码和从服务器返回的真实数据。<tt class="filename">openanything</tt> 在内部处理 gzip 压缩；在本级别上你不必关心它。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果你得到一个 <tt class="literal">301</tt> 状态代码，表示是个永久重定向，你需要把你的 URL 更新为新地址。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">第二次获取相同的资源时，你已经从以往获得了各种信息：URL (可能被更新了)、从上一次访问获得的 <tt class="literal">ETag</tt>、从上一次访问获得的 <tt class="literal">Last-Modified</tt> 日期，当然还有 <tt class="literal">User-Agent</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.alltogether.3.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你重新获取了这个 dictionary，但是数据没有改变，所以你得到了一个 <tt class="literal">304</tt> 状态代码而没有数据。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="gzip_compression.html">&lt;&lt;&nbsp;处理压缩数据</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#oa.divein" title="11.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">2</a> <span class="divider">|</span> <a href="http_features.html" title="11.3.&nbsp;HTTP 的特性">3</a> <span class="divider">|</span> <a href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">4</a> <span class="divider">|</span> <a href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">5</a> <span class="divider">|</span> <a href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">6</a> <span class="divider">|</span> <a href="redirects.html" title="11.7.&nbsp;处理重定向">7</a> <span class="divider">|</span> <a href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">8</a> <span class="divider">|</span> <span class="thispage">9</span> <span class="divider">|</span> <a href="summary.html" title="11.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

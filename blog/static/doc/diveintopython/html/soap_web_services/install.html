@@ -1,0 +1,224 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>12.2.&nbsp;安装 SOAP 库</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;12&nbsp;章&nbsp;SOAP Web 服务">
+      <link rel="previous" href="index.html" title="第&nbsp;12&nbsp;章&nbsp;SOAP Web 服务">
+      <link rel="next" href="first_steps.html" title="12.3.&nbsp;步入 SOAP">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">SOAP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">安装 SOAP 库</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="index.html" title="上一页: “SOAP Web 服务”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="first_steps.html" title="下一页: “步入 SOAP”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="soap.install"></a>12.2.&nbsp;安装 SOAP 库
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="install.html#d0e30152">12.2.1. 安装 PyXML</a></span></li>
+               <li><span class="section"><a href="install.html#d0e30255">12.2.2. 安装 fpconst</a></span></li>
+               <li><span class="section"><a href="install.html#d0e30353">12.2.3. 安装 SOAPpy</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>与本书中的其他代码不同，本章依赖的库不是 <span class="application">Python</span> 预安装的。
+            </p>
+         </div>
+         <p>在深入学习 <span class="acronym">SOAP</span> web 服务之前，你需要安装三个库：<span class="application">PyXML</span>、<span class="application">fpconst</span> 和 <span class="application">SOAPpy</span>。
+         </p>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e30152"></a>12.2.1.&nbsp;安装 <span class="application">PyXML</span></h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>你要用到的第一个库是 <span class="application">PyXML</span>，它是 <span class="acronym">XML</span> 库的一个高级组件，提供了比我们在 <a href="../xml_processing/index.html">第 9 章</a> 学习的 <span class="acronym">XML</span> 内建库更多的功能。
+            </p>
+            <div class="procedure">
+               <h3 class="title">过程&nbsp;12.1.&nbsp;</h3>
+               <p>下面是安装 <span class="application">PyXML</span> 的步骤：
+               </p>
+               <ol type="1">
+                  <li>
+                     <p>访问 <a href="http://pyxml.sourceforge.net/">http://pyxml.sourceforge.net/</a>，点击 Downloads，下载适合你所使用操作系统的最新版本。
+                     </p>
+                  </li>
+                  <li>
+                     <p>如果你所使用的是 Windows，那么你有多个选择。一定要确保你所下载的 <span class="application">PyXML</span> 和你所使用的 <span class="application">Python</span> 版本匹配。
+                     </p>
+                  </li>
+                  <li>
+                     <p>双击安装程序。如果你下载的是为 Windows 提供的 <span class="application">PyXML</span> 0.8.3，并且你所使用的是 <span class="application">Python</span> 2.3，这个安装程序应该是 <tt class="filename">PyXML-0.8.3.win32-py2.3.exe</tt>。
+                     </p>
+                  </li>
+                  <li>
+                     <p>深入安装过程。</p>
+                  </li>
+                  <li>
+                     <p>安装完成后，关闭安装程序，没有任何安装成功的昭示 (并没有在开始菜单、快捷栏或桌面出现图标)。因为 <span class="application">PyXML</span> 仅仅是被其他程序调用的 <span class="acronym">XML</span> 的库集合。
+                     </p>
+                  </li>
+               </ol>
+            </div>
+            <p>要检验 <span class="application">PyXML</span> 安装得是否正确，可以运行 <span class="application">Python</span> <span class="acronym">IDE</span>，下面的指令可以看到 <span class="acronym">XML</span> 库的安装版本。
+            </p>
+            <div class="example"><a name="d0e30229"></a><h3 class="title">例&nbsp;12.3.&nbsp;检验 <span class="application">PyXML</span> 安装
+               </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> xml</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xml.__version__</span>
+<span class="computeroutput">'0.8.3'</span>
+</pre><p>这个安装版本号应该和你所下载并安装的 <span class="application">PyXML</span> 安装程序版本号一致。
+               </p>
+            </div>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e30255"></a>12.2.2.&nbsp;安装 <span class="application">fpconst</span></h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>你所需要安装的第二个库是 <span class="application">fpconst</span>，它是一系列支持 IEEE754 double-precision 特殊值的常量和函数，提供了对 Not-a-Number (NaN), Positive Infinity (Inf) 和 Negative Infinity (-Inf) 等特殊值的支持，而这是
+               <span class="acronym">SOAP</span> 数据类型规范的组成部分。
+            </p>
+            <div class="procedure">
+               <h3 class="title">过程&nbsp;12.2.&nbsp;</h3>
+               <p>下面是 <span class="application">fpconst</span> 的安装过程：
+               </p>
+               <ol type="1">
+                  <li>
+                     <p>从 <a href="http://www.analytics.washington.edu/statcomp/projects/rzope/fpconst/">http://www.analytics.washington.edu/statcomp/projects/rzope/fpconst/</a> 下载 <span class="application">fpconst</span> 的最新版本。
+                     </p>
+                  </li>
+                  <li>
+                     <p>提供了两种格式的下载：<tt class="filename">.tar.gz</tt> 和 <tt class="filename">.zip</tt>。如果你使用的是 Windows 操作系统，下载 <tt class="filename">.zip</tt> 文件；其他情况下应该下载 <tt class="filename">.tar.gz</tt> 文件。
+                     </p>
+                  </li>
+                  <li>
+                     <p>对这个文件进行解压缩。在 Windows XP 上你可以鼠标右键单击这个文件并选择“解压文件”；在较早的 Windows 版本上则需要 WinZip 之类的第三方解压程序。在 <span class="abbrev">Mac</span> <span class="acronym">OS</span> X 上，可以右键单击压缩文件进行解压。
+                     </p>
+                  </li>
+                  <li>
+                     <p>打开命令提示符窗口并定位到解压目录。</p>
+                  </li>
+                  <li>
+                     <p>键入 <b class="userinput"><tt>python setup.py install</tt></b> 运行安装程序。
+                     </p>
+                  </li>
+               </ol>
+            </div>
+            <p>要检验 <span class="application">fpconst</span> 安装得是否正确，运行 <span class="application">Python</span> <span class="acronym">IDE</span> 并查看版本号。
+            </p>
+            <div class="example"><a name="d0e30327"></a><h3 class="title">例&nbsp;12.4.&nbsp;检验 <span class="application">fpconst</span> 安装
+               </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> fpconst</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">fpconst.__version__</span>
+<span class="computeroutput">'0.6.0'</span>
+</pre><p>这个安装版本号应该和你所下载并用于安装的 <span class="application">fpconst</span> 压缩包版本号一致。
+               </p>
+            </div>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e30353"></a>12.2.3.&nbsp;安装 <span class="application">SOAPpy</span></h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>第三个，也是最后一个需要安装的库是 <span class="acronym">SOAP</span> 库本身：<span class="application">SOAPpy</span>。
+            </p>
+            <div class="procedure">
+               <h3 class="title">过程&nbsp;12.3.&nbsp;</h3>
+               <p>下面是安装 <span class="application">SOAPpy</span>的过程：
+               </p>
+               <ol type="1">
+                  <li>
+                     <p>访问 <a href="http://pywebsvcs.sourceforge.net/">http://pywebsvcs.sourceforge.net/</a> 并选择 <span class="application">SOAPpy</span> 部分中最新的官方发布。
+                     </p>
+                  </li>
+                  <li>
+                     <p>提供了两种格式的下载。如果你使用的是 Windows，那么下载 <tt class="filename">.zip</tt> 文件；其他情况则下载 <tt class="filename">.tar.gz</tt> 文件。
+                     </p>
+                  </li>
+                  <li>
+                     <p>和安装 <span class="application">fpconst</span> 时一样先解压下载的文件．
+                     </p>
+                  </li>
+                  <li>
+                     <p>打开命令提示符窗口并定位到解压 <span class="application">SOAPpy</span> 文件的目录。
+                     </p>
+                  </li>
+                  <li>
+                     <p>键入 <b class="userinput"><tt>python setup.py install</tt></b> 运行安装程序。
+                     </p>
+                  </li>
+               </ol>
+            </div>
+            <p>要检验 <span class="application">SOAPpy</span> 安装得是否正确，运行 <span class="application">Python</span> <span class="acronym">IDE</span> 并查看版本号。
+            </p>
+            <div class="example"><a name="d0e30419"></a><h3 class="title">例&nbsp;12.5.&nbsp;检验 <span class="application">SOAPpy</span> 安装
+               </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> SOAPpy</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">SOAPpy.__version__</span>
+<span class="computeroutput">'0.11.4'</span>
+</pre><p>这个安装版本号应该和你所下载并用于安装的 <span class="application">SOAPpy</span> 压缩包版本号一致。
+               </p>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="index.html">&lt;&lt;&nbsp;SOAP Web 服务</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#soap.divein" title="12.1.&nbsp;概览">1</a> <span class="divider">|</span> <span class="thispage">2</span> <span class="divider">|</span> <a href="first_steps.html" title="12.3.&nbsp;步入 SOAP">3</a> <span class="divider">|</span> <a href="debugging.html" title="12.4.&nbsp; SOAP 网络服务查错">4</a> <span class="divider">|</span> <a href="wsdl.html" title="12.5.&nbsp;WSDL 介绍">5</a> <span class="divider">|</span> <a href="introspection.html" title="12.6.&nbsp;以 WSDL 进行 SOAP 内省">6</a> <span class="divider">|</span> <a href="google.html" title="12.7.&nbsp;搜索 Google">7</a> <span class="divider">|</span> <a href="troubleshooting.html" title="12.8.&nbsp; SOAP 网络服务故障排除">8</a> <span class="divider">|</span> <a href="summary.html" title="12.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="first_steps.html">步入 SOAP&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

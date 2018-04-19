@@ -1,0 +1,265 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>5.3.&nbsp;类的定义</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;5&nbsp;章&nbsp;对象和面向对象">
+      <link rel="previous" href="importing_modules.html" title="5.2.&nbsp;使用 from module import 导入模块">
+      <link rel="next" href="instantiating_classes.html" title="5.4.&nbsp;类的实例化">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">对象和面向对象</a>&nbsp;&gt;&nbsp;<span class="thispage">类的定义</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="importing_modules.html" title="上一页: “使用 from module import 导入模块”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="instantiating_classes.html" title="下一页: “类的实例化”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="fileinfo.class"></a>5.3.&nbsp;类的定义
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="defining_classes.html#d0e11869">5.3.1. 初始化并开始类编码</a></span></li>
+               <li><span class="section"><a href="defining_classes.html#d0e12045">5.3.2. 了解何时去使用 self 和 __init__</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p><span class="application">Python</span> 是完全面向对象的：你可以定义自已的类，从自已的或内置的类继承，然后从你定义的类创建实例。
+            </p>
+         </div>
+         <p>在 <span class="application">Python</span> 中定义类很简单。就像定义函数，没有单独的接口定义。只要定义类，然后就可以开始编码。<span class="application">Python</span> 类以保留字 <tt class="literal">class</tt> 开始，后面跟着类名。从技术上讲，有这些就够了，因为一个类并非必须从其它类继承。
+         </p>
+         <div class="example"><a name="fileinfo.class.simplest"></a><h3 class="title">例&nbsp;5.3.&nbsp;最简单的 <span class="application">Python</span> 类
+            </h3><pre class="programlisting"><span class='pykeyword'>
+class</span> Loaf: <a name="fileinfo.class.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>pass</span>    <a name="fileinfo.class.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"> <a name="fileinfo.class.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.class.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个类的名字是 <tt class="classname">Loaf</tt>，它没有从其它类继承。类名通常是第一个字母大写，如：<tt class="classname">EachWordLikeThis</tt>，但这只是一个习惯，不是一个必要条件。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.class.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个类没有定义任何方法或属性，但是从语法上，需要在定义中有些东西，所以你使用 <tt class="literal">pass</tt>。这是一个 <span class="application">Python</span> 保留字，仅仅表示 “<span class="quote">向前走，不要往这看</span>”。它是一条什么都不做的语句，当你删空函数或类时，它是一个很好的占位符。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.class.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可能猜到了，在类中的所有东西都要缩近，就像位于函数、<tt class="literal">if</tt> 语句，<tt class="literal">for</tt> 循环，诸如此类的代码。第一条不缩近的东西不属于这个类。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="compare.pass.java"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在 <span class="application">Python</span> 中的 <tt class="literal">pass</tt> 语句就像 <span class="application">Java</span> 或 <span class="application"><span class="acronym">C</span></span> 中的大括号空集 (<tt class="literal">{}</tt>)。
+               </td>
+            </tr>
+         </table>
+         <p>当然，实际上大多数的类都是从其它的类继承来的，并且它们会定义自已的类方法和属性。但是就像你刚才看到的，除了名字以外，类没有什么必须要具有的。特别是，<span class="application"><span class="acronym">C++</span></span> 程序员可能会感到奇怪，<span class="application">Python</span> 的类没有显示的构造函数和析构函数。<span class="application">Python</span> 类的确存在与构造函数相似的东西：<tt class="function">__init__</tt> 方法。
+         </p>
+         <div class="example"><a name="fileinfo.class.example"></a><h3 class="title">例&nbsp;5.4.&nbsp;定义 <tt class="classname">FileInfo</tt> 类
+            </h3><pre class="programlisting"><span class='pykeyword'>
+from</span> UserDict <span class='pykeyword'>import</span> UserDict
+
+<span class='pykeyword'>class</span><span class='pyclass'> FileInfo</span>(UserDict): <a name="fileinfo.class.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.class.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在 <span class="application">Python</span> 中，类的基类只是简单地列在类名后面的小括号里。所以 <tt class="classname">FileInfo</tt> 类是从 <tt class="classname">UserDict</tt> 类 (它是从 <a href="importing_modules.html" title="5.2.&nbsp;使用 from module import 导入模块"><tt class="filename">UserDict</tt> 模块导进来的</a>) 继承来的。<tt class="classname">UserDict</tt> 是一个像字典一样工作的类，它允许你完全子类化字典数据类型，同时增加你自已的行为。{也存在相似的类 <tt class="classname">UserList</tt> 和 <tt class="classname">UserString</tt> ，它们允许你子类化列表和字符串。)<sup>[<a name="d0e11835" href="#ftn.d0e11835">2</a>]</sup> 在这个类的背后有一些“巫术”，我们将在本章的后面，随着更进一步地研究 <tt class="classname">UserDict</tt> 类，揭开这些秘密。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="compare.extends.java"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在 <span class="application">Python</span> 中，类的基类只是简单地列在类名后面的小括号里。不像在 <span class="application">Java</span> 中有一个特殊的 <tt class="literal">extends</tt> 关键字。
+               </td>
+            </tr>
+         </table>
+         <p><span class="application">Python</span> 支持多重继承。在类名后面的小括号中，你可以列出许多你想要的类名，以逗号分隔。
+         </p>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e11869"></a>5.3.1.&nbsp;初始化并开始类编码
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>本例演示了使用 <tt class="function">__init__</tt> 方法来进行 <tt class="classname">FileInfo</tt> 类的初始化。
+            </p>
+            <div class="example"><a name="fileinfo.init.example"></a><h3 class="title">例&nbsp;5.5.&nbsp;初始化 <tt class="classname">FileInfo</tt> 类
+               </h3><pre class="programlisting"><span class='pykeyword'>
+class</span> FileInfo(UserDict):
+    <span class='pystring'>"store file metadata"</span>              <a name="fileinfo.class.2.2"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>def</span><span class='pyclass'> __init__</span>(self, filename=None): <a name="fileinfo.class.2.3"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"> <a name="fileinfo.class.2.4"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"> <a name="fileinfo.class.2.5"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.class.2.2"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">类也可以 (并且<a href="../getting_to_know_python/documenting_functions.html#tip.docstring">应该</a>) 有 <tt class="literal">doc string</tt>s ，就像方法和函数一样。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.class.2.3"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="function">__init__</tt> 在类的实例创建后被立即调用。它可能会引诱你称之为类的构造函数，但这种说法并不正确。说它引诱，是因为它看上去像 (按照习惯，<tt class="function">__init__</tt> 是类中第一个定义的方法)，行为也像 (在一个新创建的类实例中，它是首先被执行的代码)，并且叫起来也像 (“<span class="quote">init</span>”当然意味着构造的本性)。说它不正确，是因为对象在调用 <tt class="function">__init__</tt> 时已经被构造出来了，你已经有了一个对类的新实例的有效引用。但 <tt class="function">__init__</tt> 是在 <span class="application">Python</span> 中你可以得到的最接近构造函数的东西，并且它也扮演着非常相似的角色。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.class.2.4"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">每个类方法的第一个参数，包括 <tt class="function">__init__</tt>，都是指向类的当前实例的引用。按照习惯这个参数总是被称为 <tt class="literal">self</tt>。在 <tt class="function">__init__</tt> 方法中，<tt class="literal">self</tt> 指向新创建的对象；在其它的类方法中，它指向方法被调用的类实例。尽管当定义方法时你需要明确指定 <tt class="literal">self</tt>，但在调用方法时，你<span class="emphasis"><em>不</em></span> 用指定它，<span class="application">Python</span> 会替你自动加上的。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.class.2.5"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="function">__init__</tt> 方法可以接受任意数目的参数，就像函数一样，参数可以用缺省值定义，即可以设置成对于调用者可选。在本例中，<tt class="varname">filename</tt> 有一个缺省值 <tt class="literal">None</tt>，即 <span class="application">Python</span> 的空值。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div><a name="compare.self.java"></a><table class="note" border="0" summary="">
+               <tr>
+                  <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+               </tr>
+               <tr>
+                  <td colspan="2" align="left" valign="top" width="99%">习惯上，任何 <span class="application">Python</span> 类方法的第一个参数 (对当前实例的引用) 都叫做 <tt class="literal">self</tt>。这个参数扮演着 <span class="application"><span class="acronym">C++</span></span> 或 <span class="application">Java</span> 中的保留字 <tt class="literal">this</tt> 的角色，但 <tt class="literal">self</tt> 在 <span class="application">Python</span> 中并不是一个保留字，它只是一个命名习惯。虽然如此，也请除了 <tt class="literal">self</tt> 之外不要使用其它的名字，这是一个非常坚固的习惯。
+                  </td>
+               </tr>
+            </table>
+            <div class="example"><a name="fileinfo.init.code.example"></a><h3 class="title">例&nbsp;5.6.&nbsp;编写 <tt class="classname">FileInfo</tt> 类
+               </h3><pre class="programlisting"><span class='pykeyword'>
+class</span> FileInfo(UserDict):
+    <span class='pystring'>"store file metadata"</span>
+    <span class='pykeyword'>def</span><span class='pyclass'> __init__</span>(self, filename=None):
+        UserDict.__init__(self)        <a name="fileinfo.class.2.6"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        self[<span class='pystring'>"name"</span>] = filename        <a name="fileinfo.class.2.7"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+                                       <a name="fileinfo.class.2.8"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.class.2.6"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">一些伪面向对象语言，像 <span class="application">Powerbuilder</span> 有一种“<span class="quote">扩展</span>”构造函数和其它事件的概念，即父类的方法在子类的方法执行前被自动调用。<span class="application">Python</span> 不是这样，你必须显示地调用在父类中的合适方法。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.class.2.7"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">我告诉过你，这个类像字典一样工作，那么这里就是第一个印象。我们将参数 <tt class="varname">filename</tt> 赋值给对象 <tt class="literal">name</tt> 关键字，作为它的值。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#fileinfo.class.2.8"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">注意 <tt class="function">__init__</tt> 方法从不返回一个值。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e12045"></a>5.3.2.&nbsp;了解何时去使用 <tt class="literal">self</tt> 和 <tt class="function">__init__</tt></h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>当定义你自已的类方法时，你<span class="emphasis"><em>必须</em></span> 明确将 <tt class="literal">self</tt> 作为每个方法的第一个参数列出，包括 <tt class="function">__init__</tt>。当从你的类中调用一个父类的一个方法时，你必须包括 <tt class="literal">self</tt> 参数。但当你从类的外部调用你的类方法时，你不必对 <tt class="literal">self</tt> 参数指定任何值；你完全将其忽略，而 <span class="application">Python</span> 会自动地替你增加实例的引用。我知道刚开始这有些混乱，它并不是自相矛盾的，因为它依靠于一个你还不了解的区别 (在绑定与非绑定方法之间)，故看上去是矛盾的。
+            </p>
+            <p>噢。我知道有很多知识需要吸收，但是你要掌握它。所有的 <span class="application">Python</span> 类以相同的方式工作，所以一旦你学会了一个，就是学会了全部。如果你忘了别的任何事，也要记住这件事，因为我认定它会让你出错：
+            </p><a name="tip.initoptional"></a><table class="note" border="0" summary="">
+               <tr>
+                  <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+               </tr>
+               <tr>
+                  <td colspan="2" align="left" valign="top" width="99%"><tt class="function">__init__</tt> 方法是可选的，但是一旦你定义了，就必须记得显示调用父类的 <tt class="function">__init__</tt> 方法 (如果它定义了的话)。这样更是正确的：无论何时子类想扩展父类的行为，后代方法必须在适当的时机，使用适当的参数，显式调用父类方法。
+                  </td>
+               </tr>
+            </table>
+            <div class="furtherreading">
+               <h3>进一步阅读关于 <span class="application">Python</span> 类
+               </h3>
+               <ul>
+                  <li><a href="http://www.freenetpages.co.uk/hp/alan.gauld/" title="Python book for first-time programmers"><i class="citetitle">Learning to Program</i></a> 有优雅的<a href="http://www.freenetpages.co.uk/hp/alan.gauld/tutclass.htm">类的介绍</a>。
+                  </li>
+                  <li><a href="http://www.ibiblio.org/obp/thinkCSpy/" title="Python book for computer science majors"><i class="citetitle">How to Think Like a Computer Scientist</i></a> 展示了如何<a href="http://www.ibiblio.org/obp/thinkCSpy/chap12.htm">使用类来实现复合数据类型模型</a>。
+                  </li>
+                  <li><a href="http://www.python.org/doc/current/tut/tut.html"><i class="citetitle"><span class="application">Python</span> Tutorial</i></a> 深入考虑了<a href="http://www.python.org/doc/current/tut/node11.html">类、名字空间和继承</a>。
+                  </li>
+                  <li><a href="http://www.faqts.com/knowledge-base/index.phtml/fid/199/"><span class="application">Python</span> Knowledge Base</a> 回答了<a href="http://www.faqts.com/knowledge-base/index.phtml/fid/242">关于类的常见问题</a>。
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="footnotes">
+            <h3 class="footnotetitle">Footnotes</h3>
+            <div class="footnote">
+               <p><sup>[<a name="ftn.d0e11835" href="#d0e11835">2</a>] </sup>在 2.2 之后已经可以从 dict、list 来派生子类了，关于这一点作者在后文也会提到。――译注
+               </p>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="importing_modules.html">&lt;&lt;&nbsp;使用 from module import 导入模块</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#fileinfo.divein" title="5.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="importing_modules.html" title="5.2.&nbsp;使用 from module import 导入模块">2</a> <span class="divider">|</span> <span class="thispage">3</span> <span class="divider">|</span> <a href="instantiating_classes.html" title="5.4.&nbsp;类的实例化">4</a> <span class="divider">|</span> <a href="userdict.html" title="5.5.&nbsp;探索 UserDict：一个封装类">5</a> <span class="divider">|</span> <a href="special_class_methods.html" title="5.6.&nbsp;专用类方法">6</a> <span class="divider">|</span> <a href="special_class_methods2.html" title="5.7.&nbsp;高级专用类方法">7</a> <span class="divider">|</span> <a href="class_attributes.html" title="5.8.&nbsp;类属性介绍">8</a> <span class="divider">|</span> <a href="private_functions.html" title="5.9.&nbsp;私有函数">9</a> <span class="divider">|</span> <a href="summary.html" title="5.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="instantiating_classes.html">类的实例化&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,438 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Dive Into Python</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="description" content=" 本书存放在  (英文原版) 和 (中文版)。如果你是从别的地方看到它的，可能看到的不是最新版本。">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="index.html" title="Dive Into Python">
+      <link rel="next" href="../installing_python/index.html" title="第&nbsp;1&nbsp;章&nbsp;安装 Python">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<span class="thispage">Dive Into Python</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../installing_python/index.html" title="下一页: “安装 Python”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="book" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h1 class="title"><a name="d0e1"></a>Dive Into <span class="application">Python</span></h1>
+               </div>
+               <div>
+                  <p class="pubdate">审校 (5.4b)：2007 年 6 月—9 月</p>
+               </div>
+               <div>
+                  <p class="pubdate">译文版 (5.4)：2005 年 12 月—2006 年 4 月 (update-060425)</p>
+               </div>
+               <div>
+                  <p class="pubdate">英文原版 (5.4)：2004 年 5 月 20 日</p>
+               </div>
+               <div>
+                  <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+               </div>
+               <div>
+                  <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+               </div>
+               <div>
+                  <div class="abstract">
+                     <h3 class="title"></h3>
+                     <p>本书存放在 <a href="http://diveintopython.org/">http://diveintopython.org/</a> (英文原版) 和 <a href="http://www.woodpecker.org.cn/diveintopython">http://www.woodpecker.org.cn/diveintopython</a>(中文版)。如果你是从别的地方看到它的，可能看到的不是最新版本。
+                     </p>
+                  </div>
+               </div>
+               <div>
+                  <div class="legalnotice">
+                     <p>Permission is granted to copy, distribute, and/or modify this document under the terms of the <span class="acronym">GNU</span> Free Documentation License, Version 1.1 or any later version published by the Free Software Foundation; with no Invariant
+                        Sections, no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license is included in <a href="../appendix/fdl.html" title="附录&nbsp;G.&nbsp;GNU Free Documentation License">Appendix G, GNU Free Documentation License</a>.
+                     </p>
+                     <p>允许在 GNU 自由文档协议 (1.1 版，或自由软件基金会出版的任何更新版本) 的许可下复制、发行且/或修改本文档；本文档没有不变部分，没有前封面文本，没有封底文本。该协议的一份中文版参考译文包含在 <a href="../appendix/fdl_zh.html" title="附录&nbsp;H.&nbsp;GNU 自由文档协议">附录&nbsp;H, <i>GNU 自由文档协议</i></a> 中。
+                        
+                     </p>
+                     <p>在这本书中的例程是自由软件。你可以在遵守 <span class="application">Python</span> 协议 (<span class="application">Python</span> 软件基金会发布) 条款的规定下，重新发布，且/或修改它们。在 <a href="../appendix/license.html" title="附录&nbsp;I.&nbsp;Python license">附录&nbsp;I, <i>Python license</i></a> 中包含了此协议的一份拷贝。
+                     </p>
+                     <p>本译本由 Zoom.Quiet 负责项目管理。感谢<a href="http://www.woodpecker.org.cn">啄木鸟社区</a>提供 <a href="http://svn.woodpecker.org.cn/woodpecker/zh-translations/trunk/diveintopython/zh-cn/">SVN 项目空间</a>和 <a href="http://wiki.woodpecker.org.cn/moin/DiveIntoPythonZh">Wiki 协作空间</a>。
+                     </p>
+                     <p>本译本由 <a href="http://wiki.woodpecker.org.cn/moin/CPUG">啄木鸟/CPUG</a> 的 obp 团队完成。可以在<a href="../appendix/history.html" title="附录&nbsp;E.&nbsp;修订历史">附录&nbsp;E, <i>修订历史</i></a>中找到一个翻译和修订人员的清单。如果您对当前版本的 Dive Into Python 中文版有任何意见和建议，可以到<a href="http://wiki.woodpecker.org.cn/moin/DiveIntoPythonZh">本书的 Wiki 协作空间</a>中留下你的评论。
+                     </p>
+                     <p>本译文遵守 GFDL 的规定。你可以复制、发行、修改此文档，但请保留此版权信息。</p>
+                  </div>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <p><b>目录</b></p>
+            <ul>
+               <li><span class="chapter"><a href="../installing_python/index.html">1. 安装 Python</a></span><ul>
+                     <li><span class="section"><a href="../installing_python/index.html#install.choosing">1.1. 哪一种 Python 适合您？</a></span></li>
+                     <li><span class="section"><a href="../installing_python/windows.html">1.2. Windows 上的 Python</a></span></li>
+                     <li><span class="section"><a href="../installing_python/macosx.html">1.3. Mac OS X 上的 Python </a></span></li>
+                     <li><span class="section"><a href="../installing_python/macos9.html">1.4. Mac OS 9 上的 Python </a></span></li>
+                     <li><span class="section"><a href="../installing_python/redhat.html">1.5. RedHat Linux 上的 Python </a></span></li>
+                     <li><span class="section"><a href="../installing_python/debian.html">1.6. Debian GNU/Linux 上的 Python </a></span></li>
+                     <li><span class="section"><a href="../installing_python/source.html">1.7. 从源代码安装 Python </a></span></li>
+                     <li><span class="section"><a href="../installing_python/shell.html">1.8. 使用 Python 的交互 Shell</a></span></li>
+                     <li><span class="section"><a href="../installing_python/summary.html">1.9. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../getting_to_know_python/index.html">2. 第一个 Python 程序</a></span><ul>
+                     <li><span class="section"><a href="../getting_to_know_python/index.html#odbchelper.divein">2.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../getting_to_know_python/declaring_functions.html">2.2. 函数声明</a></span><ul>
+                           <li><span class="section"><a href="../getting_to_know_python/declaring_functions.html#d0e4324">2.2.1. Python 和其他编程语言数据类型的比较</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../getting_to_know_python/documenting_functions.html">2.3. 文档化函数</a></span></li>
+                     <li><span class="section"><a href="../getting_to_know_python/everything_is_an_object.html">2.4. 万物皆对象</a></span><ul>
+                           <li><span class="section"><a href="../getting_to_know_python/everything_is_an_object.html#d0e4686">2.4.1. 模块导入的搜索路径</a></span></li>
+                           <li><span class="section"><a href="../getting_to_know_python/everything_is_an_object.html#d0e4801">2.4.2. 何谓对象？</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../getting_to_know_python/indenting_code.html">2.5. 代码缩进</a></span></li>
+                     <li><span class="section"><a href="../getting_to_know_python/testing_modules.html">2.6. 测试模块</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../native_data_types/index.html">3. 内置数据类型</a></span><ul>
+                     <li><span class="section"><a href="../native_data_types/index.html#odbchelper.dict">3.1. Dictionary 介绍</a></span><ul>
+                           <li><span class="section"><a href="../native_data_types/index.html#d0e5309">3.1.1. Dictionary 的定义</a></span></li>
+                           <li><span class="section"><a href="../native_data_types/index.html#d0e5404">3.1.2. Dictionary 的修改</a></span></li>
+                           <li><span class="section"><a href="../native_data_types/index.html#d0e5585">3.1.3. 从 dictionary 中删除元素</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../native_data_types/lists.html">3.2. List 介绍</a></span><ul>
+                           <li><span class="section"><a href="../native_data_types/lists.html#d0e5762">3.2.1. List 的定义</a></span></li>
+                           <li><span class="section"><a href="../native_data_types/lists.html#d0e6029">3.2.2. 向 list 中增加元素</a></span></li>
+                           <li><span class="section"><a href="../native_data_types/lists.html#d0e6257">3.2.3. 在 list 中搜索</a></span></li>
+                           <li><span class="section"><a href="../native_data_types/lists.html#d0e6419">3.2.4. 从 list 中删除元素</a></span></li>
+                           <li><span class="section"><a href="../native_data_types/lists.html#d0e6537">3.2.5. 使用 list 的运算符</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../native_data_types/tuples.html">3.3. Tuple 介绍</a></span></li>
+                     <li><span class="section"><a href="../native_data_types/declaring_variables.html">3.4. 变量声明</a></span><ul>
+                           <li><span class="section"><a href="../native_data_types/declaring_variables.html#d0e7017">3.4.1. 变量引用</a></span></li>
+                           <li><span class="section"><a href="../native_data_types/declaring_variables.html#odbchelper.multiassign">3.4.2. 一次赋多值</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../native_data_types/formatting_strings.html">3.5. 格式化字符串</a></span></li>
+                     <li><span class="section"><a href="../native_data_types/mapping_lists.html">3.6. 映射 list</a></span></li>
+                     <li><span class="section"><a href="../native_data_types/joining_lists.html">3.7. 连接 list 与分割字符串</a></span><ul>
+                           <li><span class="section"><a href="../native_data_types/joining_lists.html#d0e8123">3.7.1. 字符串方法的历史注解</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../native_data_types/summary.html">3.8. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../power_of_introspection/index.html">4. 自省的威力</a></span><ul>
+                     <li><span class="section"><a href="../power_of_introspection/index.html#apihelper.divein">4.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../power_of_introspection/optional_arguments.html">4.2. 使用可选参数和命名参数</a></span></li>
+                     <li><span class="section"><a href="../power_of_introspection/built_in_functions.html">4.3. 使用 type、str、dir 和其它内置函数</a></span><ul>
+                           <li><span class="section"><a href="../power_of_introspection/built_in_functions.html#d0e8648">4.3.1. type 函数</a></span></li>
+                           <li><span class="section"><a href="../power_of_introspection/built_in_functions.html#d0e8758">4.3.2. str 函数</a></span></li>
+                           <li><span class="section"><a href="../power_of_introspection/built_in_functions.html#d0e9105">4.3.3. 内置函数</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../power_of_introspection/getattr.html">4.4. 通过 getattr 获取对象引用</a></span><ul>
+                           <li><span class="section"><a href="../power_of_introspection/getattr.html#d0e9345">4.4.1. 用于模块的 getattr</a></span></li>
+                           <li><span class="section"><a href="../power_of_introspection/getattr.html#d0e9513">4.4.2. getattr 作为一个分发者</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../power_of_introspection/filtering_lists.html">4.5. 过滤列表</a></span></li>
+                     <li><span class="section"><a href="../power_of_introspection/and_or.html">4.6. and 和 or 的特殊性质</a></span><ul>
+                           <li><span class="section"><a href="../power_of_introspection/and_or.html#d0e10128">4.6.1. 使用 and-or 技巧</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../power_of_introspection/lambda_functions.html">4.7. 使用 lambda 函数</a></span><ul>
+                           <li><span class="section"><a href="../power_of_introspection/lambda_functions.html#d0e10549">4.7.1. 真实世界中的 lambda 函数</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../power_of_introspection/all_together.html">4.8. 全部放在一起</a></span></li>
+                     <li><span class="section"><a href="../power_of_introspection/summary.html">4.9. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../object_oriented_framework/index.html">5. 对象和面向对象</a></span><ul>
+                     <li><span class="section"><a href="../object_oriented_framework/index.html#fileinfo.divein">5.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../object_oriented_framework/importing_modules.html">5.2. 使用 from module import 导入模块</a></span></li>
+                     <li><span class="section"><a href="../object_oriented_framework/defining_classes.html">5.3. 类的定义</a></span><ul>
+                           <li><span class="section"><a href="../object_oriented_framework/defining_classes.html#d0e11869">5.3.1. 初始化并开始类编码</a></span></li>
+                           <li><span class="section"><a href="../object_oriented_framework/defining_classes.html#d0e12045">5.3.2. 了解何时去使用 self 和 __init__</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../object_oriented_framework/instantiating_classes.html">5.4. 类的实例化</a></span><ul>
+                           <li><span class="section"><a href="../object_oriented_framework/instantiating_classes.html#d0e12314">5.4.1. 垃圾回收</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../object_oriented_framework/userdict.html">5.5. 探索 UserDict：一个封装类</a></span></li>
+                     <li><span class="section"><a href="../object_oriented_framework/special_class_methods.html">5.6. 专用类方法</a></span><ul>
+                           <li><span class="section"><a href="../object_oriented_framework/special_class_methods.html#d0e13019">5.6.1. 获得和设置数据项</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../object_oriented_framework/special_class_methods2.html">5.7. 高级专用类方法</a></span></li>
+                     <li><span class="section"><a href="../object_oriented_framework/class_attributes.html">5.8. 类属性介绍</a></span></li>
+                     <li><span class="section"><a href="../object_oriented_framework/private_functions.html">5.9. 私有函数</a></span></li>
+                     <li><span class="section"><a href="../object_oriented_framework/summary.html">5.10. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../file_handling/index.html">6. 异常和文件处理</a></span><ul>
+                     <li><span class="section"><a href="../file_handling/index.html#fileinfo.exception">6.1. 异常处理</a></span><ul>
+                           <li><span class="section"><a href="../file_handling/index.html#d0e14544">6.1.1. 为其他用途使用异常</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../file_handling/file_objects.html">6.2. 与文件对象共事</a></span><ul>
+                           <li><span class="section"><a href="../file_handling/file_objects.html#d0e14868">6.2.1. 读取文件</a></span></li>
+                           <li><span class="section"><a href="../file_handling/file_objects.html#d0e14995">6.2.2. 关闭文件</a></span></li>
+                           <li><span class="section"><a href="../file_handling/file_objects.html#d0e15122">6.2.3. 处理 I/O 错误</a></span></li>
+                           <li><span class="section"><a href="../file_handling/file_objects.html#d0e15243">6.2.4. 写入文件</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../file_handling/for_loops.html">6.3. for 循环</a></span></li>
+                     <li><span class="section"><a href="../file_handling/more_on_modules.html">6.4. 使用 sys.modules</a></span></li>
+                     <li><span class="section"><a href="../file_handling/os_module.html">6.5. 与目录共事</a></span></li>
+                     <li><span class="section"><a href="../file_handling/all_together.html">6.6. 全部放在一起</a></span></li>
+                     <li><span class="section"><a href="../file_handling/summary.html">6.7. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../regular_expressions/index.html">7. 正则表达式</a></span><ul>
+                     <li><span class="section"><a href="../regular_expressions/index.html#re.intro">7.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../regular_expressions/street_addresses.html">7.2. 个案研究：街道地址</a></span></li>
+                     <li><span class="section"><a href="../regular_expressions/roman_numerals.html">7.3. 个案研究：罗马字母</a></span><ul>
+                           <li><span class="section"><a href="../regular_expressions/roman_numerals.html#d0e17763">7.3.1. 校验千位数</a></span></li>
+                           <li><span class="section"><a href="../regular_expressions/roman_numerals.html#d0e17955">7.3.2. 校验百位数</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../regular_expressions/n_m_syntax.html">7.4. 使用 {n,m} 语法</a></span><ul>
+                           <li><span class="section"><a href="../regular_expressions/n_m_syntax.html#d0e18499">7.4.1. 校验十位数和个位数</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../regular_expressions/verbose.html">7.5. 松散正则表达式</a></span></li>
+                     <li><span class="section"><a href="../regular_expressions/phone_numbers.html">7.6. 个案研究：解析电话号码</a></span></li>
+                     <li><span class="section"><a href="../regular_expressions/summary.html">7.7. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../html_processing/index.html">8. HTML 处理</a></span><ul>
+                     <li><span class="section"><a href="../html_processing/index.html#dialect.divein">8.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../html_processing/introducing_sgmllib.html">8.2. sgmllib.py 介绍</a></span></li>
+                     <li><span class="section"><a href="../html_processing/extracting_data.html">8.3. 从 HTML 文档中提取数据</a></span></li>
+                     <li><span class="section"><a href="../html_processing/basehtmlprocessor.html">8.4. BaseHTMLProcessor.py 介绍</a></span></li>
+                     <li><span class="section"><a href="../html_processing/locals_and_globals.html">8.5. locals 和 globals</a></span></li>
+                     <li><span class="section"><a href="../html_processing/dictionary_based_string_formatting.html">8.6. 基于 dictionary 的字符串格式化</a></span></li>
+                     <li><span class="section"><a href="../html_processing/quoting_attribute_values.html">8.7. 给属性值加引号</a></span></li>
+                     <li><span class="section"><a href="../html_processing/dialect.html">8.8. dialect.py 介绍</a></span></li>
+                     <li><span class="section"><a href="../html_processing/all_together.html">8.9. 全部放在一起</a></span></li>
+                     <li><span class="section"><a href="../html_processing/summary.html">8.10. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../xml_processing/index.html">9. XML 处理</a></span><ul>
+                     <li><span class="section"><a href="../xml_processing/index.html#kgp.divein">9.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../xml_processing/packages.html">9.2. 包</a></span></li>
+                     <li><span class="section"><a href="../xml_processing/parsing_xml.html">9.3. XML 解析</a></span></li>
+                     <li><span class="section"><a href="../xml_processing/unicode.html">9.4. Unicode</a></span></li>
+                     <li><span class="section"><a href="../xml_processing/searching.html">9.5. 搜索元素</a></span></li>
+                     <li><span class="section"><a href="../xml_processing/attributes.html">9.6. 访问元素属性</a></span></li>
+                     <li><span class="section"><a href="../xml_processing/summary.html">9.7. Segue </a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../scripts_and_streams/index.html">10. 脚本和流</a></span><ul>
+                     <li><span class="section"><a href="../scripts_and_streams/index.html#kgp.openanything">10.1. 抽象输入源</a></span></li>
+                     <li><span class="section"><a href="../scripts_and_streams/stdin_stdout_stderr.html">10.2. 标准输入、输出和错误</a></span></li>
+                     <li><span class="section"><a href="../scripts_and_streams/caching.html">10.3. 查询缓冲节点</a></span></li>
+                     <li><span class="section"><a href="../scripts_and_streams/child_nodes.html">10.4. 查找节点的直接子节点</a></span></li>
+                     <li><span class="section"><a href="../scripts_and_streams/handlers_by_node_type.html">10.5. 根据节点类型创建不同的处理器</a></span></li>
+                     <li><span class="section"><a href="../scripts_and_streams/command_line_arguments.html">10.6. 处理命令行参数</a></span></li>
+                     <li><span class="section"><a href="../scripts_and_streams/all_together.html">10.7. 全部放在一起</a></span></li>
+                     <li><span class="section"><a href="../scripts_and_streams/summary.html">10.8. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../http_web_services/index.html">11. HTTP Web 服务</a></span><ul>
+                     <li><span class="section"><a href="../http_web_services/index.html#oa.divein">11.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../http_web_services/review.html">11.2. 避免通过 HTTP 重复地获取数据</a></span></li>
+                     <li><span class="section"><a href="../http_web_services/http_features.html">11.3. HTTP 的特性</a></span><ul>
+                           <li><span class="section"><a href="../http_web_services/http_features.html#d0e27782">11.3.1. 用户代理 (User-Agent)</a></span></li>
+                           <li><span class="section"><a href="../http_web_services/http_features.html#d0e27806">11.3.2. 重定向 (Redirects)</a></span></li>
+                           <li><span class="section"><a href="../http_web_services/http_features.html#d0e27880">11.3.3. Last-Modified/If-Modified-Since</a></span></li>
+                           <li><span class="section"><a href="../http_web_services/http_features.html#d0e27915">11.3.4. ETag/If-None-Match</a></span></li>
+                           <li><span class="section"><a href="../http_web_services/http_features.html#d0e27943">11.3.5. 压缩 (Compression)</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../http_web_services/debugging.html">11.4. 调试 HTTP web 服务</a></span></li>
+                     <li><span class="section"><a href="../http_web_services/user_agent.html">11.5. 设置 User-Agent</a></span></li>
+                     <li><span class="section"><a href="../http_web_services/etags.html">11.6. 处理 Last-Modified 和 ETag</a></span></li>
+                     <li><span class="section"><a href="../http_web_services/redirects.html">11.7. 处理重定向</a></span></li>
+                     <li><span class="section"><a href="../http_web_services/gzip_compression.html">11.8. 处理压缩数据</a></span></li>
+                     <li><span class="section"><a href="../http_web_services/alltogether.html">11.9. 全部放在一起</a></span></li>
+                     <li><span class="section"><a href="../http_web_services/summary.html">11.10. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../soap_web_services/index.html">12. SOAP Web 服务</a></span><ul>
+                     <li><span class="section"><a href="../soap_web_services/index.html#soap.divein">12.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../soap_web_services/install.html">12.2. 安装 SOAP 库</a></span><ul>
+                           <li><span class="section"><a href="../soap_web_services/install.html#d0e30152">12.2.1. 安装 PyXML</a></span></li>
+                           <li><span class="section"><a href="../soap_web_services/install.html#d0e30255">12.2.2. 安装 fpconst</a></span></li>
+                           <li><span class="section"><a href="../soap_web_services/install.html#d0e30353">12.2.3. 安装 SOAPpy</a></span></li>
+                        </ul>
+                     </li>
+                     <li><span class="section"><a href="../soap_web_services/first_steps.html">12.3. 步入 SOAP</a></span></li>
+                     <li><span class="section"><a href="../soap_web_services/debugging.html">12.4.  SOAP 网络服务查错</a></span></li>
+                     <li><span class="section"><a href="../soap_web_services/wsdl.html">12.5. WSDL 介绍</a></span></li>
+                     <li><span class="section"><a href="../soap_web_services/introspection.html">12.6. 以 WSDL 进行 SOAP 内省</a></span></li>
+                     <li><span class="section"><a href="../soap_web_services/google.html">12.7. 搜索 Google</a></span></li>
+                     <li><span class="section"><a href="../soap_web_services/troubleshooting.html">12.8.  SOAP 网络服务故障排除</a></span></li>
+                     <li><span class="section"><a href="../soap_web_services/summary.html">12.9. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../unit_testing/index.html">13. 单元测试</a></span><ul>
+                     <li><span class="section"><a href="../unit_testing/index.html#roman.intro">13.1. 罗马数字程序介绍 II</a></span></li>
+                     <li><span class="section"><a href="../unit_testing/diving_in.html">13.2. 深入</a></span></li>
+                     <li><span class="section"><a href="../unit_testing/romantest.html">13.3. romantest.py 介绍</a></span></li>
+                     <li><span class="section"><a href="../unit_testing/testing_for_success.html">13.4. 正面测试 (Testing for success)</a></span></li>
+                     <li><span class="section"><a href="../unit_testing/testing_for_failure.html">13.5. 负面测试 (Testing for failure)</a></span></li>
+                     <li><span class="section"><a href="../unit_testing/testing_for_sanity.html">13.6. 完备性检测 (Testing for sanity)</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../unit_testing/stage_1.html">14. 测试优先编程</a></span><ul>
+                     <li><span class="section"><a href="../unit_testing/stage_1.html#roman.stage1">14.1. roman.py, 第 1 阶段</a></span></li>
+                     <li><span class="section"><a href="../unit_testing/stage_2.html">14.2. roman.py, 第 2 阶段</a></span></li>
+                     <li><span class="section"><a href="../unit_testing/stage_3.html">14.3. roman.py, 第 3 阶段</a></span></li>
+                     <li><span class="section"><a href="../unit_testing/stage_4.html">14.4. roman.py, 第 4 阶段</a></span></li>
+                     <li><span class="section"><a href="../unit_testing/stage_5.html">14.5. roman.py, 第 5 阶段</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../refactoring/index.html">15. 重构</a></span><ul>
+                     <li><span class="section"><a href="../refactoring/index.html#roman.bugs">15.1. 处理 bugs</a></span></li>
+                     <li><span class="section"><a href="../refactoring/handling_changing_requirements.html">15.2. 应对需求变化</a></span></li>
+                     <li><span class="section"><a href="../refactoring/refactoring.html">15.3. 重构</a></span></li>
+                     <li><span class="section"><a href="../refactoring/postscript.html">15.4. 后记</a></span></li>
+                     <li><span class="section"><a href="../refactoring/summary.html">15.5. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../functional_programming/index.html">16. 函数编程</a></span><ul>
+                     <li><span class="section"><a href="../functional_programming/index.html#regression.divein">16.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../functional_programming/finding_the_path.html">16.2. 找到路径</a></span></li>
+                     <li><span class="section"><a href="../functional_programming/filtering_lists.html">16.3. 重识列表过滤</a></span></li>
+                     <li><span class="section"><a href="../functional_programming/mapping_lists.html">16.4. 重识列表映射</a></span></li>
+                     <li><span class="section"><a href="../functional_programming/data_centric.html">16.5. 数据中心思想编程</a></span></li>
+                     <li><span class="section"><a href="../functional_programming/dynamic_import.html">16.6. 动态导入模块</a></span></li>
+                     <li><span class="section"><a href="../functional_programming/all_together.html">16.7. 全部放在一起</a></span></li>
+                     <li><span class="section"><a href="../functional_programming/summary.html">16.8. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../dynamic_functions/index.html">17. 动态函数</a></span><ul>
+                     <li><span class="section"><a href="../dynamic_functions/index.html#plural.divein">17.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../dynamic_functions/stage1.html">17.2. plural.py, 第 1 阶段</a></span></li>
+                     <li><span class="section"><a href="../dynamic_functions/stage2.html">17.3. plural.py, 第 2 阶段</a></span></li>
+                     <li><span class="section"><a href="../dynamic_functions/stage3.html">17.4. plural.py, 第 3 阶段</a></span></li>
+                     <li><span class="section"><a href="../dynamic_functions/stage4.html">17.5. plural.py, 第 4 阶段</a></span></li>
+                     <li><span class="section"><a href="../dynamic_functions/stage5.html">17.6. plural.py, 第 5 阶段</a></span></li>
+                     <li><span class="section"><a href="../dynamic_functions/stage6.html">17.7. plural.py, 第 6 阶段</a></span></li>
+                     <li><span class="section"><a href="../dynamic_functions/summary.html">17.8. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="chapter"><a href="../performance_tuning/index.html">18. 性能优化</a></span><ul>
+                     <li><span class="section"><a href="../performance_tuning/index.html#soundex.divein">18.1. 概览</a></span></li>
+                     <li><span class="section"><a href="../performance_tuning/timeit.html">18.2. 使用 timeit 模块</a></span></li>
+                     <li><span class="section"><a href="../performance_tuning/regular_expressions.html">18.3. 优化正则表达式</a></span></li>
+                     <li><span class="section"><a href="../performance_tuning/dictionary_lookups.html">18.4. 优化字典查找</a></span></li>
+                     <li><span class="section"><a href="../performance_tuning/list_operations.html">18.5. 优化列表操作</a></span></li>
+                     <li><span class="section"><a href="../performance_tuning/string_manipulation.html">18.6. 优化字符串操作</a></span></li>
+                     <li><span class="section"><a href="../performance_tuning/summary.html">18.7. 小结</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="appendix"><a href="../appendix/furtherreading.html">A. 进一步阅读</a></span></li>
+               <li><span class="appendix"><a href="../appendix/abstracts.html">B. 五分钟回顾</a></span></li>
+               <li><span class="appendix"><a href="../appendix/tips.html">C. 技巧和窍门</a></span></li>
+               <li><span class="appendix"><a href="../appendix/examples.html">D. 示例清单</a></span></li>
+               <li><span class="appendix"><a href="../appendix/history.html">E. 修订历史</a></span></li>
+               <li><span class="appendix"><a href="../appendix/about.html">F. 关于本书</a></span></li>
+               <li><span class="appendix"><a href="../appendix/fdl.html">G. GNU Free Documentation License</a></span><ul>
+                     <li><span class="section"><a href="../appendix/fdl.html#d0e40184">G.0. Preamble</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_applicability.html">G.1. Applicability and definitions</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_copying.html">G.2. Verbatim copying</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_copyinginquantity.html">G.3. Copying in quantity</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_modifications.html">G.4. Modifications</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_combining.html">G.5. Combining documents</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_collections.html">G.6. Collections of documents</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_aggregation.html">G.7. Aggregation with independent works</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_translation.html">G.8. Translation</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_termination.html">G.9. Termination</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_future.html">G.10. Future revisions of this license</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_howto.html">G.11. How to use this License for your documents</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="appendix"><a href="../appendix/fdl_zh.html">H. GNU 自由文档协议</a></span><ul>
+                     <li><span class="section"><a href="../appendix/fdl_zh.html#d0e40371">H.0. 序</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_applicability_zh.html">H.1. 适用范围和定义</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_copying_zh.html">H.2. 原样复制</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_copyinginquantity_zh.html">H.3. 大量复制</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_modifications_zh.html">H.4. 修改</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_combining_zh.html">H.5. 合并文档</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_collections_zh.html">H.6. 文档合集</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_aggregation_zh.html">H.7. 独立著作聚集</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_translation_zh.html">H.8. 翻译</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_termination_zh.html">H.9. 终止协议</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_future_zh.html">H.10. 协议将来的修订</a></span></li>
+                     <li><span class="section"><a href="../appendix/fdl_howto_zh.html">H.11. 如何为你的文档使用本协议</a></span></li>
+                  </ul>
+               </li>
+               <li><span class="appendix"><a href="../appendix/license.html">I. Python license</a></span><ul>
+                     <li><span class="section"><a href="../appendix/license.html#d0e40554">I.A. History of the software</a></span></li>
+                     <li><span class="section"><a href="../appendix/license_terms.html">I.B. Terms and conditions for accessing or otherwise using Python</a></span><ul>
+                           <li><span class="section"><a href="../appendix/license_terms.html#d0e40569">I.B.1. PSF license agreement</a></span></li>
+                           <li><span class="section"><a href="../appendix/license_terms.html#d0e40597">I.B.2. BeOpen Python open source license agreement version 1</a></span></li>
+                           <li><span class="section"><a href="../appendix/license_terms.html#d0e40622">I.B.3. CNRI open source GPL-compatible license agreement</a></span></li>
+                           <li><span class="section"><a href="../appendix/license_terms.html#d0e40650">I.B.4. CWI permissions statement and disclaimer</a></span></li>
+                        </ul>
+                     </li>
+                  </ul>
+               </li>
+               <li><span class="appendix"><a href="../appendix/license_statement_zh.html">J. Python 协议</a></span><ul>
+                     <li><span class="section"><a href="../appendix/license_statement_zh.html#d0e40666">J.0. 关于译文的声明</a></span></li>
+                     <li><span class="section"><a href="../appendix/license_zh.html">J.A. 软件的历史</a></span></li>
+                     <li><span class="section"><a href="../appendix/license_terms_zh.html">J.B. 使用 Python 的条款和条件</a></span><ul>
+                           <li><span class="section"><a href="../appendix/license_terms_zh.html#d0e40693">J.B.1. PSF 协议</a></span></li>
+                           <li><span class="section"><a href="../appendix/license_terms_zh.html#d0e40721">J.B.2. BeOpen Python 开源协议第 1 版</a></span></li>
+                           <li><span class="section"><a href="../appendix/license_terms_zh.html#d0e40746">J.B.3. CNRI 开源 GPL 兼容协议</a></span></li>
+                           <li><span class="section"><a href="../appendix/license_terms_zh.html#d0e40774">J.B.4. CWI 许可声明与免责声明</a></span></li>
+                        </ul>
+                     </li>
+                  </ul>
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="../installing_python/index.html">安装 Python&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

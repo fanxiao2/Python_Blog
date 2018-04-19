@@ -1,0 +1,157 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>9.2.&nbsp;包</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;9&nbsp;章&nbsp;XML 处理">
+      <link rel="previous" href="index.html" title="第&nbsp;9&nbsp;章&nbsp;XML 处理">
+      <link rel="next" href="parsing_xml.html" title="9.3.&nbsp;XML 解析">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">XML 处理</a>&nbsp;&gt;&nbsp;<span class="thispage">包</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="index.html" title="上一页: “XML 处理”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="parsing_xml.html" title="下一页: “XML 解析”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="kgp.packages"></a>9.2.&nbsp;包
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>实际上解析一个 <span class="acronym">XML</span> 文档是很简单的：只要一行代码。但是，在你接触那行代码前，需要暂时岔开一下，讨论一下包。
+            </p>
+         </div>
+         <div class="example"><a name="d0e23095"></a><h3 class="title">例&nbsp;9.5.&nbsp;载入一个 <span class="acronym">XML</span> 文档 (偷瞥一下)
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> xml.dom <span class='pykeyword'>import</span> minidom</span> <a name="kgp.packages.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc = minidom.parse(<span class='pystring'>'~/diveintopython/common/py/kgp/binary.xml'</span>)</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.packages.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个语法你之前没有见过。它看上去很像我们熟知的 <tt class="literal">from <i class="replaceable">module</i> import</tt>，但是<tt class="literal">"."</tt> 使得它好像不只是普通的 import 那么简单。事实上，<tt class="filename">xml</tt> 称为包，<tt class="filename">dom</tt> 是 <tt class="filename">xml</tt> 中嵌套的包，而 <tt class="filename">minidom</tt> 是 <tt class="filename">xml.dom</tt> 中的模块。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>听起来挺复杂的，其实不是。看一下确切的实现可能会有帮助。包不过是模块的目录；嵌套包是子目录。一个包 (或一个嵌套包) 中的模块也只是 <tt class="filename">.py</tt> 文件罢了，永远都是，只是它们是在一个子目录中，而不是在你的 <span class="application">Python</span> 安装环境的主 <tt class="filename">lib/</tt> 目录下。
+         </p>
+         <div class="example"><a name="d0e23153"></a><h3 class="title">例&nbsp;9.6.&nbsp;包的文件布局</h3><pre class="screen"><span class="computeroutput"><span class="application">Python</span>21/           <span class="application">Python</span> 安装根目录 (可执行文件的所在地)
+|
++--lib/             库目录 (标准库模块的所在地)
+   |
+   +-- xml/         xml包 (实际上目录中还有其它东西)
+       |
+       +--sax/      xml.sax包 (也只是一个目录)
+       |
+       +--dom/      xml.dom包 (包含 minidom.py)
+       |
+       +--parsers/  xml.parsers包 (内部使用)</span></pre></div>
+         <p>所以你说 <tt class="literal">from xml.dom import minidom</tt>，<span class="application">Python</span> 认为它的意思是“<span class="quote">在 <tt class="filename">xml</tt> 目录中查找 <tt class="filename">dom</tt> 目录，然后在<span class="emphasis"><em>这个目录</em></span> 中查找 <tt class="filename">minidom</tt> 模块，接着导入它并以 <tt class="filename">minidom</tt> 命名 </span>”。但是 <span class="application">Python</span> 更聪明；你不仅可以导入包含在一个包中的所有模块，还可以从包的模块中有选择地导入指定的类或者函数。语法都是一样的； <span class="application">Python</span> 会根据包的布局理解你的意思，然后自动进行正确的导入。
+            
+         </p>
+         <div class="example"><a name="d0e23196"></a><h3 class="title">例&nbsp;9.7.&nbsp;包也是模块</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> xml.dom <span class='pykeyword'>import</span> minidom</span>         <a name="kgp.packages.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">minidom</span>
+<span class="computeroutput">&lt;module 'xml.dom.minidom' from 'C:\Python21\lib\xml\dom\minidom.pyc'&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">minidom.Element</span>
+<span class="computeroutput">&lt;class xml.dom.minidom.Element at 01095744&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> xml.dom.minidom <span class='pykeyword'>import</span> Element</span> <a name="kgp.packages.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">Element</span>
+<span class="computeroutput">&lt;class xml.dom.minidom.Element at 01095744&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">minidom.Element</span>
+<span class="computeroutput">&lt;class xml.dom.minidom.Element at 01095744&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> xml <span class='pykeyword'>import</span> dom</span>                 <a name="kgp.packages.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">dom</span>
+<span class="computeroutput">&lt;module 'xml.dom' from 'C:\Python21\lib\xml\dom\__init__.pyc'&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> xml</span>                          <a name="kgp.packages.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xml</span>
+<span class="computeroutput">&lt;module 'xml' from 'C:\Python21\lib\xml\__init__.pyc'&gt;</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.packages.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里你正从一个嵌套包 (<tt class="filename">xml.dom</tt>)中导入一个模块 (<tt class="filename">minidom</tt>)。结果就是 <tt class="filename">minidom</tt> 被导入到了你 (程序) 的<a href="../html_processing/locals_and_globals.html" title="8.5.&nbsp;locals 和 globals">命名空间</a>中了。要引用 <tt class="filename">minidom</tt> 模块中的类 (比如 <tt class="classname">Element</tt>)，你必须在它们的类名前面加上模块名。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.packages.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里你正从一个来自嵌套包 (<tt class="filename">xml.dom</tt>) 的模块 (<tt class="filename">minidom</tt>) 中导入一个类 (<tt class="classname">Element</tt>)。结果就是 <tt class="classname">Element</tt> 直接导入到了你 (程序) 的命名空间中。注意，这样做并不会干扰以前的导入；现在 <tt class="classname">Element</tt> 类可以用两种方式引用了 (但其实是同一个类)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.packages.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里你正在导入 <tt class="filename">dom</tt> 包 (<tt class="filename">xml</tt> 的一个嵌套包)，并将其作为一个模块。一个包的任何层次都可以视为一个模块，一会儿就会看到。它甚至可以拥有自己的属性和方法，就像你在前面看到过的模块。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.packages.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里你正在将根层次的 <tt class="filename">xml</tt> 包作为一个模块导入。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>那么如何才能导入一个包 (它不过是磁盘上的一个目录) 并使其成为一个模块 (它总是在磁盘上的一个文件) 呢？答案就是神奇的 <tt class="filename">__init__.py</tt> 文件。你明白了吧，包不只是目录，它们是包含一个特殊文件 <tt class="filename">__init__.py</tt> 的目录。这个文件定义了包的属性和方法。例如，<tt class="filename">xml.dom</tt> 包含了 <tt class="classname">Node</tt> 类，它在<tt class="filename">xml/dom/__init__.py</tt>中有所定义。当你将一个包作为模块导入 (比如从 <tt class="filename">xml</tt> 导入 <tt class="filename">dom</tt>) 的时候，实际上导入了它的 <tt class="filename">__init__.py</tt> 文件。
+         </p><a name="d0e23356"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">一个包是一个其中带有特殊文件 <tt class="filename">__init__.py</tt> 的目录。<tt class="filename">__init__.py</tt> 文件定义了包的属性和方法。其实它可以什么也不定义；可以只是一个空文件，但是必须要存在。如果 <tt class="filename">__init__.py</tt> 不存在，这个目录就仅仅是一个目录，而不是一个包，它就不能被导入或者包含其它的模块和嵌套包。
+               </td>
+            </tr>
+         </table>
+         <p>那为什么非得用包呢？嗯，它们提供了在逻辑上将相关模块归为一组的方法。不使用其中带有 <tt class="filename">sax</tt> 和 <tt class="filename">dom</tt> 的 <tt class="filename">xml</tt> 包，作者也可以选择将所有的 <tt class="filename">sax</tt> 功能放入 <tt class="filename">xmlsax.py</tt>中，并将所有的 <tt class="filename">dom</tt> 功能放入 <tt class="filename">xmldom.py</tt>中，或者干脆将所有东西放入单个模块中。但是这样可能不实用 (写到这儿时，<span class="acronym">XML</span> 包已经超过了 3000 行代码) 并且很难管理 (独立的源文件意味着多个人可以同时在不同的地方进行开发)。
+         </p>
+         <p>如果你发现自己正在用 <span class="application">Python</span> 编写一个大型的子系统 (或者，很有可能，当你意识到你的小型子系统已经成长为一个大型子系统时)，你应该花费些时间设计一个好的包架构。它是 <span class="application">Python</span> 所擅长的事情之一，所以应该好好利用它。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="index.html">&lt;&lt;&nbsp;XML 处理</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#kgp.divein" title="9.1.&nbsp;概览">1</a> <span class="divider">|</span> <span class="thispage">2</span> <span class="divider">|</span> <a href="parsing_xml.html" title="9.3.&nbsp;XML 解析">3</a> <span class="divider">|</span> <a href="unicode.html" title="9.4.&nbsp;Unicode">4</a> <span class="divider">|</span> <a href="searching.html" title="9.5.&nbsp;搜索元素">5</a> <span class="divider">|</span> <a href="attributes.html" title="9.6.&nbsp;访问元素属性">6</a> <span class="divider">|</span> <a href="summary.html" title="9.7.&nbsp;Segue ">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="parsing_xml.html">XML 解析&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

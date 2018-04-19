@@ -1,0 +1,119 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>4.5.&nbsp;过滤列表</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;4&nbsp;章&nbsp;自省的威力">
+      <link rel="previous" href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用">
+      <link rel="next" href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">自省的威力</a>&nbsp;&gt;&nbsp;<span class="thispage">过滤列表</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="getattr.html" title="上一页: “通过 getattr 获取对象引用”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="and_or.html" title="下一页: “and 和 or 的特殊性质”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="apihelper.filter"></a>4.5.&nbsp;过滤列表
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>如你所知，<span class="application">Python</span> 具有通过列表解析 (<a href="../native_data_types/mapping_lists.html" title="3.6.&nbsp;映射 list">第&nbsp;3.6&nbsp;节 “映射 list”</a>) 将列表映射到其它列表的强大能力。这种能力同过滤机制结合使用，使列表中的有些元素被映射的同时跳过另外一些元素。
+            </p>
+         </div>
+         <div class="informalexample">
+            <p>过滤列表语法：</p><pre class="programlisting">
+[<i class="replaceable"><tt>mapping-expression</tt></i><span class='pykeyword'> for</span> <i class="replaceable"><tt>element</tt></i><span class='pykeyword'> in</span> <i class="replaceable"><tt>source-list</tt></i><span class='pykeyword'> if</span> <i class="replaceable"><tt>filter-expression</tt></i>]</pre></div>
+         <p>这是你所知所爱的<a href="../native_data_types/mapping_lists.html" title="3.6.&nbsp;映射 list">列表解析</a>的扩展。前三部分都是相同的；最后一部分，以 <tt class="literal">if</tt> 开头的是过滤器表达式。过滤器表达式可以是返回值为真或者假的任何表达式 (在 <span class="application">Python</span> 中是<a href="../native_data_types/lists.html#tip.boolean">几乎任何东西</a>)。任何经过滤器表达式演算值为真的元素都可以包含在映射中。其它的元素都将忽略，它们不会进入映射表达式，更不会包含在输出列表中。
+         </p>
+         <div class="example"><a name="d0e9689"></a><h3 class="title">例&nbsp;4.14.&nbsp;列表过滤介绍</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = [<span class='pystring'>"a"</span>, <span class='pystring'>"mpilgrim"</span>, <span class='pystring'>"foo"</span>, <span class='pystring'>"b"</span>, <span class='pystring'>"c"</span>, <span class='pystring'>"b"</span>, <span class='pystring'>"d"</span>, <span class='pystring'>"d"</span>]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[elem <span class='pykeyword'>for</span> elem <span class='pykeyword'>in</span> li <span class='pykeyword'>if</span> len(elem) &gt; 1]</span>       <a name="apihelper.filter.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">['mpilgrim', 'foo']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[elem <span class='pykeyword'>for</span> elem <span class='pykeyword'>in</span> li <span class='pykeyword'>if</span> elem != <span class='pystring'>"b"</span>]</span>         <a name="apihelper.filter.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">['a', 'mpilgrim', 'foo', 'c', 'd', 'd']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[elem <span class='pykeyword'>for</span> elem <span class='pykeyword'>in</span> li <span class='pykeyword'>if</span> li.count(elem) == 1]</span> <a name="apihelper.filter.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">['a', 'mpilgrim', 'foo', 'c']</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.filter.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里的映射表达式很简单 (只是返回每个元素的值)，所以请把注意力集中到过滤器表达式上。由于 <span class="application">Python</span> 会遍历整个列表，它将对每个元素执行过滤器表达式。如果过滤器表达式演算值为真，该元素就会被映射，同时映射表达式的结果将包含在返回的列表中。这里，你过滤掉了所有单字符的字符串，留下了一个由长字符串构成的列表。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.filter.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里你过滤掉了一个特定值 <tt class="literal">b</tt>。注意这个过滤器会过滤掉所有的 <tt class="literal">b</tt>，因为每次取出 <tt class="literal">b</tt>，过滤表达式都将为假。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.filter.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">count</tt> 是一个列表方法，返回某个值在列表中出现的次数。你可以认为这个过滤器将从列表中剔除重复元素，返回一个只包含了在原始列表中有着唯一值拷贝的列表。但并非如此，因为在原始列表中出现两次的值 (在本例中，<tt class="literal">b</tt> 和 <tt class="literal">d</tt>) 被完全剔除了。从一个列表中排除重复值有多种方法，但过滤并不是其中的一种。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="informalexample"><a name="apihelper.filter.care"></a><p>回到 <tt class="filename">apihelper.py</tt> 中的这一行：
+            </p><pre class="programlisting">
+    methodList = [method <span class='pykeyword'>for</span> method <span class='pykeyword'>in</span> dir(object) <span class='pykeyword'>if</span> callable(getattr(object, method))]</pre></div>
+         <p>这行看上去挺复杂――确实也很复杂――但是基本结构都还是一样的。整个过滤表达式返回一个列表，并赋值给 <tt class="varname">methodList</tt> 变量。表达式的前半部分是列表映射部分。映射表达式是一个和遍历元素相同的表达式，因此它返回每个元素的值。<tt class="literal"><tt class="function">dir</tt>(<tt class="varname">object</tt>)</tt> 返回 <tt class="varname">object</tt> 对象的属性和方法列表――你正在映射的列表。所以唯一新出现的部分就是在 <tt class="literal">if</tt> 后面的过滤表达式。
+         </p>
+         <p>过滤表达式看上去很恐怖，其实不是。你已经知道了 <a href="built_in_functions.html#apihelper.builtin.callable" title="例&nbsp;4.8.&nbsp;callable 介绍"><tt class="function">callable</tt></a>、<a href="getattr.html#apihelper.getattr.intro" title="例&nbsp;4.10.&nbsp;getattr 介绍"><tt class="function">getattr</tt></a> 和 <a href="../native_data_types/tuples.html#odbchelper.tuplemethods" title="例&nbsp;3.16.&nbsp;Tuple 没有方法"><tt class="literal">in</tt></a>。正如你在<a href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用">前面的部分</a>中看到的，如果 <tt class="varname">object</tt> 是一个模块，并且 <tt class="varname">method</tt> 是上述模块中某个函数的名称，那么表达式 <tt class="literal">getattr(object, method)</tt> 将返回一个函数对象。
+         </p>
+         <p>所以这个表达式接收一个名为 <tt class="varname">object</tt> 的对象，然后得到它的属性、方法、函数和其他成员的名称列表，接着过滤掉我们不关心的成员。执行过滤行为是通过对每个属性/方法/函数的名称调用 <tt class="function">getattr</tt> 函数取得实际成员的引用，然后检查这些成员对象是否是可调用的，当然这些可调用的成员对象可能是方法或者函数，同时也可能是内置的 (比如列表的 <tt class="function">pop</tt> 方法) 或者用户自定义的 (比如 <tt class="filename">odbchelper</tt> 模块的 <tt class="function">buildConnectionString</tt> 函数)。这里你不用关心其它的属性，如内置在每一个模块中的 <tt class="literal">__name__</tt> 属性。
+         </p>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li><a href="http://www.python.org/doc/current/tut/tut.html"><i class="citetitle"><span class="application">Python</span> Tutorial</i></a> 讨论了<a href="http://www.python.org/doc/current/tut/node7.html#SECTION007130000000000000000">使用内置 <tt class="function">filter</tt> 函数</a>过滤列表的另一种方式。
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="getattr.html">&lt;&lt;&nbsp;通过 getattr 获取对象引用</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#apihelper.divein" title="4.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">2</a> <span class="divider">|</span> <a href="built_in_functions.html" title="4.3.&nbsp;使用 type、str、dir 和其它内置函数">3</a> <span class="divider">|</span> <a href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质">6</a> <span class="divider">|</span> <a href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">7</a> <span class="divider">|</span> <a href="all_together.html" title="4.8.&nbsp;全部放在一起">8</a> <span class="divider">|</span> <a href="summary.html" title="4.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="and_or.html">and 和 or 的特殊性质&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

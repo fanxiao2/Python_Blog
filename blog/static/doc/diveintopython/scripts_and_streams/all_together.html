@@ -1,0 +1,141 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>10.7.&nbsp;全部放在一起</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;10&nbsp;章&nbsp;脚本和流">
+      <link rel="previous" href="command_line_arguments.html" title="10.6.&nbsp;处理命令行参数">
+      <link rel="next" href="summary.html" title="10.8.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">脚本和流</a>&nbsp;&gt;&nbsp;<span class="thispage">全部放在一起</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="command_line_arguments.html" title="上一页: “处理命令行参数”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="kgp.alltogether"></a>10.7.&nbsp;全部放在一起
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你已经了解很多基础的东西。让我们回来看看所有片段是如何整合到一起的。</p>
+         </div>
+         <p>作为开始，这里是一个<a href="command_line_arguments.html" title="10.6.&nbsp;处理命令行参数">接收命令行参数</a>的脚本，它使用 <tt class="filename">getopt</tt> 模块。
+         </p>
+         <div class="informalexample"><pre class="programlisting"><span class='pykeyword'>
+def</span> main(argv):                         
+...
+    <span class='pykeyword'>try</span>:                                
+        opts, args = getopt.getopt(argv, <span class='pystring'>"hg:d"</span>, [<span class='pystring'>"help"</span>, <span class='pystring'>"grammar="</span>])
+    <span class='pykeyword'>except</span> getopt.GetoptError:          
+...
+    <span class='pykeyword'>for</span> opt, arg <span class='pykeyword'>in</span> opts:               
+...</pre></div>
+         <p>创建 <tt class="classname">KantGenerator</tt> 类的一个实例，然后将语法文件和源文件传给它，可能在命令行没有指定。
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+    k = KantGenerator(grammar, source)</pre></div>
+         <p><tt class="classname">KantGenerator</tt> 实例自动加载语法，它是一个 <span class="acronym">XML</span> 文件。你使用自定义的 <tt class="function">openAnything</tt> 函数打开这个文件 (<a href="index.html#kgp.openanything" title="10.1.&nbsp;抽象输入源">可能保存在一个本地文件中或者一个远程服务器上</a>)，然后使用内置的 <tt class="filename">minidom</tt> 解析函数<a href="../xml_processing/parsing_xml.html" title="9.3.&nbsp;XML 解析">将 <span class="acronym">XML</span> 解析为一棵 <span class="application">Python</span> 对象树</a>。
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> _load</span>(self, source):
+        sock = toolbox.openAnything(source)
+        xmldoc = minidom.parse(sock).documentElement
+        sock.close()</pre></div>
+         <p>哦，根据这种方式，你将使用到 <span class="acronym">XML</span> 文档结构的知识<a href="caching.html" title="10.3.&nbsp;查询缓冲节点">建立一个引用的小缓冲</a>，这些引用都只是 <span class="acronym">XML</span> 文档中的元素。
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> loadGrammar</span>(self, grammar):                         
+        <span class='pykeyword'>for</span> ref <span class='pykeyword'>in</span> self.grammar.getElementsByTagName(<span class='pystring'>"ref"</span>):
+            self.refs[ref.attributes[<span class='pystring'>"id"</span>].value] = ref     </pre></div>
+         <p>如果你在命令行中指定了某些源材料，你可以使用它；否则你将打开语法文件查找“顶层”引用 (没有被其它的东西引用) 并把它作为开始点。</p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> getDefaultSource</span>(self):
+        xrefs = {}
+        <span class='pykeyword'>for</span> xref <span class='pykeyword'>in</span> self.grammar.getElementsByTagName(<span class='pystring'>"xref"</span>):
+            xrefs[xref.attributes[<span class='pystring'>"id"</span>].value] = 1
+        xrefs = xrefs.keys()
+        standaloneXrefs = [e <span class='pykeyword'>for</span> e <span class='pykeyword'>in</span> self.refs.keys() <span class='pykeyword'>if</span> e <span class='pykeyword'>not</span> <span class='pykeyword'>in</span> xrefs]
+        <span class='pykeyword'>return</span> <span class='pystring'>'&lt;xref id="%s"/&gt;'</span> % random.choice(standaloneXrefs)</pre></div>
+         <p>现在你打开了了源材料。它是一个 <span class="acronym">XML</span>，你每次解析一个节点。为了让代码分离并具备更高的可维护性，你可以使用<a href="handlers_by_node_type.html" title="10.5.&nbsp;根据节点类型创建不同的处理器">针对每个节点类型的独立处理方法</a>。
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> parse_Element</span>(self, node): 
+        handlerMethod = getattr(self, <span class='pystring'>"do_%s"</span> % node.tagName)
+        handlerMethod(node)</pre></div>
+         <p>你在语法里面跳来跳去，解析每一个 <tt class="sgmltag-element">p</tt> 元素的<a href="child_nodes.html" title="10.4.&nbsp;查找节点的直接子节点">所有孩子</a>，
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> do_p</span>(self, node):
+...
+        <span class='pykeyword'>if</span> doit:
+            <span class='pykeyword'>for</span> child <span class='pykeyword'>in</span> node.childNodes: self.parse(child)</pre></div>
+         <p>用任意一个孩子替换 <tt class="sgmltag-element">choice</tt> 元素，
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> do_choice</span>(self, node):
+        self.parse(self.randomChildElement(node))</pre></div>
+         <p>并用对应 <tt class="sgmltag-element">ref</tt> 元素的任意孩子替换 <tt class="sgmltag-element">xref</tt>，前面你已经进行了缓冲。
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> do_xref</span>(self, node):
+        id = node.attributes[<span class='pystring'>"id"</span>].value
+        self.parse(self.randomChildElement(self.refs[id]))</pre></div>
+         <p>就这样一直解析，最后得到普通文本。</p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> parse_Text</span>(self, node):    
+        text = node.data
+...
+            self.pieces.append(text)</pre></div>
+         <p>把结果打印出来。</p>
+         <div class="informalexample"><pre class="programlisting"><span class='pykeyword'>
+def</span> main(argv):                         
+...
+    k = KantGenerator(grammar, source)
+    <span class='pykeyword'>print</span> k.output()</pre></div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="command_line_arguments.html">&lt;&lt;&nbsp;处理命令行参数</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#kgp.openanything" title="10.1.&nbsp;抽象输入源">1</a> <span class="divider">|</span> <a href="stdin_stdout_stderr.html" title="10.2.&nbsp;标准输入、输出和错误">2</a> <span class="divider">|</span> <a href="caching.html" title="10.3.&nbsp;查询缓冲节点">3</a> <span class="divider">|</span> <a href="child_nodes.html" title="10.4.&nbsp;查找节点的直接子节点">4</a> <span class="divider">|</span> <a href="handlers_by_node_type.html" title="10.5.&nbsp;根据节点类型创建不同的处理器">5</a> <span class="divider">|</span> <a href="command_line_arguments.html" title="10.6.&nbsp;处理命令行参数">6</a> <span class="divider">|</span> <span class="thispage">7</span> <span class="divider">|</span> <a href="summary.html" title="10.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

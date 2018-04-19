@@ -1,0 +1,139 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>5.7.&nbsp;高级专用类方法</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;5&nbsp;章&nbsp;对象和面向对象">
+      <link rel="previous" href="special_class_methods.html" title="5.6.&nbsp;专用类方法">
+      <link rel="next" href="class_attributes.html" title="5.8.&nbsp;类属性介绍">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">对象和面向对象</a>&nbsp;&gt;&nbsp;<span class="thispage">高级专用类方法</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="special_class_methods.html" title="上一页: “专用类方法”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="class_attributes.html" title="下一页: “类属性介绍”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="fileinfo.morespecial"></a>5.7.&nbsp;高级专用类方法
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>除了 <tt class="function">__getitem__</tt> 和 <tt class="function">__setitem__</tt> 之外 <span class="application">Python</span> 还有更多的专用函数。某些可以让你模拟出你甚至可能不知道的功能。
+            </p>
+         </div>
+         <p>下面的例子将展示 <tt class="filename">UserDict</tt> 一些其他专用方法。
+         </p>
+         <div class="example"><a name="fileinfo.morespecial.example"></a><h3 class="title">例&nbsp;5.16.&nbsp;<tt class="classname">UserDict</tt> 中更多的专用方法
+            </h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> __repr__</span>(self): <span class='pykeyword'>return</span> repr(self.data)     <a name="fileinfo.morespecial.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>def</span><span class='pyclass'> __cmp__</span>(self, dict):                       <a name="fileinfo.morespecial.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> isinstance(dict, UserDict):            
+            <span class='pykeyword'>return</span> cmp(self.data, dict.data)      
+        <span class='pykeyword'>else</span>:                                     
+            <span class='pykeyword'>return</span> cmp(self.data, dict)           
+    <span class='pykeyword'>def</span><span class='pyclass'> __len__</span>(self): <span class='pykeyword'>return</span> len(self.data)       <a name="fileinfo.morespecial.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+    <span class='pykeyword'>def</span><span class='pyclass'> __delitem__</span>(self, key): <span class='pykeyword'>del</span> self.data[key] <a name="fileinfo.morespecial.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.morespecial.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">__repr__</tt> 是一个专用的方法，在当调用 <tt class="literal">repr(<i class="replaceable">instance</i>)</tt> 时被调用。<tt class="function">repr</tt> 函数是一个内置函数，它返回一个对象的字符串表示。它可以用在任何对象上，不仅仅是类的实例。你已经对 <tt class="function">repr</tt> 相当熟悉了，尽管你不知道它。在交互式窗口中，当你只敲入一个变量名，接着按<span><b class="keycap">ENTER</b></span>，<span class="application">Python</span> 使用 <tt class="function">repr</tt> 来显示变量的值。自已用一些数据来创建一个字典 <tt class="varname">d</tt> ，然后用 <tt class="literal">print repr(d)</tt> 来看一看吧。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.morespecial.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">__cmp__</tt> 在比较类实例时被调用。通常，你可以通过使用 <tt class="literal">==</tt> 比较任意两个 <span class="application">Python</span> 对象，不只是类实例。有一些规则，定义了何时内置数据类型被认为是相等的，例如，字典在有着全部相同的关键字和值时是相等的。对于类实例，你可以定义 <tt class="function">__cmp__</tt> 方法，自已编写比较逻辑，然后你可以使用 <tt class="literal">==</tt> 来比较你的类，<span class="application">Python</span> 将会替你调用你的 <tt class="function">__cmp__</tt> 专用方法。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.morespecial.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">__len__</tt> 在调用 <tt class="literal">len(<i class="replaceable">instance</i>)</tt> 时被调用。<tt class="function">len</tt> 是一个内置函数，可以返回一个对象的长度。它可以用于任何被认为理应有长度的对象。字符串的 <tt class="function">len</tt> 是它的字符个数；字典的 <tt class="function">len</tt> 是它的关键字的个数；列表或序列的 <tt class="function">len</tt> 是元素的个数。对于类实例，定义 <tt class="function">__len__</tt> 方法，接着自已编写长度的计算，然后调用 <tt class="literal">len(<i class="replaceable">instance</i>)</tt>，<span class="application">Python</span> 将替你调用你的 <tt class="function">__len__</tt> 专用方法。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.morespecial.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">__delitem__</tt> 在调用 <tt class="literal">del <i class="replaceable">instance</i>[<i class="replaceable">key</i>]</tt> 时调用 ，你可能记得它作为<a href="../native_data_types/index.html#odbchelper.dict.del" title="例&nbsp;3.5.&nbsp;从 dictionary 中删除元素">从字典中删除单个元素</a>的方法。当你在类实例中使用 <tt class="function">del</tt> 时，<span class="application">Python</span> 替你调用 <tt class="function">__delitem__</tt> 专用方法。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="compare.strequals.java"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在 <span class="application">Java</span> 中，通过使用 <tt class="literal">str1 == str2</tt> 可以确定两个字符串变量是否指向同一块物理内存位置。这叫做<span class="emphasis"><em>对象同一性</em></span>，在 <span class="application">Python</span> 中写为 <tt class="literal">str1 is str2</tt>。在 <span class="application">Java</span> 中要比较两个字符串值，你要使用 <tt class="literal">str1.equals(str2)</tt>；在 <span class="application">Python</span> 中，你要使用 <tt class="literal">str1 == str2</tt>。某些 <span class="application">Java</span> 程序员，他们已经被教授得认为，正是因为在 <span class="application">Java</span> 中 <tt class="literal">==</tt> 是通过同一性而不是值进行比较，所以世界才会更美好。这些人要接受 <span class="application">Python</span> 的这个“严重缺失”可能要花些时间。
+               </td>
+            </tr>
+         </table>
+         <p>在这个地方，你可能会想，“<span class="quote">所有这些工作只是为了在类中做一些我可以对一个内置数据类型所做的操作</span>”。不错，如果你能够从像字典一样的内置数据类型进行继承的话，事情就容易多了 (那样整个 <tt class="classname">UserDict</tt> 类将完全不需要了)。尽管你可以这样做，专用方法仍然是有用的，因为它们可以用于任何的类，而不只是像 <tt class="classname">UserDict</tt> 这样的封装类。
+         </p>
+         <p>专用方法意味着<span class="emphasis"><em>任何类</em></span> 可以像字典一样保存键-值对，只要定义 <tt class="function">__setitem__</tt> 方法。任何类可以表现得像一个序列，只要定义 <tt class="function">__getitem__</tt> 方法。任何定义了 <tt class="function">__cmp__</tt> 方法的类可以用 <tt class="literal">==</tt> 进行比较。并且如果你的类表现为拥有类似长度的东西，不要定义 <tt class="function">GetLength</tt> 方法，而定义 <tt class="function">__len__</tt> 方法，并使用 <tt class="literal">len(<i class="replaceable">instance</i>)</tt>。
+         </p><a name="note.physical.v.logical"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">其它的面向对象语言仅让你定义一个对象的物理模型 (“<span class="quote">这个对象有 <tt class="function">GetLength</tt> 方法</span>”)，而 <span class="application">Python</span> 的专用类方法像 <tt class="function">__len__</tt> 允许你定义一个对象的逻辑模型 (“<span class="quote">这个对象有一个长度</span>”)。
+                  
+               </td>
+            </tr>
+         </table>
+         <p><span class="application">Python</span> 存在许多其它的专用方法。有一整套的专用方法，可以让类表现得象数值一样，允许你在类实例上进行加、减，以及执行其它算数操作。(关于这一点典型的例子就是表示复数的类，数值带有实数和虚数部分。) <tt class="function">__call__</tt> 方法让一个类表现得像一个函数，允许你直接调用一个类实例。并且存在其它的专用函数，允许类拥有只读或只写数据属性，在后面的章节中我们会更多地谈到这些。
+         </p>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li><a href="http://www.python.org/doc/current/ref/"><i class="citetitle"><span class="application">Python</span> Reference Manual</i></a> 提供了<a href="http://www.python.org/doc/current/ref/specialnames.html">所有专用类方法</a>的文档。
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="special_class_methods.html">&lt;&lt;&nbsp;专用类方法</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#fileinfo.divein" title="5.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="importing_modules.html" title="5.2.&nbsp;使用 from module import 导入模块">2</a> <span class="divider">|</span> <a href="defining_classes.html" title="5.3.&nbsp;类的定义">3</a> <span class="divider">|</span> <a href="instantiating_classes.html" title="5.4.&nbsp;类的实例化">4</a> <span class="divider">|</span> <a href="userdict.html" title="5.5.&nbsp;探索 UserDict：一个封装类">5</a> <span class="divider">|</span> <a href="special_class_methods.html" title="5.6.&nbsp;专用类方法">6</a> <span class="divider">|</span> <span class="thispage">7</span> <span class="divider">|</span> <a href="class_attributes.html" title="5.8.&nbsp;类属性介绍">8</a> <span class="divider">|</span> <a href="private_functions.html" title="5.9.&nbsp;私有函数">9</a> <span class="divider">|</span> <a href="summary.html" title="5.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="class_attributes.html">类属性介绍&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

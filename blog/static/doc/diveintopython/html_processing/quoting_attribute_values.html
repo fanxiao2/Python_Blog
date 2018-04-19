@@ -1,0 +1,130 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>8.7.&nbsp;给属性值加引号</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;8&nbsp;章&nbsp;HTML 处理">
+      <link rel="previous" href="dictionary_based_string_formatting.html" title="8.6.&nbsp;基于 dictionary 的字符串格式化">
+      <link rel="next" href="dialect.html" title="8.8.&nbsp;dialect.py 介绍">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTML 处理</a>&nbsp;&gt;&nbsp;<span class="thispage">给属性值加引号</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="dictionary_based_string_formatting.html" title="上一页: “基于 dictionary 的字符串格式化”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="dialect.html" title="下一页: “dialect.py 介绍”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="dialect.quoting"></a>8.7.&nbsp;给属性值加引号
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>在 <a href="http://groups.google.com/groups?group=comp.lang.python">comp.lang.python</a> 上的一个常见问题是 “<span class="quote">我有一些 <span class="acronym">HTML</span> 文档，属性值没有用引号括起来，并且我想将它们全部括起来，我怎么才能实现它呢？</span>”
+               <sup>[<a name="d0e21934" href="#ftn.d0e21934">7</a>]</sup>  (一般这种事情的出现是由于一个项目经理加入到一个大的项目中来，而他又抱着 <span class="acronym">HTML</span> 是一种标记语言的教条，要求所有的页面必须能够通过 <span class="acronym">HTML</span> 校验器的验证。而属性值没有被引号括起来是一种常见的对 <span class="acronym">HTML</span> 规范的违反。) 不管什么原因，未括起来的属性值通过将 <span class="acronym">HTML</span> 送进 <tt class="classname">BaseHTMLProcessor</tt> 可以容易地修复。
+               
+            </p>
+         </div>
+         <p><tt class="classname">BaseHTMLProcessor</tt> 消费 (consume) <span class="acronym">HTML</span>  (因为它是从 <tt class="classname">SGMLParser</tt> 派生来的) 并生成等价的 <span class="acronym">HTML</span>。但是这个 <span class="acronym">HTML</span> 输出与输入的并不一样。标记和属性名最终会转化为小写字母，即使它们可能以大写字母开始或是大小写的混合形式。属性值将被双引号引起来，即使它们原来可能是用单引号括起来的或根本没有括起来。这就是最后我们可以受益的边际效应。
+         </p>
+         <div class="example"><a name="dialect.quoting.example"></a><h3 class="title">例&nbsp;8.16.&nbsp;给属性值加引号</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">htmlSource = <span class='pystring'>""</span>"</span>        <a name="dialect.basehtml.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">...     </tt>&lt;html&gt;
+<tt class="prompt">...     </tt>&lt;head&gt;
+<tt class="prompt">...     </tt>&lt;title&gt;Test page&lt;/title&gt;
+<tt class="prompt">...     </tt>&lt;/head&gt;
+<tt class="prompt">...     </tt>&lt;body&gt;
+<tt class="prompt">...     </tt>&lt;ul&gt;
+<tt class="prompt">...     </tt>&lt;li&gt;&lt;a href=index.html&gt;Home&lt;/a&gt;&lt;/li&gt;
+<tt class="prompt">...     </tt>&lt;li&gt;&lt;a href=toc.html&gt;Table of contents&lt;/a&gt;&lt;/li&gt;
+<tt class="prompt">...     </tt>&lt;li&gt;&lt;a href=history.html&gt;Revision history&lt;/a&gt;&lt;/li&gt;
+<tt class="prompt">...     </tt>&lt;/body&gt;
+<tt class="prompt">...     </tt>&lt;/html&gt;
+<tt class="prompt">...     </tt><span class="userinput"><span class='pystring'>""</span>"</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> BaseHTMLProcessor <span class='pykeyword'>import</span> BaseHTMLProcessor</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">parser = BaseHTMLProcessor()</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">parser.feed(htmlSource)</span> <a name="dialect.basehtml.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> parser.output()</span>   <a name="dialect.basehtml.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Test page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="index.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="toc.html"&gt;Table of contents&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="history.html"&gt;Revision history&lt;/a&gt;&lt;/li&gt;
+&lt;/body&gt;
+&lt;/html&gt;</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.basehtml.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">请注意，在 <tt class="sgmltag-element">&lt;a&gt;</tt> 标记中的 <tt class="literal">href</tt> 属性值没有被适当地括起来 (还要注意，除了文档字符串之外，我们还将<a href="../getting_to_know_python/documenting_functions.html#odbchelper.triplequotes" title="例&nbsp;2.2.&nbsp;定义 buildConnectionString 函数的 doc string">三重引号</a>用到了 <tt class="literal">doc string</tt> 之外的其它地方，并且是不会少于直接在 <span class="acronym">IDE</span> 中的使用。它们非常有用。) 
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.basehtml.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">装填分析器。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.basehtml.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用定义在 <tt class="classname">BaseHTMLProcessor</tt> 中的 <tt class="function">output</tt> 函数，我们得到单个字符串的输出，并且属性值被完全括起来了。让我们想一下这里实际上发生了多少事：<tt class="classname">SGMLParser</tt> 分析整个 <span class="acronym">HTML</span> 文档，将其分解为一片片的标记、引用、数据等等。<tt class="classname">BaseHTMLProcessor</tt> 使用这些元素来重新构造 <span class="acronym">HTML</span> 的片段 (如果您想查看的话它们仍然保存在 <tt class="varname">parser.pieces</tt> 中) 。最后，我们调用 <tt class="function">parser.output</tt>，它将所有的 <span class="acronym">HTML</span> 片段连接成一个字符串。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="footnotes">
+            <h3 class="footnotetitle">Footnotes</h3>
+            <div class="footnote">
+               <p><sup>[<a name="ftn.d0e21934" href="#d0e21934">7</a>] </sup>好吧，其实并不是那么普通的一个问题。在那不都是问 “<span class="quote">我应该用何种编辑器来写 <span class="application">Python</span> 代码？</span>” (回答：<span class="application">Emacs</span>) 或 “<span class="quote"><span class="application">Python</span> 比 <span class="application">Perl</span> 是好还是坏？</span>” (回答：“<span class="quote"><span class="application">Perl</span> 比 <span class="application">Python</span> 差，因为人们想让它差的。</span>” ――Larry Wall，1998 年 10 月 14 日) 但是关于 <span class="acronym">HTML</span>  处理的问题，或者这种提法或者另一种提法，大约一个月就要出现一次，在这些问题之中，这个问题是最常见的一个。
+               </p>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="dictionary_based_string_formatting.html">&lt;&lt;&nbsp;基于 dictionary 的字符串格式化</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#dialect.divein" title="8.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="introducing_sgmllib.html" title="8.2.&nbsp;sgmllib.py 介绍">2</a> <span class="divider">|</span> <a href="extracting_data.html" title="8.3.&nbsp;从 HTML 文档中提取数据">3</a> <span class="divider">|</span> <a href="basehtmlprocessor.html" title="8.4.&nbsp;BaseHTMLProcessor.py 介绍">4</a> <span class="divider">|</span> <a href="locals_and_globals.html" title="8.5.&nbsp;locals 和 globals">5</a> <span class="divider">|</span> <a href="dictionary_based_string_formatting.html" title="8.6.&nbsp;基于 dictionary 的字符串格式化">6</a> <span class="divider">|</span> <span class="thispage">7</span> <span class="divider">|</span> <a href="dialect.html" title="8.8.&nbsp;dialect.py 介绍">8</a> <span class="divider">|</span> <a href="all_together.html" title="8.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="8.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="dialect.html">dialect.py 介绍&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

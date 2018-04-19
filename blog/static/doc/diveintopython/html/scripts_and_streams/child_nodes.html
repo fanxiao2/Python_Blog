@@ -1,0 +1,105 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>10.4.&nbsp;查找节点的直接子节点</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;10&nbsp;章&nbsp;脚本和流">
+      <link rel="previous" href="caching.html" title="10.3.&nbsp;查询缓冲节点">
+      <link rel="next" href="handlers_by_node_type.html" title="10.5.&nbsp;根据节点类型创建不同的处理器">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">脚本和流</a>&nbsp;&gt;&nbsp;<span class="thispage">查找节点的直接子节点</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="caching.html" title="上一页: “查询缓冲节点”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="handlers_by_node_type.html" title="下一页: “根据节点类型创建不同的处理器”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="kgp.child"></a>10.4.&nbsp;查找节点的直接子节点
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>解析 <span class="acronym">XML</span> 文档时，另一个有用的己技巧是查找某个特定元素的所有直接子元素。例如，在语法文件中，一个 <tt class="sgmltag-element">ref</tt> 元素可以有数个 <tt class="sgmltag-element">p</tt> 元素，其中每一个都可以包含很多东西，包括其他的 <tt class="sgmltag-element">p</tt> 元素。你只要查找作为 <tt class="sgmltag-element">ref</tt> 孩子的 <tt class="sgmltag-element">p</tt> 元素，不用查找其他 <tt class="sgmltag-element">p</tt> 元素的孩子 <tt class="sgmltag-element">p</tt> 元素。
+            </p>
+         </div>
+         <p>你可能认为你只要简单地使用 <tt class="function">getElementsByTagName</tt> 来实现这点就可以了，但是你不可以这么做。<tt class="function">getElementsByTagName</tt> 递归搜索并返回所有找到的元素的单个列表。由于 <tt class="sgmltag-element">p</tt> 元素可以包含其他的 <tt class="sgmltag-element">p</tt> 元素，你不能使用 <tt class="function">getElementsByTagName</tt>，因为它会返回你不要的嵌套 <tt class="sgmltag-element">p</tt> 元素。为了只找到直接子元素，你要自己进行处理。
+         </p>
+         <div class="example"><a name="d0e26690"></a><h3 class="title">例&nbsp;10.16.&nbsp;查找直接子元素</h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> randomChildElement</span>(self, node):
+        choices = [e <span class='pykeyword'>for</span> e <span class='pykeyword'>in</span> node.childNodes
+                   <span class='pykeyword'>if</span> e.nodeType == e.ELEMENT_NODE] <a name="kgp.child.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"> <a name="kgp.child.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"> <a name="kgp.child.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        chosen = random.choice(choices)             <a name="kgp.child.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+        <span class='pykeyword'>return</span> chosen                              </pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.child.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你在<a href="../xml_processing/parsing_xml.html#kgp.parse.gettingchildnodes.example" title="例&nbsp;9.9.&nbsp;获取子节点">例&nbsp;9.9 “获取子节点”</a>中看到的，<tt class="function">childNodes</tt> 属性返回元素所有子节点的一个列表。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.child.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">然而，正如你在<a href="../xml_processing/parsing_xml.html#kgp.parse.childnodescanbetext.example" title="例&nbsp;9.11.&nbsp;子节点可以是文本">例&nbsp;9.11 “子节点可以是文本”</a>中看到的，<tt class="function">childNodes</tt> 返回的列表包含了所有不同类型的节点，包括文本节点。这并不是你在这里要查找的。你只要元素形式的孩子。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.child.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">每个节点都有一个 <tt class="varname">nodeType</tt> 属性，它可以是<tt class="literal">ELEMENT_NODE</tt>, <tt class="literal">TEXT_NODE</tt>, <tt class="literal">COMMENT_NODE</tt>，或者其它值。可能值的完整列表在 <tt class="classname">xml.dom</tt> 包的 <tt class="filename">__init__.py</tt> 文件中。(关于包的介绍，参见<a href="../xml_processing/packages.html" title="9.2.&nbsp;包">第&nbsp;9.2&nbsp;节 “包”</a>。) 但你只是对元素节点有兴趣，所以你可以过滤出一个列表，其中只包含 <tt class="varname">nodeType</tt> 是<tt class="literal">ELEMENT_NODE</tt>的节点。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.child.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">只要拥有了一个真实元素的列表，选择任意一个都很容易。<span class="application">Python</span> 有一个叫 <tt class="filename">random</tt> 的模块，它包含了好几个有用的函数。<tt class="function">random.choice</tt> 函数接收一个任意数量条目的列表并随机返回其中的一个条目。比如，如果 <tt class="sgmltag-element">ref</tt> 元素包含了多个 <tt class="sgmltag-element">p</tt> 元素，那么 <tt class="varname">choices</tt> 将会是 <tt class="sgmltag-element">p</tt> 元素的一个列表，而 <tt class="varname">chosen</tt> 将被赋予其中的某一个值，而这个值是随机选择的。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="caching.html">&lt;&lt;&nbsp;查询缓冲节点</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#kgp.openanything" title="10.1.&nbsp;抽象输入源">1</a> <span class="divider">|</span> <a href="stdin_stdout_stderr.html" title="10.2.&nbsp;标准输入、输出和错误">2</a> <span class="divider">|</span> <a href="caching.html" title="10.3.&nbsp;查询缓冲节点">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="handlers_by_node_type.html" title="10.5.&nbsp;根据节点类型创建不同的处理器">5</a> <span class="divider">|</span> <a href="command_line_arguments.html" title="10.6.&nbsp;处理命令行参数">6</a> <span class="divider">|</span> <a href="all_together.html" title="10.7.&nbsp;全部放在一起">7</a> <span class="divider">|</span> <a href="summary.html" title="10.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="handlers_by_node_type.html">根据节点类型创建不同的处理器&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

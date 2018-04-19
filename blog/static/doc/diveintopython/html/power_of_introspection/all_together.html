@@ -1,0 +1,209 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>4.8.&nbsp;全部放在一起</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;4&nbsp;章&nbsp;自省的威力">
+      <link rel="previous" href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">
+      <link rel="next" href="summary.html" title="4.9.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">自省的威力</a>&nbsp;&gt;&nbsp;<span class="thispage">全部放在一起</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="lambda_functions.html" title="上一页: “使用 lambda 函数”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="apihelper.alltogether"></a>4.8.&nbsp;全部放在一起
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>最后一行代码是唯一还没有解释过的，它完成全部的工作。但是现在工作已经简单了，因为所需要的每件事都已经按照需求建立好了。所有的多米诺骨牌已经就位，到了将它们推倒的时候了。</p>
+         </div>
+         <div class="informalexample">
+            <p>下面是 <tt class="filename">apihelper.py</tt> 的关键
+            </p><pre class="programlisting">
+    <span class='pykeyword'>print</span> <span class='pystring'>"\n"</span>.join([<span class='pystring'>"%s %s"</span> %
+                      (method.ljust(spacing),
+                       processFunc(str(getattr(object, method).__doc__)))
+                     <span class='pykeyword'>for</span> method <span class='pykeyword'>in</span> methodList])</pre></div>
+         <p>注意这是一条命令，被分隔成了多行，但是并没有使用续行符 (<tt class="literal">\</tt>)。还记得我说过<a href="../native_data_types/declaring_variables.html#tip.implicitmultiline">一些表达式可以分割成多行</a>而不需要使用反斜线吗？列表解析就是这些表达式之一，因为整个表达式包括在方括号里。
+         </p>
+         <p>现在，让我们从后向前分析。</p><pre class="programlisting"><span class='pykeyword'>
+for</span> method <span class='pykeyword'>in</span> methodList</pre><p>告诉我们这是一个<a href="../native_data_types/mapping_lists.html" title="3.6.&nbsp;映射 list">列表解析</a>。如你所知 <tt class="varname">methodList</tt> 是 <tt class="varname">object</tt> 中<a href="filtering_lists.html#apihelper.filter.care">所有你关心的方法</a>的一个列表。所以你正在使用 <tt class="varname">method</tt> 遍历列表。
+         </p>
+         <div class="example"><a name="d0e10827"></a><h3 class="title">例&nbsp;4.22.&nbsp;动态得到 <tt class="literal">doc string</tt> 
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> odbchelper</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">object = odbchelper</span>                   <a name="apihelper.alltogether.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">method = <span class='pystring'>'buildConnectionString'</span></span>      <a name="apihelper.alltogether.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">getattr(object, method)</span>               <a name="apihelper.alltogether.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">&lt;function buildConnectionString at 010D6D74&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> getattr(object, method).__doc__</span> <a name="apihelper.alltogether.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">Build a connection string from a dictionary of parameters.
+
+    Returns string.</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在 <tt class="function">info</tt> 函数中，<tt class="varname">object</tt> 是要得到帮助的对象，作为一个参数传入。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在你遍历 <tt class="varname">methodList</tt> 时，<tt class="varname">method</tt> 是当前方法的名称。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">通过 <a href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用"><tt class="function">getattr</tt></a> 函数，你可以得到 <i class="replaceable"><tt>object</tt></i> 模块中 <i class="replaceable"><tt>method</tt></i> 函数的引用。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在，很容易就可以打印出方法的 <tt class="literal">doc string</tt> 。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>接下来令人困惑的是 <tt class="literal">doc string</tt> 周围 <tt class="function">str</tt> 的使用。你可能记得，<tt class="function">str</tt> 是一个内置函数，它可以<a href="built_in_functions.html" title="4.3.&nbsp;使用 type、str、dir 和其它内置函数">强制将数据转化为字符串</a>。但是一个 <tt class="literal">doc string</tt> 应该总是一个字符串，为什么还要费事地使用 <tt class="function">str</tt> 函数呢？答案就是：不是每个函数都有 <tt class="literal">doc string</tt> ，如果没有，这个 <tt class="literal">__doc__</tt> 属性为 <tt class="literal">None</tt>。
+         </p>
+         <div class="example"><a name="d0e10939"></a><h3 class="title">例&nbsp;4.23.&nbsp;为什么对一个 <tt class="literal">doc string</tt> 使用 <tt class="function">str</tt> ？
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">&gt;&gt;&gt; <span class='pykeyword'>def</span><span class='pyclass'> foo</span>(): <span class='pykeyword'>print</span> 2</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">&gt;&gt;&gt; foo()</span>
+<span class="computeroutput">2</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">&gt;&gt;&gt; foo.__doc__</span>     <a name="apihelper.alltogether.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">foo.__doc__ == None</span> <a name="apihelper.alltogether.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">True</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">str(foo.__doc__)</span>    <a name="apihelper.alltogether.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'None'</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以很容易的定义一个没有 <tt class="literal">doc string</tt> 的函数，这种情况下它的 <tt class="literal">__doc__</tt> 属性为 <tt class="literal">None</tt>。令人迷惑的是，如果你直接演算 <tt class="literal">__doc__</tt> 属性的值，<span class="application">Python</span> <span class="acronym">IDE</span> 什么都不会打印。这是有意义的 (前提是你考虑了这个结果的来由)，但是却没有什么用。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以直接通过 <tt class="literal">__doc__</tt> 属性和 <tt class="literal">None</tt> 的比较验证 <tt class="literal">__doc__</tt> 属性的值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">str</tt> 函数可以接收值为 null  的参数，然后返回它的字符串表示，<tt class="literal">'None'</tt>。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="compare.isnull.sql"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">在 <span class="acronym">SQL</span> 中，你必须使用 <tt class="literal">IS NULL</tt> 代替 <tt class="literal">= NULL</tt> 进行 null 值比较。在 <span class="application">Python</span>，你可以使用 <tt class="literal">== None</tt> 或者 <tt class="literal">is None</tt> 进行比较，但是 <tt class="literal">is None</tt> 更快。
+               </td>
+            </tr>
+         </table>
+         <p>现在你确保有了一个字符串，可以把这个字符串传给 <tt class="varname">processFunc</tt>，这个函数<a href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">已经定义</a>是一个既可以压缩空白也可以不压缩空白的函数。现在你看出来为什么使用 <tt class="function">str</tt> 将 <tt class="literal">None</tt> 转化为一个字符串很重要了。<tt class="varname">processFunc</tt> 假设接收到一个字符串参数然后调用 <tt class="function">split</tt> 方法，如果你传入 <tt class="literal">None</tt> ，将导致程序崩溃，因为 <tt class="literal">None</tt> 没有 <tt class="function">split</tt> 方法。
+         </p>
+         <p>再往回走一步，你再一次使用了字符串格式化来连接 <tt class="varname">processFunc</tt> 的返回值 和 <tt class="varname">method</tt> 的 <tt class="function">ljust</tt> 方法的返回值。<tt class="function">ljust</tt> 是一个你之前没有见过的新字符串方法。
+         </p>
+         <div class="example"><a name="d0e11109"></a><h3 class="title">例&nbsp;4.24.&nbsp;<tt class="function">ljust</tt> 方法介绍
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s = <span class='pystring'>'buildConnectionString'</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s.ljust(30)</span> <a name="apihelper.alltogether.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'buildConnectionString         '</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s.ljust(20)</span> <a name="apihelper.alltogether.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'buildConnectionString'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">ljust</tt> 用空格填充字符串以符合指定的长度。<tt class="function">info</tt> 函数使用它生成了两列输出并将所有在第二列的 <tt class="literal">doc string</tt> 纵向对齐。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果指定的长度小于字符串的长度，<tt class="function">ljust</tt> 将简单地返回未变化的字符串。它决不会截断字符串。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>几乎已经完成了。有了 <tt class="function">ljust</tt> 方法填充过的方法名称和来自调用 <tt class="varname">processFunc</tt> 方法得到的 <tt class="literal">doc string</tt> (可能压缩过)，你就可以将两者连接起来并得到单个字符串。因为对 <tt class="varname">methodList</tt> 进行了映射，最终你将获得一个字符串列表。利用 <tt class="literal">"\n"</tt> 的 <tt class="function">join</tt> 函数，将这个列表连接为单个字符串，列表中每个元素独占一行，接着打印出结果。
+         </p>
+         <div class="example"><a name="d0e11177"></a><h3 class="title">例&nbsp;4.25.&nbsp;打印列表</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = [<span class='pystring'>'a'</span>, <span class='pystring'>'b'</span>, <span class='pystring'>'c'</span>]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>"\n"</span>.join(li)</span> <a name="apihelper.alltogether.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">a
+b
+c</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#apihelper.alltogether.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在你处理列表时，这确实是一个有用的调试技巧。在 <span class="application">Python</span> 中，你会十分频繁地操作列表。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>上述就是最后一个令人困惑的地方了。但是现在你应该已经理解这段代码了。</p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>print</span> <span class='pystring'>"\n"</span>.join([<span class='pystring'>"%s %s"</span> %
+                      (method.ljust(spacing),
+                       processFunc(str(getattr(object, method).__doc__)))
+                     <span class='pykeyword'>for</span> method <span class='pykeyword'>in</span> methodList])</pre></div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="lambda_functions.html">&lt;&lt;&nbsp;使用 lambda 函数</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#apihelper.divein" title="4.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">2</a> <span class="divider">|</span> <a href="built_in_functions.html" title="4.3.&nbsp;使用 type、str、dir 和其它内置函数">3</a> <span class="divider">|</span> <a href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用">4</a> <span class="divider">|</span> <a href="filtering_lists.html" title="4.5.&nbsp;过滤列表">5</a> <span class="divider">|</span> <a href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质">6</a> <span class="divider">|</span> <a href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">7</a> <span class="divider">|</span> <span class="thispage">8</span> <span class="divider">|</span> <a href="summary.html" title="4.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,217 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>8.8.&nbsp;dialect.py 介绍</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;8&nbsp;章&nbsp;HTML 处理">
+      <link rel="previous" href="quoting_attribute_values.html" title="8.7.&nbsp;给属性值加引号">
+      <link rel="next" href="all_together.html" title="8.9.&nbsp;全部放在一起">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTML 处理</a>&nbsp;&gt;&nbsp;<span class="thispage">dialect.py 介绍</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="quoting_attribute_values.html" title="上一页: “给属性值加引号”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="all_together.html" title="下一页: “全部放在一起”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="dialect.dialectizer"></a>8.8.&nbsp;<tt class="filename">dialect.py</tt> 介绍
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><tt class="classname">Dialectizer</tt> 是 <tt class="classname">BaseHTMLProcessor</tt> 的简单 (和拙劣) 的派生类。它通过一系列的替换对文本块进行了处理，但是它确保在 <tt class="literal"><tt class="sgmltag-element">&lt;pre&gt;</tt>...<tt class="sgmltag-element">&lt;/pre&gt;</tt></tt> 块之间的任何东西不被修改地通过。
+            </p>
+         </div>
+         <p>为了处理 <tt class="sgmltag-element">&lt;pre&gt;</tt> 块，我们在 <tt class="classname">Dialectizer</tt> 中定义了两个方法：<tt class="function">start_pre</tt> 和 <tt class="function">end_pre</tt>。
+         </p>
+         <div class="example"><a name="dialect.specifictags.example"></a><h3 class="title">例&nbsp;8.17.&nbsp;处理特别标记</h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> start_pre</span>(self, attrs):             <a name="dialect.dialectizer.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        self.verbatim += 1                  <a name="dialect.dialectizer.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        self.unknown_starttag(<span class='pystring'>"pre"</span>, attrs) <a name="dialect.dialectizer.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+
+    <span class='pykeyword'>def</span><span class='pyclass'> end_pre</span>(self):                      <a name="dialect.dialectizer.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+        self.unknown_endtag(<span class='pystring'>"pre"</span>)          <a name="dialect.dialectizer.1.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+        self.verbatim -= 1                  <a name="dialect.dialectizer.1.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">每当 <tt class="classname">SGMLParser</tt> 在 <span class="acronym">HTML</span> 源代码中发现一个 <tt class="sgmltag-element">&lt;pre&gt;</tt> 时，都会调用 <tt class="function">start_pre</tt>。(马上我们就会确切地看到它是如何发生的。) 这个方法使用单个参数：<tt class="varname">attrs</tt>，这个参数会包含标记的属性 (如果存在的话) 。<tt class="varname">attrs</tt> 是一个键/值 tuple 的 list，就像 <a href="dictionary_based_string_formatting.html#dialect.unknownstarttag" title="例&nbsp;8.14.&nbsp;BaseHTMLProcessor.py 中的基于 dictionary 的字符串格式化"><tt class="function">unknown_starttag</tt></a> 中所使用的。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在 <tt class="function">reset</tt> 方法中，我们初始化了一个数据属性，它作为 <tt class="sgmltag-element">&lt;pre&gt;</tt> 标记的一个计数器。每当我们找到一个 <tt class="sgmltag-element">&lt;pre&gt;</tt> 标记，我们增加计数器的值；每当我们找到一个 <tt class="sgmltag-element">&lt;/pre&gt;</tt> 标记，我们将减少计数器的值。(我们本可以把它实现为一个标志，即或把它设为 <tt class="constant">1</tt>，或重置为 <tt class="constant">0</tt>，但这样做只是为了方便，并且这样做可以处理古怪 (但有可能) 的 <tt class="sgmltag-element">&lt;pre&gt;</tt> 标记嵌套的情况。) 马上我们将会看到这个计数器是多么的好用。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">不错，这就是我们对 <tt class="sgmltag-element">&lt;pre&gt;</tt> 标记所做的唯一的特殊处理。现在我们将属性列表传给 <tt class="function">unknown_starttag</tt>，由它来进行缺省的处理。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">每当 <tt class="classname">SGMLParser</tt> 找到一个 <tt class="sgmltag-element">&lt;/pre&gt;</tt> 标记时，会调用 <tt class="function">end_pre</tt>。因为结束标记不能包含属性，因此这个方法没有参数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.1.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">首先我们要进行缺省处理，就像其它结束标记做的一样。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.1.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">其次我们将计数器减少，标记这个 <tt class="sgmltag-element">&lt;pre&gt;</tt> 块已经被关闭了。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>到了这个地方，有必要对 <tt class="classname">SGMLParser</tt> 更深入一层。我已经多次声明 (到目前为止您应已经把它做为信条了) ，就是 <tt class="classname">SGMLParser</tt> 查找每一个标记并且如果存在特定的方法就调用它们。例如：我们刚刚看到处理 <tt class="sgmltag-element">&lt;pre&gt;</tt> 和 <tt class="sgmltag-element">&lt;/pre&gt;</tt> 的 <tt class="function">start_pre</tt> 和 <tt class="function">end_pre</tt> 的定义。但这是如何发生的呢？嗯，也没什么神奇的，只不过是出色的 <span class="application">Python</span> 编码。
+         </p>
+         <div class="example"><a name="dialect.dialectizer.example"></a><h3 class="title">例&nbsp;8.18.&nbsp;<tt class="classname">SGMLParser</tt></h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> finish_starttag</span>(self, tag, attrs):               <a name="dialect.dialectizer.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        <span class='pykeyword'>try</span>:                                            
+            method = getattr(self, <span class='pystring'>'start_'</span> + tag)       <a name="dialect.dialectizer.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        <span class='pykeyword'>except</span> AttributeError:                           <a name="dialect.dialectizer.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+            <span class='pykeyword'>try</span>:                                        
+                method = getattr(self, <span class='pystring'>'do_'</span> + tag)      <a name="dialect.dialectizer.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+            <span class='pykeyword'>except</span> AttributeError:                      
+                self.unknown_starttag(tag, attrs)        <a name="dialect.dialectizer.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+                <span class='pykeyword'>return</span> -1                               
+            <span class='pykeyword'>else</span>:                                       
+                self.handle_starttag(tag, method, attrs) <a name="dialect.dialectizer.2.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12">
+                <span class='pykeyword'>return</span> 0                                
+        <span class='pykeyword'>else</span>:                                           
+            self.stack.append(tag)                      
+            self.handle_starttag(tag, method, attrs)    
+            <span class='pykeyword'>return</span> 1                                     <a name="dialect.dialectizer.2.7"></a><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12">
+
+    <span class='pykeyword'>def</span><span class='pyclass'> handle_starttag</span>(self, tag, method, attrs):      
+        method(attrs)                                    <a name="dialect.dialectizer.2.8"></a><img src="../images/callouts/8.png" alt="8" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">此处，<tt class="classname">SGMLParser</tt> 已经找到了一个开始标记，并且分析出属性列表。唯一要做的事情就是检查对于这个标记是否存在一个特别的处理方法，否则我们就应该求助于缺省方法 (<tt class="function">unknown_starttag</tt>) 。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="classname">SGMLParser</tt> 的 “<span class="quote">神奇</span>” 之处除了我们的老朋友 <a href="../power_of_introspection/getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用"><tt class="function">getattr</tt></a> 之外就没有什么了。您以前可能没注意到，<tt class="function">getattr</tt> 将查找定义在一个对象的继承者中或对象自身的方法。这里对象是 <tt class="literal">self</tt>，即当前实例。所以，如果 <tt class="varname">tag</tt> 是 <tt class="literal">'pre'</tt>，这里对 <tt class="function">getattr</tt> 的调用将会在当前实例 (它是 <tt class="classname">Dialectizer</tt> 类的一个实例) 中查找一个名为 <tt class="function">start_pre</tt> 的方法。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果 <tt class="function">getattr</tt> 所查找的方法在对象或它的任何继承者中不存在的话，它会引发一个 <tt class="errorcode">AttributeError</tt> 的异常。但没有关系，因为我们把对 <tt class="function">getattr</tt> 的调用包装到一个 <a href="../file_handling/index.html#fileinfo.exception" title="6.1.&nbsp;异常处理"><tt class="literal">try...except</tt></a> 块中了，并且显式地捕捉 <tt class="errorcode">AttributeError</tt> 异常。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">因为我们没有找到一个 <tt class="function">start_xxx</tt> 方法，在放弃之前，我们将还要查找一个 <tt class="function">do_xxx</tt> 方法。这个可替换的命名模式一般用于单独的标记，如 <tt class="sgmltag-element">&lt;br&gt;</tt>，这些标记没有相应的结束标记。但是您可以使用任何一种模式，正如您看到的，<tt class="classname">SGMLParser</tt> 对每个标记尝试两次。(您不应该对相同的标记同时定义 <tt class="function">start_xxx</tt> 和 <tt class="function">do_xxx</tt> 处理方法，因为这样的话只有 <tt class="function">start_xxx</tt> 方法会被调用。) 
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">另一个 <tt class="errorcode">AttributeError</tt> 异常，它是说用 <tt class="function">do_xxx</tt> 来调用 <tt class="function">getattr</tt> 失败了。因为对同一个标记我们既没有找到 <tt class="function">start_xxx</tt> 也没有找到 <tt class="function">do_xxx</tt> 处理方法，这样我们捕捉到了异常并且求助于缺省方法：<tt class="function">unknown_starttag</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.2.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">记得吗？<tt class="literal">try...except</tt> 块可以有一个 <tt class="literal">else</tt> 子句，当在 <tt class="literal">try...except</tt> 块中<a href="../file_handling/index.html#crossplatform.example" title="例&nbsp;6.2.&nbsp;支持特定平台功能">没有异常被引发</a>时，它将被调用。逻辑上，意味着我们<span class="emphasis"><em>确实</em></span> 找到了这个标记的 <tt class="function">do_xxx</tt> 方法，所以我们将要调用它。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.2.7"><img src="../images/callouts/7.png" alt="7" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">顺便说，不要为这些不同的返回值而担心；理论上他们有意义，但实际上它们没有任何用处。也不要担心   <tt class="literal">self.stack.append(tag)</tt> ; <tt class="classname">SGMLParser</tt> 内部会知晓您的开始标记是否有合适的结束标记与之匹配，但是它不会对这些信息做任何操作。理论上，您能使用这个模块校验您的标记是否完全匹配，但是这或许没有多大价值，并且这样的内容已经超出了本章所要讨论的范畴。现在有您更需要担心的问题。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.2.8"><img src="../images/callouts/8.png" alt="8" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">start_xxx</tt> 和 <tt class="function">do_xxx</tt> 方法并不被直接调用；标记名、方法和属性被传给 <tt class="function">handle_starttag</tt> 这个方法，以便继承者可以覆盖它，并改变<span class="emphasis"><em>全部</em></span> 开始标记分发的方式。我们不需要控制这个层面，所以我们只让这个方法做它自已的事，就是用属性 list 来调用方法 (<tt class="function">start_xxx</tt> 或 <tt class="function">do_xxx</tt>) 。记住 <tt class="varname">method</tt> 是一个从 <tt class="function">getattr</tt> 返回的函数，而函数是对象。(我知道您已经听腻了，我发誓，一旦我们停止寻找新的使用方法来为我们服务时，我就决不再提它了。) 这时，函数对象作为一个参数传入这个分发方法，这个方法反过来再调用这个函数。在这里，我们不需要知道函数是什么，叫什么名字，或是在哪时定义的；我们只需要知道用一个参数
+                        <tt class="varname">attrs</tt> 调用它。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>现在回到我们已经计划好的程序：<tt class="classname">Dialectizer</tt>。当我们跑题时，我们定义了特别的处理方法来处理 <tt class="sgmltag-element">&lt;pre&gt;</tt> 和 <tt class="sgmltag-element">&lt;/pre&gt;</tt> 标记。还有一件事没有做，那就是用我们预定义的替换处理来处理文本块。为了实现它，我们需要覆盖 <tt class="function">handle_data</tt> 方法。
+         </p>
+         <div class="example"><a name="d0e22481"></a><h3 class="title">例&nbsp;8.19.&nbsp;覆盖 <tt class="function">handle_data</tt> 方法
+            </h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> handle_data</span>(self, text):                                         <a name="dialect.dialectizer.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        self.pieces.append(self.verbatim <span class='pykeyword'>and</span> text <span class='pykeyword'>or</span> self.process(text)) <a name="dialect.dialectizer.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">handle_data</tt> 在调用时只使用一个参数：要处理的文本。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.dialectizer.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在祖先类 <a href="basehtmlprocessor.html#dialect.basehtml.intro" title="例&nbsp;8.8.&nbsp;BaseHTMLProcessor 介绍"><tt class="classname">BaseHTMLProcessor</tt></a> 中，<tt class="function">handle_data</tt> 方法只是将文本追加到输出缓冲区 <tt class="varname">self.pieces</tt> 之后。这里的逻辑稍微有点复杂。如果我们处于 <tt class="literal"><tt class="sgmltag-element">&lt;pre&gt;</tt>...<tt class="sgmltag-element">&lt;/pre&gt;</tt></tt> 块的中间，<tt class="varname">self.verbatim</tt> 将是大于 <tt class="constant">0</tt> 的某个值，接着我们想要将文本不作改动地传入输出缓冲区。否则，我们将调用另一个单独的方法来进行替换处理，然后将处理结果放入输出缓冲区中。在 <span class="application">Python</span> 中，这是一个一行代码，它使用了<a href="../power_of_introspection/and_or.html#apihelper.andortrick.intro" title="例&nbsp;4.17.&nbsp;and-or 技巧介绍"><tt class="literal">and-or</tt> 技巧</a>。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>我们已经接近了对 <tt class="classname">Dialectizer</tt> 的全面理解。唯一缺少的一个环节是文本替换的特性。如果您知道点 <span class="application">Perl</span>，您就会知道当需要复杂的文本替换时，唯一有效的解决方法就是正则表达式。在 <tt class="filename">dialect.py</tt> 文件后面的几个类中定义了一连串的正则表达式来操作 <span class="acronym">HTML</span> 标记中的文本。我们已经学习过了<a href="../regular_expressions/index.html" title="第&nbsp;7&nbsp;章&nbsp;正则表达式">正则表达式中的所有字符</a>。我们不必重复学习正则表达式的艰难历程了，不是吗？上帝知道我反正不需要。我想现在这章您已经学得差不多了。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="quoting_attribute_values.html">&lt;&lt;&nbsp;给属性值加引号</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#dialect.divein" title="8.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="introducing_sgmllib.html" title="8.2.&nbsp;sgmllib.py 介绍">2</a> <span class="divider">|</span> <a href="extracting_data.html" title="8.3.&nbsp;从 HTML 文档中提取数据">3</a> <span class="divider">|</span> <a href="basehtmlprocessor.html" title="8.4.&nbsp;BaseHTMLProcessor.py 介绍">4</a> <span class="divider">|</span> <a href="locals_and_globals.html" title="8.5.&nbsp;locals 和 globals">5</a> <span class="divider">|</span> <a href="dictionary_based_string_formatting.html" title="8.6.&nbsp;基于 dictionary 的字符串格式化">6</a> <span class="divider">|</span> <a href="quoting_attribute_values.html" title="8.7.&nbsp;给属性值加引号">7</a> <span class="divider">|</span> <span class="thispage">8</span> <span class="divider">|</span> <a href="all_together.html" title="8.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="8.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="all_together.html">全部放在一起&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

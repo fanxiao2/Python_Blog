@@ -1,0 +1,213 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>11.8.&nbsp;处理压缩数据</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务">
+      <link rel="previous" href="redirects.html" title="11.7.&nbsp;处理重定向">
+      <link rel="next" href="alltogether.html" title="11.9.&nbsp;全部放在一起">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTTP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">处理压缩数据</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="redirects.html" title="上一页: “处理重定向”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="alltogether.html" title="下一页: “全部放在一起”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="oa.gzip"></a>11.8.&nbsp;处理压缩数据
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你要支持的最后一个重要的 HTTP 特性是压缩。许多 web 服务具有发送压缩数据的能力，这可以将网络线路上传输的大量数据消减 60% 以上。这尤其适用于 XML web 服务，因为 XML 数据 的压缩率可以很高。</p>
+         </div>
+         <p>服务器不会为你发送压缩数据，除非你告诉服务器你可以处理压缩数据。</p>
+         <div class="example"><a name="d0e29332"></a><h3 class="title">例&nbsp;11.14.&nbsp;告诉服务器你想获得压缩数据</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> urllib2, httplib</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">httplib.HTTPConnection.debuglevel = 1</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request = urllib2.Request(<span class='pystring'>'http://diveintomark.org/xml/atom.xml'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request.add_header(<span class='pystring'>'Accept-encoding'</span>, <span class='pystring'>'gzip'</span>)</span>        <a name="oa.gzip.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">opener = urllib2.build_opener()</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f = opener.open(request)</span>
+<span class="computeroutput">connect: (diveintomark.org, 80)
+send: '
+GET /xml/atom.xml HTTP/1.0
+Host: diveintomark.org
+User-agent: Python-urllib/2.1
+Accept-encoding: gzip</span>                                    <a name="oa.gzip.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'
+reply: 'HTTP/1.1 200 OK\r\n'
+header: Date: Thu, 15 Apr 2004 22:24:39 GMT
+header: Server: Apache/2.0.49 (Debian GNU/Linux)
+header: Last-Modified: Thu, 15 Apr 2004 19:45:21 GMT
+header: ETag: "e842a-3e53-55d97640"
+header: Accept-Ranges: bytes
+header: Vary: Accept-Encoding
+header: Content-Encoding: gzip</span>                           <a name="oa.gzip.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">header: Content-Length: 6289</span>                             <a name="oa.gzip.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">header: Connection: close
+header: Content-Type: application/atom+xml</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是关键：一创建了 <tt class="classname">Request</tt> 对象，就添加一个 <tt class="literal">Accept-encoding</tt> 头信息告诉服务器你能接受 gzip 压缩数据。<tt class="literal">gzip</tt> 是你使用的压缩算法的名称。理论上你可以使用其它的压缩算法，但是 <tt class="literal">gzip</tt> 是 web 服务器上使用率高达 99% 的一种。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是你的头信息传越网络线路的过程。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是服务器的返回信息：<tt class="literal">Content-Encoding: gzip</tt> 头信息意味着你要回得的数据已经被 gzip 压缩了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">Content-Length</tt> 头信息是已压缩数据的长度，并非解压缩数据的长度。一会儿你会看到，实际的解压缩数据长度为 15955，因此 gzip 压缩节省了 60% 以上的网络带宽！
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e29417"></a><h3 class="title">例&nbsp;11.15.&nbsp;解压缩数据</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">compresseddata = f.read()</span>                              <a name="oa.gzip.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">len(compresseddata)</span>
+<span class="computeroutput">6289</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> StringIO</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">compressedstream = StringIO.StringIO(compresseddata)</span>   <a name="oa.gzip.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> gzip</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">gzipper = gzip.GzipFile(fileobj=compressedstream)</span>      <a name="oa.gzip.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">data = gzipper.read()</span>                                  <a name="oa.gzip.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> data</span>                                             <a name="oa.gzip.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="computeroutput">&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;feed version="0.3"
+  xmlns="http://purl.org/atom/ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xml:lang="en"&gt;
+  &lt;title mode="escaped"&gt;dive into mark&lt;/title&gt;
+  &lt;link rel="alternate" type="text/html" href="http://diveintomark.org/"/&gt;
+  &lt;-- rest of feed omitted for brevity --&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">len(data)</span>
+<span class="computeroutput">15955</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">继续上面的例子，<tt class="varname">f</tt> 是一个从 URL 开启器返回的类文件对象。使用它的 <tt class="methodname">read()</tt> 方法将正常地获得非压缩数据，但是因为这个数据已经被 gzip 压缩过，所以这只是获得你想要的最终数据的第一步。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">好吧，只是先得有点儿凌乱的步骤。<span class="application">Python</span> 有一个 <tt class="filename">gzip</tt> 模块，它能读取 (当然也能写入) 磁盘上的 gzip 压缩文件。但是磁盘上还没有文件，只在内存里有一个 gzip 压缩缓冲区，并且你不想仅仅为了解压缩而写出一个临时文件。那么怎么做来从内存数据 (<tt class="varname">compresseddata</tt>) 创建类文件对象呢？这需要使用 <tt class="filename">StringIO</tt> 模块。你首次看到 <tt class="filename">StringIO</tt> 模块是在<a href="../scripts_and_streams/index.html#kgp.openanything.stringio.example" title="例&nbsp;10.4.&nbsp;StringIO 介绍">上一章</a>，但现在你会发现它的另一种用法。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在你可以创建 <tt class="classname">GzipFile</tt> 的一个实例，并且告诉它其中的 “<span class="quote">文件</span>” 是一个类文件对象 <tt class="varname">compressedstream</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是做所有工作的一行：从 <tt class="classname">GzipFile</tt> 中 “<span class="quote">读取</span>” 将会解压缩数据。感到奇妙吗？是的，它确实解压缩了数据。<tt class="varname">gzipper</tt> 是一个类文件对象，它代表一个 gzip 压缩文件。尽管这个 “<span class="quote">文件</span>” 并非一个磁盘上的真实文件；但 <tt class="varname">gzipper</tt> 还是从你用 <tt class="filename">StringIO</tt> 包装了压缩数据的类文件对象中 “<span class="quote">读取</span>” 数据，而它仅仅是内存中的变量 <tt class="varname">compresseddata</tt>。压缩的数据来自哪呢？最初你从远程 HTTP 服务器下载它，通过从用 <tt class="function">urllib2.build_opener</tt> 创建的类文件对象中 “<span class="quote">读取</span>”。令人吃惊吧，这就是所有的步骤。链条上的每一步都完全不知道上一步在造假。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">看看吧，实际的数据 (实际为 15955 bytes)。</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>“<span class="quote">等等!</span>” 我听见你在叫。“<span class="quote">还能更简单吗！</span>” 我知道你在想什么。你在，既然 <tt class="varname">opener.open</tt> 返回一个类文件对象，那么为什么不抛弃中间件 <tt class="filename">StringIO</tt> 而通过 <tt class="varname">f</tt> 直接访问 <tt class="methodname">GzipFile</tt> 呢？OK，或许你没想到，但是别为此担心，因为那样无法工作。
+         </p>
+         <div class="example"><a name="d0e29584"></a><h3 class="title">例&nbsp;11.16.&nbsp;从服务器直接解压缩数据</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f = opener.open(request)</span>                  <a name="oa.gzip.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.headers.get(<span class='pystring'>'Content-Encoding'</span>)</span>         <a name="oa.gzip.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'gzip'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">data = gzip.GzipFile(fileobj=f).read()</span>    <a name="oa.gzip.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="traceback">Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+  File "c:\python23\lib\gzip.py", line 217, in read
+    self._read(readsize)
+  File "c:\python23\lib\gzip.py", line 252, in _read
+    pos = self.fileobj.tell()   # Save current position
+AttributeError: addinfourl instance has no attribute 'tell'</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">继续前面的例子，你已经有一个设置了 <tt class="literal">Accept-encoding: gzip</tt> 头信息的 <tt class="classname">Request</tt> 对象。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">简单地打开请求将获得你的头信息 (虽然还没下载任何数据)。正如你从 <tt class="literal">Content-Encoding</tt> 头信息所看到的，这个数据被要求用 gzip 压缩发送。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.gzip.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">从 <tt class="methodname">opener.open</tt> 返回了一个类文件对象，从头信息中你可以获知，你将获得 gzip 压缩数据。为什么不简单地通过那个类文件对象直接访问 <tt class="classname">GzipFile</tt> 呢？当你从 <tt class="classname">GzipFile</tt> 实例 “<span class="quote">读取</span>” 时，它将从远程 HTTP 服务器 “<span class="quote">读取</span>” 被压缩的数据并且立即解压缩。这是个好主意，但是不行。由 gzip 压缩的工作方式所致，<tt class="classname">GzipFile</tt> 需要存储其位置并在压缩文件上往返游走。当 “<span class="quote">文件</span>” 是来自远程服务器的字节流时无法工作；你能用它做的所有工作就是一次返回一个字节流，而不是在字节流上往返。所以使用 <tt class="filename">StringIO</tt> 这种看上去不太优雅的手段是最好的解决方案：下载压缩的数据，用 <tt class="filename">StringIO</tt> 创建一个类文件对象，并从中解压缩数据。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="redirects.html">&lt;&lt;&nbsp;处理重定向</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#oa.divein" title="11.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">2</a> <span class="divider">|</span> <a href="http_features.html" title="11.3.&nbsp;HTTP 的特性">3</a> <span class="divider">|</span> <a href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">4</a> <span class="divider">|</span> <a href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">5</a> <span class="divider">|</span> <a href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">6</a> <span class="divider">|</span> <a href="redirects.html" title="11.7.&nbsp;处理重定向">7</a> <span class="divider">|</span> <span class="thispage">8</span> <span class="divider">|</span> <a href="alltogether.html" title="11.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="11.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="alltogether.html">全部放在一起&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

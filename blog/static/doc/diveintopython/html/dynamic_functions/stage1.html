@@ -1,0 +1,231 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>17.2.&nbsp;plural.py, 第 1 阶段</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;17&nbsp;章&nbsp;动态函数">
+      <link rel="previous" href="index.html" title="第&nbsp;17&nbsp;章&nbsp;动态函数">
+      <link rel="next" href="stage2.html" title="17.3.&nbsp;plural.py, 第 2 阶段">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">动态函数</a>&nbsp;&gt;&nbsp;<span class="thispage">plural.py, 第 1 阶段</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="index.html" title="上一页: “动态函数”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="stage2.html" title="下一页: “plural.py, 第 2 阶段”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="plural.stage1"></a>17.2.&nbsp;<tt class="filename">plural.py</tt>, 第 1 阶段
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你所针对的单词 (至少在英语中) 是字符串和字符。你还需要规则来找出不同的字符 (字母) 组合，并对它们进行不同的操作。这听起来像是正则表达式的工作。</p>
+         </div>
+         <div class="example"><a name="d0e37260"></a><h3 class="title">例&nbsp;17.1.&nbsp;<tt class="filename">plural1.py</tt></h3><pre class="programlisting"><span class='pykeyword'>
+import</span> re
+
+<span class='pykeyword'>def</span><span class='pyclass'> plural</span>(noun):                            
+    <span class='pykeyword'>if</span> re.search(<span class='pystring'>'[sxz]$'</span>, noun):             <a name="plural.stage1.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        <span class='pykeyword'>return</span> re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, noun)        <a name="plural.stage1.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    <span class='pykeyword'>elif</span> re.search(<span class='pystring'>'[^aeioudgkprt]h$'</span>, noun):
+        <span class='pykeyword'>return</span> re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, noun)       
+    <span class='pykeyword'>elif</span> re.search(<span class='pystring'>'[^aeiou]y$'</span>, noun):      
+        <span class='pykeyword'>return</span> re.sub(<span class='pystring'>'y$'</span>, <span class='pystring'>'ies'</span>, noun)     
+    <span class='pykeyword'>else</span>:                                    
+        <span class='pykeyword'>return</span> noun + <span class='pystring'>'s'</span>                    
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">好啦，这是一个正则表达式，但是它使用了你在 <a href="../regular_expressions/index.html" title="第&nbsp;7&nbsp;章&nbsp;正则表达式">第&nbsp;7&nbsp;章 <i>正则表达式</i></a> 中未曾见过的语法。方括号的意思是 “<span class="quote">完全匹配这些字符中的一个</span>”。也就是说，<tt class="literal">[sxz]</tt> 意味着 “<span class="quote"><tt class="literal">s</tt>，或者 <tt class="literal">x</tt>，再或者 <tt class="literal">z</tt></span>”，但只是其中的一个。<tt class="literal">$</tt> 应该不陌生，它意味着匹配字符串的结尾。也就是说，检查 <tt class="varname">noun</tt> 是否以 <tt class="literal">s</tt>，<tt class="literal">x</tt>，或者 <tt class="literal">z</tt> 结尾。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">re.sub</tt> 函数进行以正则表达式为基础的替换工作。让我们更具体地看看它。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e37312"></a><h3 class="title">例&nbsp;17.2.&nbsp;<tt class="function">re.sub</tt> 介绍
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> re</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.search(<span class='pystring'>'[abc]'</span>, <span class='pystring'>'Mark'</span>)</span>   <a name="plural.stage1.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">&lt;_sre.SRE_Match object at 0x001C1FA8&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.sub(<span class='pystring'>'[abc]'</span>, <span class='pystring'>'o'</span>, <span class='pystring'>'Mark'</span>)</span> <a name="plural.stage1.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'Mork'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.sub(<span class='pystring'>'[abc]'</span>, <span class='pystring'>'o'</span>, <span class='pystring'>'rock'</span>)</span> <a name="plural.stage1.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'rook'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.sub(<span class='pystring'>'[abc]'</span>, <span class='pystring'>'o'</span>, <span class='pystring'>'caps'</span>)</span> <a name="plural.stage1.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">'oops'</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">Mark</tt> 包含 <tt class="literal">a</tt>，<tt class="literal">b</tt>，或者 <tt class="literal">c</tt>吗？是的，含有 <tt class="literal">a</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">好的，现在找出 <tt class="literal">a</tt>，<tt class="literal">b</tt>，或者 <tt class="literal">c</tt> 并以 <tt class="literal">o</tt> 取代之。<tt class="literal">Mark</tt> 就变成 <tt class="literal">Mork</tt> 了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">同一方法可以将 <tt class="literal">rock</tt> 变成 <tt class="literal">rook</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可能认为它可以将 <tt class="literal">caps</tt> 变成 <tt class="literal">oaps</tt>，但事实并非如此。<tt class="literal">re.sub</tt> 替换<span class="emphasis"><em>所有</em></span> 的匹配项，并不只是第一个匹配项。因此正则表达式将会把 <tt class="literal">caps</tt> 变成 <tt class="literal">oops</tt>，因为 <tt class="literal">c</tt> 和 <tt class="literal">a</tt> 都被转换为 <tt class="literal">o</tt>了。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e37442"></a><h3 class="title">例&nbsp;17.3.&nbsp;回到 <tt class="filename">plural1.py</tt></h3><pre class="programlisting"><span class='pykeyword'>
+import</span> re
+
+<span class='pykeyword'>def</span><span class='pyclass'> plural</span>(noun):                            
+    <span class='pykeyword'>if</span> re.search(<span class='pystring'>'[sxz]$'</span>, noun):            
+        <span class='pykeyword'>return</span> re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, noun)        <a name="plural.stage1.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>elif</span> re.search(<span class='pystring'>'[^aeioudgkprt]h$'</span>, noun): <a name="plural.stage1.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        <span class='pykeyword'>return</span> re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, noun)        <a name="plural.stage1.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+    <span class='pykeyword'>elif</span> re.search(<span class='pystring'>'[^aeiou]y$'</span>, noun):      
+        <span class='pykeyword'>return</span> re.sub(<span class='pystring'>'y$'</span>, <span class='pystring'>'ies'</span>, noun)     
+    <span class='pykeyword'>else</span>:                                    
+        <span class='pykeyword'>return</span> noun + <span class='pystring'>'s'</span>                    
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">回到 <tt class="function">plural</tt> 函数。你在做什么？你在以 <tt class="literal">es</tt> 取代字符串的结尾。换句话说，追加 <tt class="literal">es</tt> 到字符串。你可以通过字符串拼合做到相同的事，例如 <tt class="literal">noun + 'es'</tt>，但是我使用正则表达式做这一切，既是为了保持一致，也是为了本章稍后你会明白的其它原因。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">仔细看看，这是另一个新的内容。<tt class="literal">^</tt> 是方括号里面的第一个字符，这有特别的含义：否定。<tt class="literal">[^abc]</tt> 意味着 “<span class="quote"> 除 <tt class="literal">a</tt>、 <tt class="literal">b</tt>、 和 <tt class="literal">c</tt> <span class="emphasis"><em>以外的</em></span> 任意单字符</span>”。所以，<tt class="literal">[^aeioudgkprt]</tt> 意味着除 <tt class="literal">a</tt>、 <tt class="literal">e</tt>、 <tt class="literal">i</tt>、 <tt class="literal">o</tt>、 <tt class="literal">u</tt>、 <tt class="literal">d</tt>、 <tt class="literal">g</tt>、 <tt class="literal">k</tt>、 <tt class="literal">p</tt>、 <tt class="literal">r</tt> 和 <tt class="literal">t</tt> 以外的任意字符。这个字符之后应该跟着一个 <tt class="literal">h</tt>，然后是字符串的结尾。你在寻找的是以发音的 H 结尾的单词。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是一个相似的表达：匹配 Y 前面<span class="emphasis"><em>不是</em></span> <tt class="literal">a</tt>、 <tt class="literal">e</tt>、 <tt class="literal">i</tt>、 <tt class="literal">o</tt> 和 <tt class="literal">u</tt>，并以这个 Y 结尾的单词。你在查找的是以发 I 音的 Y 结尾的单词。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e37555"></a><h3 class="title">例&nbsp;17.4.&nbsp;正则表达式中否定的更多应用</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> re</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.search(<span class='pystring'>'[^aeiou]y$'</span>, <span class='pystring'>'vacancy'</span>)</span> <a name="plural.stage1.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">&lt;_sre.SRE_Match object at 0x001C1FA8&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.search(<span class='pystring'>'[^aeiou]y$'</span>, <span class='pystring'>'boy'</span>)</span>     <a name="plural.stage1.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.search(<span class='pystring'>'[^aeiou]y$'</span>, <span class='pystring'>'day'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.search(<span class='pystring'>'[^aeiou]y$'</span>, <span class='pystring'>'pita'</span>)</span>    <a name="plural.stage1.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">vacancy</tt> 匹配这个正则表达式，因为它以 <tt class="literal">cy</tt> 结尾，并且 <tt class="literal">c</tt> 不在 <tt class="literal">a</tt>、 <tt class="literal">e</tt>、 <tt class="literal">i</tt>、 <tt class="literal">o</tt> 和 <tt class="literal">u</tt> 之列。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">boy</tt> 不能匹配，因为它以 <tt class="literal">oy</tt> 结尾，并且你特别指出 <tt class="literal">y</tt> 之前的字符不可以是 <tt class="literal">o</tt>。<tt class="literal">day</tt> 不能匹配是因为以 <tt class="literal">ay</tt> 结尾。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">pita</tt> 不匹配是因为不以 <tt class="literal">y</tt> 结尾。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e37658"></a><h3 class="title">例&nbsp;17.5.&nbsp;更多的 <tt class="function">re.sub</tt></h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.sub(<span class='pystring'>'y$'</span>, <span class='pystring'>'ies'</span>, <span class='pystring'>'vacancy'</span>)</span>              <a name="plural.stage1.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'vacancies'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.sub(<span class='pystring'>'y$'</span>, <span class='pystring'>'ies'</span>, <span class='pystring'>'agency'</span>)</span>
+<span class="computeroutput">'agencies'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">re.sub(<span class='pystring'>'([^aeiou])y$'</span>, r<span class='pystring'>'\1ies'</span>, <span class='pystring'>'vacancy'</span>)</span> <a name="plural.stage1.5.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'vacancies'</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正则表达式把 <tt class="literal">vacancy</tt> 变为 <tt class="literal">vacancies</tt>，把 <tt class="literal">agency</tt> 变为 <tt class="literal">agencies</tt>，这正是你想要的。注意，将 <tt class="literal">boy</tt> 变成 <tt class="literal">boies</tt> 是可行的，但是永远不会发生，因为 <tt class="function">re.search</tt> 首先确定是否应该应用 <tt class="function">re.sub</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage1.5.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">顺便提一下，可以将两个正则表达式 (一个确定规则适用与否，一个应用规则) 合并在一起成为一个正则表达式。这便是合并后的样子。它的大部分已经很熟悉：你应用的是在 <a href="../regular_expressions/phone_numbers.html" title="7.6.&nbsp;个案研究：解析电话号码">第&nbsp;7.6&nbsp;节 “个案研究：解析电话号码”</a> 学过的记忆组 (remembered group) 记住 <tt class="literal">y</tt> 之前的字符。然后再替换字符串，你使用一个新的语法 <tt class="literal">\1</tt>，这意味着：“<span class="quote">嘿！记得前面的第一个组吗？把它放这儿</span>”。就此而言，记住了 <tt class="literal">y</tt> 之前的 <tt class="literal">c</tt> ，然后你做替换工作，你将 <tt class="literal">c</tt> 替换到 <tt class="literal">c</tt> 的位置，并将 <tt class="literal">ies</tt> 替换到 <tt class="literal">y</tt> 的位置。(如果你有不止一个组则可以使用 <tt class="literal">\2</tt> 或者 <tt class="literal">\3</tt> 等等。)
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>正则表达式替换非常强大，并且 <tt class="literal">\1</tt> 语法使之更加强大。但是将整个操作放在一个正则表达式中仍然晦涩难懂，也不能与前面描述的复数规则直接呼应。你原来列出的规则，比如 “<span class="quote">如果单词以 S，X 或者 Z 结尾，结尾追加 ES</span>”。如果你在函数中看到两行代码描述 “<span class="quote">如果单词以 S，X 或者 Z 结尾，结尾追加 ES</span>”，更加直观些。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="index.html">&lt;&lt;&nbsp;动态函数</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#plural.divein" title="17.1.&nbsp;概览">1</a> <span class="divider">|</span> <span class="thispage">2</span> <span class="divider">|</span> <a href="stage2.html" title="17.3.&nbsp;plural.py, 第 2 阶段">3</a> <span class="divider">|</span> <a href="stage3.html" title="17.4.&nbsp;plural.py, 第 3 阶段">4</a> <span class="divider">|</span> <a href="stage4.html" title="17.5.&nbsp;plural.py, 第 4 阶段">5</a> <span class="divider">|</span> <a href="stage5.html" title="17.6.&nbsp;plural.py, 第 5 阶段">6</a> <span class="divider">|</span> <a href="stage6.html" title="17.7.&nbsp;plural.py, 第 6 阶段">7</a> <span class="divider">|</span> <a href="summary.html" title="17.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="stage2.html">plural.py, 第 2 阶段&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

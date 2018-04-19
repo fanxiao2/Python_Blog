@@ -1,0 +1,182 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>9.5.&nbsp;搜索元素</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;9&nbsp;章&nbsp;XML 处理">
+      <link rel="previous" href="unicode.html" title="9.4.&nbsp;Unicode">
+      <link rel="next" href="attributes.html" title="9.6.&nbsp;访问元素属性">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">XML 处理</a>&nbsp;&gt;&nbsp;<span class="thispage">搜索元素</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="unicode.html" title="上一页: “Unicode”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="attributes.html" title="下一页: “访问元素属性”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="kgp.search"></a>9.5.&nbsp;搜索元素
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>通过一步步访问每一个节点的方式遍历 <span class="acronym">XML</span> 文档可能很乏味。如果你正在寻找些特别的东西，又恰恰它们深深埋入了你的 <span class="acronym">XML</span> 文档，有个捷径让你可以快速找到它：<tt class="function">getElementsByTagName</tt> 。
+            </p>
+         </div>
+         <p>在这部分，将使用 <tt class="filename">binary.xml</tt> 语法文件，它的内容如下：
+         </p>
+         <div class="example"><a name="d0e24604"></a><h3 class="title">例&nbsp;9.20.&nbsp;<tt class="filename">binary.xml</tt></h3><pre class="screen"><span class="computeroutput">&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE grammar PUBLIC "-//diveintopython.org//DTD Kant Generator Pro v1.0//EN" "kgp.dtd"&gt;
+&lt;grammar&gt;
+&lt;ref id="bit"&gt;
+  &lt;p&gt;0&lt;/p&gt;
+  &lt;p&gt;1&lt;/p&gt;
+&lt;/ref&gt;
+&lt;ref id="byte"&gt;
+  &lt;p&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;\
+&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;/p&gt;
+&lt;/ref&gt;
+&lt;/grammar&gt;</span></pre></div>
+         <p>它有两个 <tt class="sgmltag-element">ref</tt>，<tt class="literal">'bit'</tt> (位) 和 <tt class="literal">'byte'</tt> (字节)。一个 <tt class="literal">bit</tt> 是 <tt class="literal">'0'</tt> 或者 <tt class="literal">'1'</tt>，而一个 <tt class="literal">byte</tt> 是 8 个 <tt class="literal">bit</tt>。
+         </p>
+         <div class="example"><a name="d0e24637"></a><h3 class="title">例&nbsp;9.21.&nbsp;<tt class="function">getElementsByTagName</tt> 介绍
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> xml.dom <span class='pykeyword'>import</span> minidom</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc = minidom.parse(<span class='pystring'>'binary.xml'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">reflist = xmldoc.getElementsByTagName(<span class='pystring'>'ref'</span>)</span> <a name="kgp.search.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">reflist</span>
+<span class="computeroutput">[&lt;DOM Element: ref at 136138108&gt;, &lt;DOM Element: ref at 136144292&gt;]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> reflist[0].toxml()</span>
+<span class="computeroutput">&lt;ref id="bit"&gt;
+  &lt;p&gt;0&lt;/p&gt;
+  &lt;p&gt;1&lt;/p&gt;
+&lt;/ref&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> reflist[1].toxml()</span>
+<span class="computeroutput">&lt;ref id="byte"&gt;
+  &lt;p&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;\
+&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;/p&gt;
+&lt;/ref&gt;
+</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.search.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">getElementsByTagName</tt> 接收一个参数，即要找的元素的名称。它返回一个 <tt class="classname">Element</tt> 对象的列表，列表中的对象都是有指定名称的 <span class="acronym">XML</span> 元素。在本例中，你能找到两个 <tt class="literal">ref</tt> 元素。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e24699"></a><h3 class="title">例&nbsp;9.22.&nbsp;每个元素都是可搜索的</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">firstref = reflist[0]</span>                      <a name="kgp.search.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> firstref.toxml()</span>
+<span class="computeroutput">&lt;ref id="bit"&gt;
+  &lt;p&gt;0&lt;/p&gt;
+  &lt;p&gt;1&lt;/p&gt;
+&lt;/ref&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">plist = firstref.getElementsByTagName(<span class='pystring'>"p"</span>)</span> <a name="kgp.search.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">plist</span>
+<span class="computeroutput">[&lt;DOM Element: p at 136140116&gt;, &lt;DOM Element: p at 136142172&gt;]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> plist[0].toxml()</span>                     <a name="kgp.search.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">&lt;p&gt;0&lt;/p&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> plist[1].toxml()</span>
+<span class="computeroutput">&lt;p&gt;1&lt;/p&gt;</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.search.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">继续前面的例子，在 <tt class="varname">reflist</tt> 中的第一个对象是 <tt class="literal">'bit'</tt> <tt class="sgmltag-element">ref</tt>元素。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.search.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以在这个 <tt class="classname">Element</tt> 上使用相同的 <tt class="function">getElementsByTagName</tt> 方法来寻找所有在<tt class="literal">'bit'</tt> <tt class="sgmltag-element">ref</tt> 元素中的<tt class="sgmltag-element">&lt;p&gt;</tt>元素。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.search.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">和前面一样，<tt class="function">getElementsByTagName</tt> 方法返回一个找到元素的列表。在本例中，你有两个元素，每“位”各占一个。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e24788"></a><h3 class="title">例&nbsp;9.23.&nbsp;搜索实际上是递归的</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">plist = xmldoc.getElementsByTagName(<span class='pystring'>"p"</span>)</span> <a name="kgp.search.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">plist</span>
+<span class="computeroutput">[&lt;DOM Element: p at 136140116&gt;, &lt;DOM Element: p at 136142172&gt;, &lt;DOM Element: p at 136146124&gt;]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">plist[0].toxml()</span>                         <a name="kgp.search.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">'&lt;p&gt;0&lt;/p&gt;'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">plist[1].toxml()</span>
+<span class="computeroutput">'&lt;p&gt;1&lt;/p&gt;'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">plist[2].toxml()</span>                         <a name="kgp.search.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'&lt;p&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;\
+&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;xref id="bit"/&gt;&lt;/p&gt;'</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.search.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">仔细注意这个例子和前面例子之间的不同。前面，你是在 <tt class="varname">firstref</tt> 中搜索 <tt class="sgmltag-element">p</tt> 元素，但是这里你是在 <tt class="varname">xmldoc</tt> 中搜索 <tt class="sgmltag-element">p</tt> 元素，<tt class="varname">xmldoc</tt> 是代表了整个 <span class="acronym">XML</span> 文档的根层对象。这样<span class="emphasis"><em>就会</em></span> 找到嵌套在 <tt class="sgmltag-element">ref</tt> 元素 (它嵌套在根 <tt class="sgmltag-element">grammar</tt> 元素中) 中的 <tt class="sgmltag-element">p</tt> 元素。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.search.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">前两个 <tt class="sgmltag-element">p</tt> 元素在第一个 <tt class="sgmltag-element">ref</tt> 内 (<tt class="literal">'bit'</tt> <tt class="sgmltag-element">ref</tt>)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.search.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">后一个 <tt class="sgmltag-element">p</tt> 元素在第二个 <tt class="sgmltag-element">ref</tt> 中 (<tt class="literal">'byte'</tt> <tt class="sgmltag-element">ref</tt>)。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="unicode.html">&lt;&lt;&nbsp;Unicode</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#kgp.divein" title="9.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="packages.html" title="9.2.&nbsp;包">2</a> <span class="divider">|</span> <a href="parsing_xml.html" title="9.3.&nbsp;XML 解析">3</a> <span class="divider">|</span> <a href="unicode.html" title="9.4.&nbsp;Unicode">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="attributes.html" title="9.6.&nbsp;访问元素属性">6</a> <span class="divider">|</span> <a href="summary.html" title="9.7.&nbsp;Segue ">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="attributes.html">访问元素属性&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

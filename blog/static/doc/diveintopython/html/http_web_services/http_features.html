@@ -1,0 +1,166 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>11.3.&nbsp;HTTP 的特性</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务">
+      <link rel="previous" href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">
+      <link rel="next" href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTTP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">HTTP 的特性</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="review.html" title="上一页: “避免通过 HTTP 重复地获取数据”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="debugging.html" title="下一页: “调试 HTTP web 服务”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="oa.features"></a>11.3.&nbsp;HTTP 的特性
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="http_features.html#d0e27782">11.3.1. 用户代理 (User-Agent)</a></span></li>
+               <li><span class="section"><a href="http_features.html#d0e27806">11.3.2. 重定向 (Redirects)</a></span></li>
+               <li><span class="section"><a href="http_features.html#d0e27880">11.3.3. Last-Modified/If-Modified-Since</a></span></li>
+               <li><span class="section"><a href="http_features.html#d0e27915">11.3.4. ETag/If-None-Match</a></span></li>
+               <li><span class="section"><a href="http_features.html#d0e27943">11.3.5. 压缩 (Compression)</a></span></li>
+            </ul>
+         </div>
+         <div class="abstract">
+            <p>这里有五个你必须关注的 HTTP 重要特性。</p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e27782"></a>11.3.1.&nbsp;用户代理 (<tt class="literal">User-Agent</tt>)
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p><tt class="literal">User-Agent</tt> 是一种客户端告知服务器谁在什么时候通过 HTTP 请求了一个 web 页、feed 汇聚或其他类型的 web 服务的简单途径。当客户端请求一个资源时，应该尽可能明确发起请求的是谁，以便当产生异常错误时，允许服务器端的管理员与客户端的开发者取得联系。
+               
+            </p>
+            <p>默认情况下 <span class="application">Python</span> 发送一个通用的 <tt class="literal">User-Agent</tt>：<tt class="literal">Python-urllib/1.15</tt>。下一节，您将看到更加有针对性的 <tt class="literal">User-Agent</tt>。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e27806"></a>11.3.2.&nbsp;重定向 (Redirects)
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>有时资源移来移去。Web 站点重组内容，页面移动到了新的地址。甚至是 web 服务重组。原来位于 <tt class="literal">http://example.com/index.xml</tt> 的 feed 汇聚可能被移动到 <tt class="literal">http://example.com/xml/atom.xml</tt>。或者因为一个机构的扩展或重组，整个域被迁移。例如，<tt class="literal">http://www.example.com/index.xml</tt> 可能被重定向到 <tt class="literal">http://server-farm-1.example.com/index.xml</tt>。
+            </p>
+            <p>您每次从 HTTP 服务器请求任何类型的资源时，服务器的响应中均包含一个状态代码。状态代码 <tt class="literal">200</tt> 的意思是 “<span class="quote">一切正常，这就是您请求的页面</span>”。状态代码 <tt class="literal">404</tt> 的意思是 “<span class="quote">页面没找到</span>”。 (当浏览 web 时，你可能看到过 404 errors。)
+            </p>
+            <p>HTTP 有两种不同的方法表示资源已经被移动。状态代码 <tt class="literal">302</tt> 表示<span class="emphasis"><em>临时重定向</em></span>；这意味着 “<span class="quote">哎呀，访问内容被临时移动</span>” (然后在 <tt class="literal">Location:</tt> 头信息中给出临时地址)。状态代码 <tt class="literal">301</tt> 表示<span class="emphasis"><em>永久重定向</em></span>；这意味着 “<span class="quote">哎呀，访问内容被永久移动</span>” (然后在 <tt class="literal">Location:</tt> 头信息中给出新地址)。如果您获得了一个 <tt class="literal">302</tt> 状态代码和一个新地址，HTTP 规范说您应该使用新地址获取您的请求，但是下次您要访问同一资源时，应该使用原地址重试。但是如果您获得了一个 <tt class="literal">301</tt> 状态代码和一个新地址，您应该从此使用新地址。
+            </p>
+            <p>当从 HTTP 服务器接受到一个适当的状态代码时，<tt class="function">urllib.urlopen</tt> 将自动 “<span class="quote">跟踪</span>” 重定向，但不幸的是，当它做了重定向时不会告诉你。
+               你将最终获得所请求的数据，却丝毫不会察觉到在这个过程中一个潜在的库 “<span class="quote">帮助</span>” 你做了一次重定向操作。因此你将继续不断地使用旧地址，并且每次都将获得被重定向的新地址。这一过程要往返两次而不是一次：太没效率了！本章的后面，您将看到如何改进这一点，从而适当地且有效率地处理永久重定向。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e27880"></a>11.3.3.&nbsp;<tt class="literal">Last-Modified</tt>/<tt class="literal">If-Modified-Since</tt></h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>有些数据随时都在变化。CNN.com 的主页经常几分钟就更新。另一方面，Google.com 的主页几个星期才更新一次 (当他们上传特殊的假日 logo，或为一个新服务作广告时)。
+               Web 服务是不变的：通常服务器知道你所请求的数据的最后修改时间，并且 HTTP 为服务器提供了一种将最近修改数据连同你请求的数据一同发送的方法。
+            </p>
+            <p>如果你第二次 (或第三次，或第四次) 请求相同的数据，你可以告诉服务器你上一次获得的最后修改日期：在你的请求中发送一个 <tt class="literal">If-Modified-Since</tt> 头信息，它包含了上一次从服务器连同数据所获得的日期。如果数据从那时起没有改变，服务器将返回一个特殊的 HTTP 状态代码 <tt class="literal">304</tt>，这意味着 “<span class="quote">从上一次请求后这个数据没有改变</span>”。这一点有何进步呢？当服务器发送状态编码 <tt class="literal">304</tt> 时，<span class="emphasis"><em>不再重新发送数据</em></span>。您仅仅获得了这个状态代码。所以当数据没有更新时，你不需要一次又一次地下载相同的数据；服务器假定你有本地的缓存数据。
+            </p>
+            <p>所有现代的浏览器都支持最近修改 (last-modified) 的数据检查。如果你曾经访问过某页，一天后重新访问相同的页时发现它没有变化，并奇怪第二次访问时页面加载得如此之快——这就是原因所在。你的浏览器首次访问时会在本地缓存页面内容，当你第二次访问，浏览器自动发送首次访问时从服务器获得的最近修改日期。服务器简单地返回
+               <tt class="literal">304: Not Modified</tt> (没有修改)，因此浏览器就会知道从本地缓存加载页面。在这一点上，Web 服务也如此智能。
+            </p>
+            <p><span class="application">Python</span> 的 URL 库没有提供内置的最近修改数据检查支持，但是你可以为每一个请求添加任意的头信息并在每一个响应中读取任意头信息，从而自己添加这种支持。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e27915"></a>11.3.4.&nbsp;<tt class="literal">ETag</tt>/<tt class="literal">If-None-Match</tt></h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>ETag 是实现与最近修改数据检查同样的功能的另一种方法：没有变化时不重新下载数据。其工作方式是：服务器发送你所请求的数据的同时，发送某种数据的 hash (在 <tt class="literal">ETag</tt> 头信息中给出)。hash 的确定完全取决于服务器。当第二次请求相同的数据时，你需要在 <tt class="literal">If-None-Match:</tt> 头信息中包含 ETag hash，如果数据没有改变，服务器将返回 <tt class="literal">304</tt> 状态代码。与最近修改数据检查相同，服务器<span class="emphasis"><em>仅仅</em></span> 发送 <tt class="literal">304</tt> 状态代码；第二次将不为你发送相同的数据。在第二次请求时，通过包含 ETag hash，你告诉服务器：如果 hash 仍旧匹配就没有必要重新发送相同的数据，因为你还有上一次访问过的数据。
+            </p>
+            <p><span class="application">Python</span> 的 URL 库没有对 ETag 的内置支持，但是在本章后面你将看到如何添加这种支持。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e27943"></a>11.3.5.&nbsp;压缩 (Compression)
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p>最后一个重要的 HTTP 特性是 gzip 压缩。
+               关于 HTTP web 服务的主题几乎总是会涉及在网络线路上传输的 XML。XML 是文本，而且还是相当冗长的文本，而文本通常可以被很好地压缩。当你通过 HTTP 请求一个资源时，可以告诉服务器，如果它有任何新数据要发送给我时，请以压缩的格式发送。在你的请求中包含
+               <tt class="literal">Accept-encoding: gzip</tt> 头信息，如果服务器支持压缩，它将返回由 gzip 压缩的数据并且使用 <tt class="literal">Content-encoding: gzip</tt> 头信息标记。
+            </p>
+            <p><span class="application">Python</span> 的 URL 库本身没有内置对 gzip 压缩的支持，但是你能为请求添加任意的头信息。<span class="application">Python</span> 还提供了一个独立的 <tt class="filename">gzip</tt> 模块，它提供了对数据进行解压缩的功能。
+            </p>
+            <p>注意我们用于下载 feed 汇聚的<a href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">小单行脚本</a>并不支持任何这些 HTTP 特性。让我们来看看如何改善它。
+            </p>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="review.html">&lt;&lt;&nbsp;避免通过 HTTP 重复地获取数据</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#oa.divein" title="11.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">2</a> <span class="divider">|</span> <span class="thispage">3</span> <span class="divider">|</span> <a href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">4</a> <span class="divider">|</span> <a href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">5</a> <span class="divider">|</span> <a href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">6</a> <span class="divider">|</span> <a href="redirects.html" title="11.7.&nbsp;处理重定向">7</a> <span class="divider">|</span> <a href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">8</a> <span class="divider">|</span> <a href="alltogether.html" title="11.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="11.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="debugging.html">调试 HTTP web 服务&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

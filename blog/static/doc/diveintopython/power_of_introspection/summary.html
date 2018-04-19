@@ -1,0 +1,116 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>4.9.&nbsp;小结</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;4&nbsp;章&nbsp;自省的威力">
+      <link rel="previous" href="all_together.html" title="4.8.&nbsp;全部放在一起">
+      <link rel="next" href="../object_oriented_framework/index.html" title="第&nbsp;5&nbsp;章&nbsp;对象和面向对象">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">自省的威力</a>&nbsp;&gt;&nbsp;<span class="thispage">小结</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="all_together.html" title="上一页: “全部放在一起”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="../object_oriented_framework/index.html" title="下一页: “对象和面向对象”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="apihelper.summary"></a>4.9.&nbsp;小结
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><tt class="filename">apihelper.py</tt> 程序和它的输出现在应该非常清晰了。
+            </p>
+         </div>
+         <div class="informalexample"><pre class="programlisting"><span class='pykeyword'>
+def</span> info(object, spacing=10, collapse=1):
+    <span class='pystring'>"""Print methods and doc strings.
+    
+    Takes module, class, list, dictionary, or string."""</span>
+    methodList = [method <span class='pykeyword'>for</span> method <span class='pykeyword'>in</span> dir(object) <span class='pykeyword'>if</span> callable(getattr(object, method))]
+    processFunc = collapse <span class='pykeyword'>and</span> (<span class='pykeyword'>lambda</span> s: <span class='pystring'>" "</span>.join(s.split())) <span class='pykeyword'>or</span> (<span class='pykeyword'>lambda</span> s: s)
+    <span class='pykeyword'>print</span> <span class='pystring'>"\n"</span>.join([<span class='pystring'>"%s %s"</span> %
+                      (method.ljust(spacing),
+                       processFunc(str(getattr(object, method).__doc__)))
+                     <span class='pykeyword'>for</span> method <span class='pykeyword'>in</span> methodList])
+
+<span class='pykeyword'>if</span> __name__ == <span class='pystring'>"__main__"</span>:
+    <span class='pykeyword'>print</span> info.__doc__</pre></div>
+         <div class="informalexample">
+            <p><tt class="filename">apihelper.py</tt> 的输出：
+            </p><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> apihelper <span class='pykeyword'>import</span> info</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = []</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">info(li)</span>
+<span class="computeroutput">append     L.append(object) -- append object to end
+count      L.count(value) -&gt; integer -- return number of occurrences of value
+extend     L.extend(list) -- extend list by appending list elements
+index      L.index(value) -&gt; integer -- return index of first occurrence of value
+insert     L.insert(index, object) -- insert object before index
+pop        L.pop([index]) -&gt; item -- remove and return item at index (default last)
+remove     L.remove(value) -- remove first occurrence of value
+reverse    L.reverse() -- reverse *IN PLACE*
+sort       L.sort([cmpfunc]) -- sort *IN PLACE*; if given, cmpfunc(x, y) -&gt; -1, 0, 1</span></pre></div>
+         <div class="highlights">
+            <p>在研究下一章前，确保你可以无困难的完成下面这些事情：</p>
+            <div class="itemizedlist">
+               <ul>
+                  <li>用<a href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">可选和命名参数</a>定义和调用函数
+                  </li>
+                  <li>用 <a href="built_in_functions.html#apihelper.str.intro" title="例&nbsp;4.6.&nbsp;str 介绍"><tt class="function">str</tt></a> 强制转换任意值为字符串形式
+                  </li>
+                  <li>用 <a href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用"><tt class="function">getattr</tt></a> 动态得到函数和其它属性的引用
+                  </li>
+                  <li>扩展列表解析语法实现<a href="filtering_lists.html" title="4.5.&nbsp;过滤列表">列表过滤</a></li>
+                  <li>识别 <a href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质"><tt class="literal">and-or</tt> 技巧</a>并安全地使用它
+                  </li>
+                  <li>定义 <a href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数"><tt class="literal">lambda</tt> 函数</a></li>
+                  <li><a href="lambda_functions.html#apihelper.funcassign">将函数赋值给变量</a>然后通过引用变量调用函数。我强调的已经够多了：这种思考方式对于提高对 <span class="application">Python</span> 的理解力至关重要。在本书中你会随处可见这种技术的更复杂的应用。
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="all_together.html">&lt;&lt;&nbsp;全部放在一起</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#apihelper.divein" title="4.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="optional_arguments.html" title="4.2.&nbsp;使用可选参数和命名参数">2</a> <span class="divider">|</span> <a href="built_in_functions.html" title="4.3.&nbsp;使用 type、str、dir 和其它内置函数">3</a> <span class="divider">|</span> <a href="getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用">4</a> <span class="divider">|</span> <a href="filtering_lists.html" title="4.5.&nbsp;过滤列表">5</a> <span class="divider">|</span> <a href="and_or.html" title="4.6.&nbsp;and 和 or 的特殊性质">6</a> <span class="divider">|</span> <a href="lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数">7</a> <span class="divider">|</span> <a href="all_together.html" title="4.8.&nbsp;全部放在一起">8</a> <span class="divider">|</span> <span class="thispage">9</span>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="../object_oriented_framework/index.html">对象和面向对象&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

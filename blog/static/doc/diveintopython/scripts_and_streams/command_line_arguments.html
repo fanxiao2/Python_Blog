@@ -1,0 +1,278 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>10.6.&nbsp;处理命令行参数</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;10&nbsp;章&nbsp;脚本和流">
+      <link rel="previous" href="handlers_by_node_type.html" title="10.5.&nbsp;根据节点类型创建不同的处理器">
+      <link rel="next" href="all_together.html" title="10.7.&nbsp;全部放在一起">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">脚本和流</a>&nbsp;&gt;&nbsp;<span class="thispage">处理命令行参数</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="handlers_by_node_type.html" title="上一页: “根据节点类型创建不同的处理器”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="all_together.html" title="下一页: “全部放在一起”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="kgp.commandline"></a>10.6.&nbsp;处理命令行参数
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><span class="application">Python</span> 完全支持创建在命令行运行的程序，也支持通过命令行参数和短长样式来指定各种选项。这些并非是 <span class="acronym">XML</span> 特定的，但是这样的脚本可以充分使用命令行处理，看来是时候提一下它了。
+            </p>
+         </div>
+         <p>如果不理解命令行参数如何暴露给你的 <span class="application">Python</span> 程序，讨论命令行处理是很困难的，所以让我们先写个简单点的程序来看一下。
+         </p>
+         <div class="example"><a name="d0e27060"></a><h3 class="title">例&nbsp;10.20.&nbsp;<tt class="varname">sys.argv</tt> 介绍
+            </h3>
+            <p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+            </p><pre class="programlisting">
+<span class='pycomment'>#argecho.py</span>
+<span class='pykeyword'>import</span> sys
+
+<span class='pykeyword'>for</span> arg <span class='pykeyword'>in</span> sys.argv: <a name="kgp.commandline.0.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>print</span> arg</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.0.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">每个传递给程序的命令行参数都在 <tt class="varname">sys.argv</tt> 中，而它仅仅是一个列表。这里我们在独立行中打印出每个参数。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e27081"></a><h3 class="title">例&nbsp;10.21.&nbsp;<tt class="varname">sys.argv</tt> 的内容
+            </h3><pre class="screen">
+<tt class="prompt">[you@localhost py]$ </tt><span class="userinput">python argecho.py</span>             <a name="kgp.commandline.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">argecho.py</span>
+<tt class="prompt">[you@localhost py]$ </tt><span class="userinput">python argecho.py abc def</span>     <a name="kgp.commandline.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">argecho.py
+abc
+def</span>
+<tt class="prompt">[you@localhost py]$ </tt><span class="userinput">python argecho.py --help</span>      <a name="kgp.commandline.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">argecho.py
+--help</span>
+<tt class="prompt">[you@localhost py]$ </tt><span class="userinput">python argecho.py -m kant.xml</span> <a name="kgp.commandline.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">argecho.py
+-m
+kant.xml</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">关于 <tt class="varname">sys.argv</tt> 需要了解的第一件事情就是：它包含了你正在调用的脚本的名称。你后面会实际使用这个知识，在<a href="../functional_programming/index.html" title="第&nbsp;16&nbsp;章&nbsp;函数编程">第&nbsp;16&nbsp;章 <i>函数编程</i></a>中。现在不用担心。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">命令行参数通过空格进行分隔。在 <tt class="varname">sys.argv</tt> 列表中，每个参数都是一个独立的元素。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">命令行标志，像 <tt class="literal">--help</tt>，在 <tt class="varname">sys.argv</tt> 列表中还保存了它们自己的元素。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">为了让事情更有趣，有些命令行标志本身就接收参数。比如，这里有一个标记 (<tt class="literal">-m</tt>) 接收一个参数 (<tt class="literal">kant.xml</tt>)。标记自身和标记参数只是 <tt class="varname">sys.argv</tt> 列表中的一串元素。并没有试图将元素与其它元素进行关联；所有你得到的是一个列表。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>所以正如你所看到的，你确实拥有了命令行传入的所有信息，但是接下来要实际使用它似乎不那么容易。对于只是接收单个参数或者没有标记的简单程序，你可以简单地使用 <tt class="literal">sys.argv[1]</tt> 来访问参数。这没有什么羞耻的；我一直都是这样做的。对更复杂的程序，你需要 <tt class="filename">getopt</tt> 模块。
+         </p>
+         <div class="example"><a name="d0e27171"></a><h3 class="title">例&nbsp;10.22.&nbsp;<tt class="filename">getopt</tt> 介绍
+            </h3><pre class="programlisting"><span class='pykeyword'>
+def</span> main(argv):                         
+    grammar = <span class='pystring'>"kant.xml"</span>                 <a name="kgp.commandline.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>try</span>:                                
+        opts, args = getopt.getopt(argv, <span class='pystring'>"hg:d"</span>, [<span class='pystring'>"help"</span>, <span class='pystring'>"grammar="</span>]) <a name="kgp.commandline.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    <span class='pykeyword'>except</span> getopt.GetoptError:           <a name="kgp.commandline.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        usage()                          <a name="kgp.commandline.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+        sys.exit(2)                     
+
+...
+
+<span class='pykeyword'>if</span> __name__ == <span class='pystring'>"__main__"</span>:
+    main(sys.argv[1:])</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">首先，看一下例子的最后并注意你正在调用 <tt class="function">main</tt> 函数，参数是 <tt class="literal">sys.argv[1:]</tt>。记住，<tt class="literal">sys.argv[0]</tt> 是你正在运行脚本的名称；在处理命令行时，你不用关心它，所以你可以砍掉它并传入列表的剩余部分。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里就是所有有趣处理发生的地方。<tt class="filename">getopt</tt> 模块的 <tt class="function">getopt</tt> 函数接受三个参数：参数列表 (你从 <tt class="literal">sys.argv[1:]</tt> 得到的)、一个包含了程序所有可能接收到的单字符命令行标志，和一个等价于单字符的长命令行标志的列表。第一次看的时候，这有点混乱，下面有更多的细节解释。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在解析这些命令行标志时，如果有任何事情错了，<tt class="filename">getopt</tt> 会抛出异常，你可以捕获它。你可以告诉 <tt class="filename">getopt</tt> 你明白的所有标志，那么这也意味着终端用户可以传入一些你不理解的命令行标志。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">和 <span class="acronym">UNIX</span> 世界中的标准实践一样，如果脚本被传入了不能理解的标志，你要打印出正确用法的一个概要并友好地退出。注意，在这里我没有写出 <tt class="function">usage</tt> 函数。你还是要在某个地方写一个，使它打印出合适的概要；它不是自动的。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>那么你传给 <tt class="function">getopt</tt> 函数的参数是什么呢？好的，第一个只不过是一个命令行标志和参数的原始列表 (不包括第一个元素――脚本名称，你在调用 <tt class="function">main</tt> 函数之前就已经将它砍掉了)。第二个是脚本接收的短命令行标志的一个列表。
+         </p>
+         <div class="variablelist">
+            <h3 class="title"><tt class="literal">"hg:d"</tt></h3>
+            <dl>
+               <dt><span class="term"><tt class="literal">-h</tt></span></dt>
+               <dd>打印用法概要</dd>
+               <dt><span class="term"><tt class="literal">-g ...</tt></span></dt>
+               <dd>使用给定的语法文件或 URL</dd>
+               <dt><span class="term"><tt class="literal">-d</tt></span></dt>
+               <dd>在解析时显示调试信息</dd>
+            </dl>
+         </div>
+         <p>第一个标志和第三个标志是简单的独立标志；你选择是否指定它们，它们做某些事情 (打印帮助) 或者改变状态 (打开调试)。但是，第二个标志 (<tt class="literal">-g</tt>) <span class="emphasis"><em>必须</em></span> 跟随一个参数――进行读取的语法文件的名称。实际上，它可以是一个文件名或者一个 web 地址，这时还不知道 (后面会确定)，但是你要知道必须要<span class="emphasis"><em>有些东西</em></span>。所以，你可以通过在 <tt class="function">getopt</tt> 函数的第二个参数的 <tt class="literal">g</tt> 后面放一个冒号，来向 <tt class="filename">getopt</tt> 说明这一点。
+         </p>
+         <p>更复杂的是，这个脚本既接收短标志 (像 <tt class="literal">-h</tt>)，也接受长标志 (像 <tt class="literal">--help</tt>)，并且你要它们做相同的事。这就是 <tt class="function">getopt</tt> 第三个参数存在的原因：它是指定长标志的一个列表，其中的长标志是和第二个参数中指定的短标志相对应的。
+         </p>
+         <div class="variablelist">
+            <h3 class="title"><tt class="literal">["help", "grammar="]</tt></h3>
+            <dl>
+               <dt><span class="term"><tt class="literal">--help</tt></span></dt>
+               <dd>打印用法概要</dd>
+               <dt><span class="term"><tt class="literal">--grammar ...</tt></span></dt>
+               <dd>使用给定的语法文件或 URL</dd>
+            </dl>
+         </div>
+         <p>这里有三点要注意：</p>
+         <div class="orderedlist">
+            <ol type="1">
+               <li>所有命令行中的长标志以两个短划线开始，但是在调用 <tt class="function">getopt</tt> 时，你不用包含这两个短划线。它们是能够被理解的。
+               </li>
+               <li><tt class="literal">--grammar</tt> 标志的后面必须跟着另一个参数，就像 <tt class="literal">-g</tt> 标志一样。通过等于号标识出来：<tt class="literal">"grammar="</tt>。
+               </li>
+               <li>长标志列表比短标志列表更短一些，因为 <tt class="literal">-d</tt> 标志没有相应的长标志。这很好；只有 <tt class="literal">-d</tt> 才会打开调试。但是短标志和长标志的顺序必须是相同的，你应该先指定有长标志的短标志，然后才是剩下的短标志。
+               </li>
+            </ol>
+         </div>
+         <p>被搞昏没？让我们看一下真实的代码，看看它在上下文中是否起作用。</p>
+         <div class="example"><a name="d0e27342"></a><h3 class="title">例&nbsp;10.23.&nbsp;在 <tt class="filename">kgp.py</tt> 中处理命令行参数
+            </h3><pre class="programlisting"><span class='pykeyword'>
+def</span> main(argv):                          <a name="kgp.commandline.3.0"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    grammar = <span class='pystring'>"kant.xml"</span>                
+    <span class='pykeyword'>try</span>:                                
+        opts, args = getopt.getopt(argv, <span class='pystring'>"hg:d"</span>, [<span class='pystring'>"help"</span>, <span class='pystring'>"grammar="</span>])
+    <span class='pykeyword'>except</span> getopt.GetoptError:          
+        usage()                         
+        sys.exit(2)                     
+    <span class='pykeyword'>for</span> opt, arg <span class='pykeyword'>in</span> opts:                <a name="kgp.commandline.3.1"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> opt <span class='pykeyword'>in</span> (<span class='pystring'>"-h"</span>, <span class='pystring'>"--help"</span>):      <a name="kgp.commandline.3.2"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+            usage()                     
+            sys.exit()                  
+        <span class='pykeyword'>elif</span> opt == <span class='pystring'>'-d'</span>:                <a name="kgp.commandline.3.3"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+            <span class='pykeyword'>global</span> _debug               
+            _debug = 1                  
+        <span class='pykeyword'>elif</span> opt <span class='pykeyword'>in</span> (<span class='pystring'>"-g"</span>, <span class='pystring'>"--grammar"</span>): <a name="kgp.commandline.3.4"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+            grammar = arg               
+
+    source = <span class='pystring'>""</span>.join(args)               <a name="kgp.commandline.3.5"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12">
+
+    k = KantGenerator(grammar, source)
+    <span class='pykeyword'>print</span> k.output()</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.3.0"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">grammar</tt> 变量会跟踪你正在使用的语法文件。如果你没有在命令行指定它 (使用 <tt class="literal">-g</tt> 或者 <tt class="literal">--grammar</tt> 标志定义它)，在这里你将初始化它。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.3.1"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你从 <tt class="function">getopt</tt> 取回的 <tt class="varname">opts</tt> 变量是一个由元组 (<tt class="varname">flag</tt> 和 <tt class="varname">argument</tt>) 组成的列表。如果标志没有带任何参数，那么 <tt class="varname">arg</tt> 只是 <tt class="literal">None</tt>。这使得遍历标志更容易了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.3.2"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">getopt</tt> 验证命令行标志是否可接受，但是它不会在短标志和长标志之间做任何转换。如果你指定 <tt class="literal">-h</tt> 标志，<tt class="varname">opt</tt> 将会包含 <tt class="literal">"-h"</tt>；如果你指定 <tt class="literal">--help</tt> 标志，<tt class="varname">opt</tt> 将会包含<tt class="literal">"--help"</tt> 标志。所以你需要检查它们两个。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.3.3"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">别忘了，<tt class="literal">-d</tt> 标志没有相应的长标志，所以你只需要检查短形式。如果你找到了它，你就可以设置一个全局变量来指示后面要打印出调试信息。(我习惯在脚本的开发过程中使用它。什么，你以为所有这些程序都是一次成功的？)
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.3.4"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果你找到了一个语法文件，跟在 <tt class="literal">-g</tt> 或者 <tt class="literal">--grammar</tt> 标志后面，那你就要把跟在后面的参数 (<tt class="varname">arg</tt>) 保存到变量<tt class="varname">grammar</tt> 中，覆盖掉在 <tt class="function">main</tt> 函数你初始化的默认值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.commandline.3.5"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">就是这样。你已经遍历并处理了所有的命令行标志。这意味着所有剩下的东西都必须是命令行参数。它们由 <tt class="function">getopt</tt> 函数的 <tt class="varname">args</tt> 变量返回。在这个例子中，你把它们当作了解析器源材料。如果没有指定命令行参数，<tt class="varname">args</tt> 将是一个空列表，而 <tt class="varname">source</tt> 将是空字符串。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="handlers_by_node_type.html">&lt;&lt;&nbsp;根据节点类型创建不同的处理器</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#kgp.openanything" title="10.1.&nbsp;抽象输入源">1</a> <span class="divider">|</span> <a href="stdin_stdout_stderr.html" title="10.2.&nbsp;标准输入、输出和错误">2</a> <span class="divider">|</span> <a href="caching.html" title="10.3.&nbsp;查询缓冲节点">3</a> <span class="divider">|</span> <a href="child_nodes.html" title="10.4.&nbsp;查找节点的直接子节点">4</a> <span class="divider">|</span> <a href="handlers_by_node_type.html" title="10.5.&nbsp;根据节点类型创建不同的处理器">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="all_together.html" title="10.7.&nbsp;全部放在一起">7</a> <span class="divider">|</span> <a href="summary.html" title="10.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="all_together.html">全部放在一起&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

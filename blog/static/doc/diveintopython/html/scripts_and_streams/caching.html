@@ -1,0 +1,118 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>10.3.&nbsp;查询缓冲节点</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;10&nbsp;章&nbsp;脚本和流">
+      <link rel="previous" href="stdin_stdout_stderr.html" title="10.2.&nbsp;标准输入、输出和错误">
+      <link rel="next" href="child_nodes.html" title="10.4.&nbsp;查找节点的直接子节点">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">脚本和流</a>&nbsp;&gt;&nbsp;<span class="thispage">查询缓冲节点</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="stdin_stdout_stderr.html" title="上一页: “标准输入、输出和错误”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="child_nodes.html" title="下一页: “查找节点的直接子节点”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="kgp.cache"></a>10.3.&nbsp;查询缓冲节点
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><tt class="filename">kgp.py</tt> 使用了多种技巧，在你进行 <span class="acronym">XML</span> 处理时，它们或许能派上用场。第一个就是，利用输入文档的结构稳定特征来构建节点缓冲。
+            </p>
+         </div>
+         <p>一个语法文件定义了一系列的 <tt class="sgmltag-element">ref</tt> 元素。每个 <tt class="sgmltag-element">ref</tt> 包含了一个或多个 <tt class="sgmltag-element">p</tt> 元素，<tt class="sgmltag-element">p</tt> 元素则可以包含很多不同的东西，包括 <tt class="sgmltag-element">xref</tt>。对于每个 <tt class="sgmltag-element">xref</tt>，你都能找到相对应的 <tt class="sgmltag-element">ref</tt> 元素 (它们具有相同的 <tt class="sgmltag-element">id</tt> 属性)，然后选择 <tt class="sgmltag-element">ref</tt> 元素的子元素之一进行解析。(在下一部分中你将看到是如何进行这种随机选择的。)
+         </p>
+         <p>语法的构建方式如下：先为最小的片段定义 <tt class="sgmltag-element">ref</tt> 元素，然后使用 <tt class="sgmltag-element">xref</tt> 定义“包含”第一个 <tt class="sgmltag-element">ref</tt> 元素的 <tt class="sgmltag-element">ref</tt> 元素，等等。然后，解析“最大的”引用并跟着 <tt class="sgmltag-element">xref</tt> 跳来跳去，最后输出真实的文本。输出的文本依赖于你每次填充 <tt class="sgmltag-element">xref</tt> 时所做的 (随机) 决策，所以每次的输出都是不同的。
+         </p>
+         <p>这种方式非常灵活，但是有一个不好的地方：性能。当你找到一个 <tt class="sgmltag-element">xref</tt> 并需要找到相应的 <tt class="sgmltag-element">ref</tt> 元素时，会遇到一个问题。<tt class="sgmltag-element">xref</tt> 有 <tt class="sgmltag-element">id</tt> 属性，而你要找拥有相同 <tt class="sgmltag-element">id</tt> 属性的 <tt class="sgmltag-element">ref</tt> 元素，但是没有简单的方式做到这件事。较慢的方式是每次获取所有 <tt class="sgmltag-element">ref</tt> 元素的完整列表，然后手动遍历并检视每一个 <tt class="sgmltag-element">id</tt> 属性。较快的方式是只做一次，然后以字典形式构建一个缓冲。
+         </p>
+         <div class="example"><a name="d0e26553"></a><h3 class="title">例&nbsp;10.14.&nbsp;<tt class="function">loadGrammar</tt></h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> loadGrammar</span>(self, grammar):                         
+        self.grammar = self._load(grammar)                  
+        self.refs = {}                                       <a name="kgp.cache.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        <span class='pykeyword'>for</span> ref <span class='pykeyword'>in</span> self.grammar.getElementsByTagName(<span class='pystring'>"ref"</span>): <a name="kgp.cache.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+            self.refs[ref.attributes[<span class='pystring'>"id"</span>].value] = ref      <a name="kgp.cache.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"> <a name="kgp.cache.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.cache.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">从创建一个空字典 <tt class="varname">self.refs</tt> 开始。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.cache.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你在<a href="../xml_processing/searching.html" title="9.5.&nbsp;搜索元素">第&nbsp;9.5&nbsp;节 “搜索元素”</a>中看到的，<tt class="function">getElementsByTagName</tt> 返回所有特定名称元素的一个列表。你可以很容易地得到所有 <tt class="sgmltag-element">ref</tt> 元素的一个列表，然后遍历这个列表。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.cache.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如你在<a href="../xml_processing/attributes.html" title="9.6.&nbsp;访问元素属性">第&nbsp;9.6&nbsp;节 “访问元素属性”</a>中看到的，使用标准的字典语法，你可以通过名称来访问个别元素。所以，<tt class="varname">self.refs</tt> 字典的键将是每个 <tt class="sgmltag-element">ref</tt> 元素的 <tt class="sgmltag-element">id</tt> 属性值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.cache.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">self.refs</tt> 字典的值将是 <tt class="sgmltag-element">ref</tt> 元素本身。如你在<a href="../xml_processing/parsing_xml.html" title="9.3.&nbsp;XML 解析">第&nbsp;9.3&nbsp;节 “XML 解析”</a>中看到的，已解析 <span class="acronym">XML</span> 文档中的每个元素、节点、注释和文本片段都是一个对象。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>只要构建了这个缓冲，无论何时你遇到一个 <tt class="sgmltag-element">xref</tt> 并且需要找到具有相同 <tt class="sgmltag-element">id</tt> 属性的 <tt class="sgmltag-element">ref</tt> 元素，都只需在 <tt class="varname">self.refs</tt> 中查找它。
+         </p>
+         <div class="example"><a name="d0e26625"></a><h3 class="title">例&nbsp;10.15.&nbsp;使用 <tt class="sgmltag-element">ref</tt> 元素缓冲
+            </h3><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> do_xref</span>(self, node):
+        id = node.attributes[<span class='pystring'>"id"</span>].value
+        self.parse(self.randomChildElement(self.refs[id]))</pre></div>
+         <p>你将在下一部分探究 <tt class="function">randomChildElement</tt> 函数。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="stdin_stdout_stderr.html">&lt;&lt;&nbsp;标准输入、输出和错误</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#kgp.openanything" title="10.1.&nbsp;抽象输入源">1</a> <span class="divider">|</span> <a href="stdin_stdout_stderr.html" title="10.2.&nbsp;标准输入、输出和错误">2</a> <span class="divider">|</span> <span class="thispage">3</span> <span class="divider">|</span> <a href="child_nodes.html" title="10.4.&nbsp;查找节点的直接子节点">4</a> <span class="divider">|</span> <a href="handlers_by_node_type.html" title="10.5.&nbsp;根据节点类型创建不同的处理器">5</a> <span class="divider">|</span> <a href="command_line_arguments.html" title="10.6.&nbsp;处理命令行参数">6</a> <span class="divider">|</span> <a href="all_together.html" title="10.7.&nbsp;全部放在一起">7</a> <span class="divider">|</span> <a href="summary.html" title="10.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="child_nodes.html">查找节点的直接子节点&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

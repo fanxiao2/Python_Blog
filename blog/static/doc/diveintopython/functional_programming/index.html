@@ -1,0 +1,183 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>第&nbsp;16&nbsp;章&nbsp;函数编程</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="../toc/index.html" title="Dive Into Python">
+      <link rel="previous" href="../refactoring/summary.html" title="15.5.&nbsp;小结">
+      <link rel="next" href="finding_the_path.html" title="16.2.&nbsp;找到路径">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<span class="thispage">函数编程</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="../refactoring/summary.html" title="上一页: “小结”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="finding_the_path.html" title="下一页: “找到路径”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="chapter" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="regression"></a>第&nbsp;16&nbsp;章&nbsp;函数编程
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="index.html#regression.divein">16.1. 概览</a></span></li>
+               <li><span class="section"><a href="finding_the_path.html">16.2. 找到路径</a></span></li>
+               <li><span class="section"><a href="filtering_lists.html">16.3. 重识列表过滤</a></span></li>
+               <li><span class="section"><a href="mapping_lists.html">16.4. 重识列表映射</a></span></li>
+               <li><span class="section"><a href="data_centric.html">16.5. 数据中心思想编程</a></span></li>
+               <li><span class="section"><a href="dynamic_import.html">16.6. 动态导入模块</a></span></li>
+               <li><span class="section"><a href="all_together.html">16.7. 全部放在一起</a></span></li>
+               <li><span class="section"><a href="summary.html">16.8. 小结</a></span></li>
+            </ul>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="regression.divein"></a>16.1.&nbsp;概览
+                     </h2>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="abstract">
+               <p>在 <a href="../unit_testing/index.html" title="第&nbsp;13&nbsp;章&nbsp;单元测试">第&nbsp;13&nbsp;章 <i>单元测试</i></a> 中，你学会了单元测试的哲学。在 <a href="../unit_testing/stage_1.html" title="第&nbsp;14&nbsp;章&nbsp;测试优先编程">第&nbsp;14&nbsp;章 <i>测试优先编程</i></a>  中你步入了 <span class="application">Python</span> 基本的单元测试操作，在 <a href="../refactoring/index.html" title="第&nbsp;15&nbsp;章&nbsp;重构">第&nbsp;15&nbsp;章 <i>重构</i></a> 部分，你看到单元测试如何令大规模重构变得容易。本章将在这些程序样例的基础上，集中关注于超越单元测试本身的更高级的 <span class="application">Python</span> 特有技术。
+               </p>
+            </div>
+            <p>下面是一个作为简单回归测试 (regression test) 框架运行的完整 <span class="application">Python</span> 程序。它将你前面编写的单独单元测试模块组织在一起成为一个测试套件并一次性运行。实际上这是本书的构建代码的一部分；我为几个样例程序都编写了单元测试 (不是只有 <a href="../unit_testing/index.html" title="第&nbsp;13&nbsp;章&nbsp;单元测试">第&nbsp;13&nbsp;章 <i>单元测试</i></a> 中的 <tt class="filename">roman.py</tt> 模块)，我的自动构建代码的第一个工作便是确保我所有的例子可以正常工作。如果回归测试程序失败，构建过程当即终止。我可不想因为发布了不能工作的样例程序而让你在下载他们后坐在显示器前抓耳挠腮地为程序不能运转而烦恼。
+            </p>
+            <div class="example"><a name="d0e35447"></a><h3 class="title">例&nbsp;16.1.&nbsp;<tt class="filename">regression.py</tt></h3>
+               <p>如果您还没有下载本书附带的样例程序, 可以 <a href="http://www.woodpecker.org.cn/diveintopython/download/diveintopython-exampleszh-cn-5.4b.zip" title="Download example scripts">下载本程序和其他样例程序</a>。
+               </p><pre class="programlisting">
+<span class='pystring'>"""Regression testing framework
+
+This module will search for scripts in the same directory named
+XYZtest.py.  Each such script should be a test suite that tests a
+module through PyUnit.  (As of Python 2.1, PyUnit is included in
+the standard library as "unittest".)  This script will aggregate all
+found test suites into one big test suite and run them all at once.
+"""</span>
+
+<span class='pykeyword'>import</span> sys, os, re, unittest
+
+<span class='pykeyword'>def</span><span class='pyclass'> regressionTest</span>():
+    path = os.path.abspath(os.path.dirname(sys.argv[0]))   
+    files = os.listdir(path)                               
+    test = re.compile(<span class='pystring'>"test\.py$"</span>, re.IGNORECASE)          
+    files = filter(test.search, files)                     
+    filenameToModuleName = <span class='pykeyword'>lambda</span> f: os.path.splitext(f)[0]
+    moduleNames = map(filenameToModuleName, files)         
+    modules = map(__import__, moduleNames)                 
+    load = unittest.defaultTestLoader.loadTestsFromModule  
+    <span class='pykeyword'>return</span> unittest.TestSuite(map(load, modules))          
+
+<span class='pykeyword'>if</span> __name__ == <span class='pystring'>"__main__"</span>:                   
+    unittest.main(defaultTest=<span class='pystring'>"regressionTest"</span>)
+</pre></div>
+            <p>把这段代码放在本书其他样例代码相同的目录下运行之，<tt class="filename"><i class="replaceable"><tt>module</tt></i>test.py</tt> 中的所有单元测试将被找到并一起被运行。
+            </p>
+            <div class="example"><a name="d0e35465"></a><h3 class="title">例&nbsp;16.2.&nbsp;<tt class="filename">regression.py</tt> 的样例输出
+               </h3><pre class="screen">
+<tt class="prompt">[you@localhost py]$ </tt><span class="userinput">python regression.py -v</span>
+<span class="computeroutput">help should fail with no object ... ok                             </span><a name="regression.divein.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"><span class="computeroutput">
+help should return known result for apihelper ... ok
+help should honor collapse argument ... ok
+help should honor spacing argument ... ok
+buildConnectionString should fail with list input ... ok           </span><a name="regression.divein.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"><span class="computeroutput">
+buildConnectionString should fail with string input ... ok
+buildConnectionString should fail with tuple input ... ok
+buildConnectionString handles empty dictionary ... ok
+buildConnectionString returns known result with known input ... ok
+fromRoman should only accept uppercase input ... ok                </span><a name="regression.divein.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"><span class="computeroutput">
+toRoman should always return uppercase ... ok
+fromRoman should fail with blank string ... ok
+fromRoman should fail with malformed antecedents ... ok
+fromRoman should fail with repeated pairs of numerals ... ok
+fromRoman should fail with too many repeated numerals ... ok
+fromRoman should give known result with known input ... ok
+toRoman should give known result with known input ... ok
+fromRoman(toRoman(n))==n for all n ... ok
+toRoman should fail with non-integer input ... ok
+toRoman should fail with negative input ... ok
+toRoman should fail with large input ... ok
+toRoman should fail with 0 input ... ok
+kgp a ref test ... ok
+kgp b ref test ... ok
+kgp c ref test ... ok
+kgp d ref test ... ok
+kgp e ref test ... ok
+kgp f ref test ... ok
+kgp g ref test ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 2.799s
+
+OK</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#regression.divein.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">前五个测试来自于 <tt class="filename">apihelpertest.py</tt>，用以测试 <a href="../power_of_introspection/index.html" title="第&nbsp;4&nbsp;章&nbsp;自省的威力">第&nbsp;4&nbsp;章 <i>自省的威力</i></a> 中的样例代码。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#regression.divein.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">接下来的五个测试来自于 <tt class="filename">odbchelpertest.py</tt>，用以测试 <a href="../getting_to_know_python/index.html" title="第&nbsp;2&nbsp;章&nbsp;第一个 Python 程序">第&nbsp;2&nbsp;章 <i>第一个 Python 程序</i></a> 中的样例代码。
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#regression.divein.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">其他的测试来自于 <tt class="filename">romantest.py</tt>，你在 <a href="../unit_testing/index.html" title="第&nbsp;13&nbsp;章&nbsp;单元测试">第&nbsp;13&nbsp;章 <i>单元测试</i></a> 中深入学习过。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="../refactoring/summary.html">&lt;&lt;&nbsp;小结</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<span class="thispage">1</span> <span class="divider">|</span> <a href="finding_the_path.html" title="16.2.&nbsp;找到路径">2</a> <span class="divider">|</span> <a href="filtering_lists.html" title="16.3.&nbsp;重识列表过滤">3</a> <span class="divider">|</span> <a href="mapping_lists.html" title="16.4.&nbsp;重识列表映射">4</a> <span class="divider">|</span> <a href="data_centric.html" title="16.5.&nbsp;数据中心思想编程">5</a> <span class="divider">|</span> <a href="dynamic_import.html" title="16.6.&nbsp;动态导入模块">6</a> <span class="divider">|</span> <a href="all_together.html" title="16.7.&nbsp;全部放在一起">7</a> <span class="divider">|</span> <a href="summary.html" title="16.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="finding_the_path.html">找到路径&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

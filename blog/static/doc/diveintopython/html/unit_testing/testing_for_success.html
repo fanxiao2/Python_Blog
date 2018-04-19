@@ -1,0 +1,186 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>13.4.&nbsp;正面测试 (Testing for success)</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;13&nbsp;章&nbsp;单元测试">
+      <link rel="previous" href="romantest.html" title="13.3.&nbsp;romantest.py 介绍">
+      <link rel="next" href="testing_for_failure.html" title="13.5.&nbsp;负面测试 (Testing for failure)">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">单元测试</a>&nbsp;&gt;&nbsp;<span class="thispage">正面测试 (Testing for success)</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="romantest.html" title="上一页: “romantest.py 介绍”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="testing_for_failure.html" title="下一页: “负面测试 (Testing for failure)”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="roman.success"></a>13.4.&nbsp;正面测试 (Testing for success)
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>单元测试的基础是构建独立的测试用例 (test case)。一个测试用例只回答一个关于被测试代码的问题。</p>
+         </div>
+         <p>一个测试用例应该做到：</p>
+         <div class="itemizedlist">
+            <ul>
+               <li>完全独立运行，不需要人工输入。单元测试应该是自动的。</li>
+               <li>可以自己判断被测试函数是通过还是失败，不需要人工干预结果。</li>
+               <li>独立运行，可以与其他测试用例隔离 (尽管它们可能测试着同一个函数)。每个测试用例是一个孤岛。</li>
+            </ul>
+         </div>
+         <p>基于如上原则，让我们构建第一个测试用例。应符合如下<a href="index.html#roman.requirements">要求</a>：
+         </p>
+         <div class="orderedlist">
+            <ol type="1">
+               <li><tt class="function">toRoman</tt> 应该为所有 <tt class="constant">1</tt> 到 <tt class="literal">3999</tt> 的整数返回罗马数字表示。
+               </li>
+            </ol>
+         </div>
+         <div class="example"><a name="roman.testtoromanknownvalues.example"></a><h3 class="title">例&nbsp;13.2.&nbsp;<tt class="function">testToRomanKnownValues</tt></h3><pre class="programlisting"><span class='pykeyword'>
+class</span> KnownValues(unittest.TestCase):                           <a name="roman.success.1.0"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    knownValues = ( (1, <span class='pystring'>'I'</span>),
+                    (2, <span class='pystring'>'II'</span>),
+                    (3, <span class='pystring'>'III'</span>),
+                    (4, <span class='pystring'>'IV'</span>),
+                    (5, <span class='pystring'>'V'</span>),
+                    (6, <span class='pystring'>'VI'</span>),
+                    (7, <span class='pystring'>'VII'</span>),
+                    (8, <span class='pystring'>'VIII'</span>),
+                    (9, <span class='pystring'>'IX'</span>),
+                    (10, <span class='pystring'>'X'</span>),
+                    (50, <span class='pystring'>'L'</span>),
+                    (100, <span class='pystring'>'C'</span>),
+                    (500, <span class='pystring'>'D'</span>),
+                    (1000, <span class='pystring'>'M'</span>),
+                    (31, <span class='pystring'>'XXXI'</span>),
+                    (148, <span class='pystring'>'CXLVIII'</span>),
+                    (294, <span class='pystring'>'CCXCIV'</span>),
+                    (312, <span class='pystring'>'CCCXII'</span>),
+                    (421, <span class='pystring'>'CDXXI'</span>),
+                    (528, <span class='pystring'>'DXXVIII'</span>),
+                    (621, <span class='pystring'>'DCXXI'</span>),
+                    (782, <span class='pystring'>'DCCLXXXII'</span>),
+                    (870, <span class='pystring'>'DCCCLXX'</span>),
+                    (941, <span class='pystring'>'CMXLI'</span>),
+                    (1043, <span class='pystring'>'MXLIII'</span>),
+                    (1110, <span class='pystring'>'MCX'</span>),
+                    (1226, <span class='pystring'>'MCCXXVI'</span>),
+                    (1301, <span class='pystring'>'MCCCI'</span>),
+                    (1485, <span class='pystring'>'MCDLXXXV'</span>),
+                    (1509, <span class='pystring'>'MDIX'</span>),
+                    (1607, <span class='pystring'>'MDCVII'</span>),
+                    (1754, <span class='pystring'>'MDCCLIV'</span>),
+                    (1832, <span class='pystring'>'MDCCCXXXII'</span>),
+                    (1993, <span class='pystring'>'MCMXCIII'</span>),
+                    (2074, <span class='pystring'>'MMLXXIV'</span>),
+                    (2152, <span class='pystring'>'MMCLII'</span>),
+                    (2212, <span class='pystring'>'MMCCXII'</span>),
+                    (2343, <span class='pystring'>'MMCCCXLIII'</span>),
+                    (2499, <span class='pystring'>'MMCDXCIX'</span>),
+                    (2574, <span class='pystring'>'MMDLXXIV'</span>),
+                    (2646, <span class='pystring'>'MMDCXLVI'</span>),
+                    (2723, <span class='pystring'>'MMDCCXXIII'</span>),
+                    (2892, <span class='pystring'>'MMDCCCXCII'</span>),
+                    (2975, <span class='pystring'>'MMCMLXXV'</span>),
+                    (3051, <span class='pystring'>'MMMLI'</span>),
+                    (3185, <span class='pystring'>'MMMCLXXXV'</span>),
+                    (3250, <span class='pystring'>'MMMCCL'</span>),
+                    (3313, <span class='pystring'>'MMMCCCXIII'</span>),
+                    (3408, <span class='pystring'>'MMMCDVIII'</span>),
+                    (3501, <span class='pystring'>'MMMDI'</span>),
+                    (3610, <span class='pystring'>'MMMDCX'</span>),
+                    (3743, <span class='pystring'>'MMMDCCXLIII'</span>),
+                    (3844, <span class='pystring'>'MMMDCCCXLIV'</span>),
+                    (3888, <span class='pystring'>'MMMDCCCLXXXVIII'</span>),
+                    (3940, <span class='pystring'>'MMMCMXL'</span>),
+                    (3999, <span class='pystring'>'MMMCMXCIX'</span>))                        <a name="roman.success.1.1"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+
+    <span class='pykeyword'>def</span><span class='pyclass'> testToRomanKnownValues</span>(self):                           <a name="roman.success.1.2"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        <span class='pystring'>"""toRoman should give known result with known input"""</span>
+        <span class='pykeyword'>for</span> integer, numeral <span class='pykeyword'>in</span> self.knownValues:              
+            result = roman.toRoman(integer)                     <a name="roman.success.1.3"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"> <a name="roman.success.1.4"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+            self.assertEqual(numeral, result)                   <a name="roman.success.1.5"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.success.1.0"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">编写测试用例的第一步就是继承 <tt class="filename">unittest</tt> 模块中的 <tt class="classname">TestCase</tt> 类，它提供了很多可以用在你的测试用例中来测试特定情况的有用方法。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.success.1.1"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是我手工转换的一个 integer/numeral 对列表。它包含了最小的十个数、最大的数、每个单字符罗马数字对应的数，以及其他随机挑选的有效数样本。单元测试的关键不在于所有可能的输入，而是一个有代表性的样本。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.success.1.2"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">每个独立测试本身都是一个方法，既不需要参数也不返回任何值。如果该方法正常退出没有引发异常，测试被认为通过；如果测试引发异常，测试被认为失败。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.success.1.3"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里你真正调用了 <tt class="function">toRoman</tt> 函数。(当然，函数还没有编写，但一旦被编写，这里便是调用之处。) 注意你在这里为 <tt class="function">toRoman</tt> 函数定义了 <span class="acronym">API</span> ：它必须接受整数 (待转换的数) 并返回一个字符串 (对应的罗马数字表示)，如果 <span class="acronym">API</span> 不是这样，测试将失败。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.success.1.4"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">同样值得注意，你在调用 <tt class="function">toRoman</tt> 时没有试图捕捉任何可能发生的异常。这正是我们所希望的。以有效输入调用 <tt class="function">toRoman</tt> 不会引发任何异常，而你看到的这些输入都是有效的。如果 <tt class="function">toRoman</tt> 引发了异常，则测试失败。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#roman.success.1.5"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">假设 <tt class="function">toRoman</tt> 函数被正确编写，正确调用，运行成功并返回一个值，最后一步便是检查这个返回值<span class="emphasis"><em>正确</em></span> 与否。这是一个常见的问题，<tt class="classname">TestCase</tt> 类提供了一个方法：<tt class="function">assertEqual</tt>，来测试两个值是否相等。如果 <tt class="function">toRoman</tt> 返回的结果 (<tt class="varname">value</tt>) 不等于我们预期的值 (<tt class="varname">numeral</tt>)，<tt class="function">assertEqual</tt> 将会引发一个异常，测试也就此失败。如果两个值相等，<tt class="function">assertEqual</tt> 什么也不做。如果每个从 <tt class="function">toRoman</tt> 返回的值都等于预期值，<tt class="function">assertEqual</tt> 便不会引发异常，于是 <tt class="function">testToRomanKnownValues</tt> 最终正常退出，这意味着 <tt class="function">toRoman</tt> 通过了该测试。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="romantest.html">&lt;&lt;&nbsp;romantest.py 介绍</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#roman.intro" title="13.1.&nbsp;罗马数字程序介绍 II">1</a> <span class="divider">|</span> <a href="diving_in.html" title="13.2.&nbsp;深入">2</a> <span class="divider">|</span> <a href="romantest.html" title="13.3.&nbsp;romantest.py 介绍">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="testing_for_failure.html" title="13.5.&nbsp;负面测试 (Testing for failure)">5</a> <span class="divider">|</span> <a href="testing_for_sanity.html" title="13.6.&nbsp;完备性检测 (Testing for sanity)">6</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="testing_for_failure.html">负面测试 (Testing for failure)&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

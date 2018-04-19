@@ -1,0 +1,209 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>18.4.&nbsp;优化字典查找</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;18&nbsp;章&nbsp;性能优化">
+      <link rel="previous" href="regular_expressions.html" title="18.3.&nbsp;优化正则表达式">
+      <link rel="next" href="list_operations.html" title="18.5.&nbsp;优化列表操作">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">性能优化</a>&nbsp;&gt;&nbsp;<span class="thispage">优化字典查找</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="regular_expressions.html" title="上一页: “优化正则表达式”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="list_operations.html" title="下一页: “优化列表操作”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="soundex.stage2"></a>18.4.&nbsp;优化字典查找
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p> Soundex 算法的第二步是依照特定规则将字符转换为数字。做到这点最好的方法是什么？</p>
+         </div>
+         <p>最明显的解决方案是定义一个以单字符为键并以所对应数字为值的字典，以字典查找每个字符。这便是 <tt class="filename">soundex/stage1/soundex1e.py</tt> 中使用的方法 (目前最好的结果)：
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+charToSoundex = {<span class='pystring'>"A"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"B"</span>: <span class='pystring'>"1"</span>,
+                 <span class='pystring'>"C"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"D"</span>: <span class='pystring'>"3"</span>,
+                 <span class='pystring'>"E"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"F"</span>: <span class='pystring'>"1"</span>,
+                 <span class='pystring'>"G"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"H"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"I"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"J"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"K"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"L"</span>: <span class='pystring'>"4"</span>,
+                 <span class='pystring'>"M"</span>: <span class='pystring'>"5"</span>,
+                 <span class='pystring'>"N"</span>: <span class='pystring'>"5"</span>,
+                 <span class='pystring'>"O"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"P"</span>: <span class='pystring'>"1"</span>,
+                 <span class='pystring'>"Q"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"R"</span>: <span class='pystring'>"6"</span>,
+                 <span class='pystring'>"S"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"T"</span>: <span class='pystring'>"3"</span>,
+                 <span class='pystring'>"U"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"V"</span>: <span class='pystring'>"1"</span>,
+                 <span class='pystring'>"W"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"X"</span>: <span class='pystring'>"2"</span>,
+                 <span class='pystring'>"Y"</span>: <span class='pystring'>"9"</span>,
+                 <span class='pystring'>"Z"</span>: <span class='pystring'>"2"</span>}
+
+<span class='pykeyword'>def</span><span class='pyclass'> soundex</span>(source):
+    <span class='pycomment'># ... input check omitted for brevity ...</span>
+    source = source[0].upper() + source[1:]
+    digits = source[0]
+    <span class='pykeyword'>for</span> s <span class='pykeyword'>in</span> source[1:]:
+        s = s.upper()
+        digits += charToSoundex[s]
+</pre></div>
+         <p>你已经为 <tt class="filename">soundex1e.py</tt> 计时，这便是其表现：
+         </p>
+         <div class="informalexample"><pre class="screen">
+<tt class="prompt">C:\samples\soundex\stage1&gt;</tt><span class="userinput">python soundex1c.py</span>
+<span class="computeroutput">Woo             W000 13.5069504644
+Pilgrim         P426 18.2199394057
+Flingjingwaller F452 28.9975225902</span>
+</pre></div>
+         <p>这段代码很直接，但它是最佳解决方案吗？为每个字符分别调用 <tt class="methodname">upper()</tt> 看起来不是很有效率，为整个字符串调用 <tt class="methodname">upper()</tt> 一次可能会好些。
+         </p>
+         <p>然后是一砖一瓦地建立 <tt class="varname">digits</tt> 字符串。一砖一瓦的建造好像非常欠缺效率。在 <span class="application">Python</span> 内部，解释器需要在循环的每一轮创建一个新的字符串，然后丢弃旧的。
+         </p>
+         <p>但是，<span class="application">Python</span> 擅长于列表。可以自动地将字符串作为列表来对待。而且使用 <tt class="methodname">join()</tt> 方法可以很容易地将列表合并成字符串。
+         </p>
+         <p>这便是 <tt class="filename">soundex/stage2/soundex2a.py</tt>，通过 <tt class="literal">map</tt> 和 <tt class="literal">lambda</tt> 把所有字母转换为数字：
+         </p>
+         <div class="informalexample"><pre class="programlisting"><span class='pykeyword'>
+def</span> soundex(source):
+    <span class='pycomment'># ...</span>
+    source = source.upper()
+    digits = source[0] + <span class='pystring'>""</span>.join(map(<span class='pykeyword'>lambda</span> c: charToSoundex[c], source[1:]))
+</pre></div>
+         <p>太震惊了，<tt class="filename">soundex2a.py</tt> 并不快：
+         </p>
+         <div class="informalexample"><pre class="screen">
+<tt class="prompt">C:\samples\soundex\stage2&gt;</tt><span class="userinput">python soundex2a.py</span>
+<span class="computeroutput">Woo             W000 15.0097526362
+Pilgrim         P426 19.254806407
+Flingjingwaller F452 29.3790847719</span>
+</pre></div>
+         <p>匿名 <tt class="literal">lambda</tt> 函数的使用耗费掉了从以字符列表替代字符串争取来的时间。
+         </p>
+         <p><tt class="filename">soundex/stage2/soundex2b.py</tt> 使用了一个列表遍历来替代 <tt class="literal">map</tt> 和 <tt class="literal">lambda</tt>：
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+    source = source.upper()
+    digits = source[0] + <span class='pystring'>""</span>.join([charToSoundex[c] <span class='pykeyword'>for</span> c <span class='pykeyword'>in</span> source[1:]])
+</pre></div>
+         <p>在 <tt class="filename">soundex2b.py</tt> 中使用列表遍历比 <tt class="filename">soundex2a.py</tt> 中使用 <tt class="literal">map</tt> 和 <tt class="literal">lambda</tt> 快，但还没有最初的代码快 (<tt class="filename">soundex1e.py</tt> 中一砖一瓦的构建字符串<sup>[<a name="d0e39596" href="#ftn.d0e39596">15</a>]</sup>)：
+         </p>
+         <div class="informalexample"><pre class="screen">
+<tt class="prompt">C:\samples\soundex\stage2&gt;</tt><span class="userinput">python soundex2b.py</span>
+<span class="computeroutput">Woo             W000 13.4221324219
+Pilgrim         P426 16.4901234654
+Flingjingwaller F452 25.8186157738</span>
+</pre></div>
+         <p>是时候从本质不同的方法来思考了。字典查找是一个普通目的实现工具。字典的键可以是任意长度的字符串 (或者很多其他数据类型) 但这里我们只和单字符键<span class="emphasis"><em>和</em></span> 单字符值打交道。恰巧 <span class="application">Python</span> 有处理这种情况的特别函数：<tt class="function">string.maketrans</tt> 函数。
+         </p>
+         <p>这便是 <tt class="filename">soundex/stage2/soundex2c.py</tt>：
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+allChar = string.uppercase + string.lowercase
+charToSoundex = string.maketrans(allChar, <span class='pystring'>"91239129922455912623919292"</span> * 2)
+<span class='pykeyword'>def</span><span class='pyclass'> soundex</span>(source):
+    <span class='pycomment'># ...</span>
+    digits = source[0].upper() + source[1:].translate(charToSoundex)
+</pre></div>
+         <p>这儿在干什么？<tt class="function">string.maketrans</tt> 创建一个两个字符串间的翻译矩阵：第一参数和第二参数。就此而言，第一个参数是字符串 <tt class="literal">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</tt>，第二个参数是字符串 <tt class="literal">9123912992245591262391929291239129922455912623919292</tt>。看到其模式了？恰好与我们用冗长的字典构建的模式相同。A 映射到 9，B 映射到 1，C 映射到 2 等等。但它不是一个字典。而是一个你可以通过字符串方法 <tt class="methodname">translate</tt> 使用的特别数据结构。它根据 <tt class="function">string.maketrans</tt> 定义的矩阵将每个字符翻译为对应的数字。
+         </p>
+         <p><tt class="filename">timeit</tt> 显示 <tt class="filename">soundex2c.py</tt> 比定义字典并对输入进行循环一砖一瓦地构建输出快很多：
+         </p>
+         <div class="informalexample"><pre class="screen">
+<tt class="prompt">C:\samples\soundex\stage2&gt;</tt><span class="userinput">python soundex2c.py</span>
+<span class="computeroutput">Woo             W000 11.437645008
+Pilgrim         P426 13.2825062962
+Flingjingwaller F452 18.5570110168</span>
+</pre></div>
+         <p>你不可能做得更多了。<span class="application">Python</span> 有一个特殊函数，通过使用它做到了一个和你的工作差不多的事情。就用它并继续吧！
+         </p>
+         <div class="example"><a name="d0e39676"></a><h3 class="title">例&nbsp;18.4.&nbsp;目前的最佳结果：<tt class="filename">soundex/stage2/soundex2c.py</tt></h3><pre class="programlisting"><span class='pykeyword'>
+import</span> string, re
+
+allChar = string.uppercase + string.lowercase
+charToSoundex = string.maketrans(allChar, <span class='pystring'>"91239129922455912623919292"</span> * 2)
+
+<span class='pykeyword'>def</span><span class='pyclass'> soundex</span>(source):
+    <span class='pykeyword'>if</span> (<span class='pykeyword'>not</span> source) <span class='pykeyword'>or</span> (<span class='pykeyword'>not</span> source.isalpha()):
+        <span class='pykeyword'>return</span> <span class='pystring'>"0000"</span>
+    digits = source[0].upper() + source[1:].translate(charToSoundex)
+    digits2 = digits[0]
+    <span class='pykeyword'>for</span> d <span class='pykeyword'>in</span> digits[1:]:
+        <span class='pykeyword'>if</span> digits2[-1] != d:
+            digits2 += d
+    digits3 = re.sub(<span class='pystring'>'9'</span>, <span class='pystring'>''</span>, digits2)
+    <span class='pykeyword'>while</span> len(digits3) &lt; 4:
+        digits3 += <span class='pystring'>"0"</span>
+    <span class='pykeyword'>return</span> digits3[:4]
+
+<span class='pykeyword'>if</span> __name__ == <span class='pystring'>'__main__'</span>:
+    <span class='pykeyword'>from</span> timeit <span class='pykeyword'>import</span> Timer
+    names = (<span class='pystring'>'Woo'</span>, <span class='pystring'>'Pilgrim'</span>, <span class='pystring'>'Flingjingwaller'</span>)
+    <span class='pykeyword'>for</span> name <span class='pykeyword'>in</span> names:
+        statement = <span class='pystring'>"soundex('%s')"</span> % name
+        t = Timer(statement, <span class='pystring'>"from __main__ import soundex"</span>)
+        <span class='pykeyword'>print</span> name.ljust(15), soundex(name), min(t.repeat())
+</pre></div>
+         <div class="footnotes">
+            <h3 class="footnotetitle">Footnotes</h3>
+            <div class="footnote">
+               <p><sup>[<a name="ftn.d0e39596" href="#d0e39596">15</a>] </sup>事实恰好相反，<tt class="filename">soundex2b.py</tt> 在每个点上都快于 <tt class="filename">soundex1e.py</tt>。――译注
+               </p>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="regular_expressions.html">&lt;&lt;&nbsp;优化正则表达式</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#soundex.divein" title="18.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="timeit.html" title="18.2.&nbsp;使用 timeit 模块">2</a> <span class="divider">|</span> <a href="regular_expressions.html" title="18.3.&nbsp;优化正则表达式">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="list_operations.html" title="18.5.&nbsp;优化列表操作">5</a> <span class="divider">|</span> <a href="string_manipulation.html" title="18.6.&nbsp;优化字符串操作">6</a> <span class="divider">|</span> <a href="summary.html" title="18.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="list_operations.html">优化列表操作&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

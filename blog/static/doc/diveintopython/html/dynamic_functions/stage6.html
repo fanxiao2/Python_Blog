@@ -1,0 +1,249 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>17.7.&nbsp;plural.py, 第 6 阶段</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;17&nbsp;章&nbsp;动态函数">
+      <link rel="previous" href="stage5.html" title="17.6.&nbsp;plural.py, 第 5 阶段">
+      <link rel="next" href="summary.html" title="17.8.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">动态函数</a>&nbsp;&gt;&nbsp;<span class="thispage">plural.py, 第 6 阶段</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="stage5.html" title="上一页: “plural.py, 第 5 阶段”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="plural.stage6"></a>17.7.&nbsp;<tt class="filename">plural.py</tt>, 第 6 阶段
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>现在你已准备好探讨生成器 (Generator) 了。</p>
+         </div>
+         <div class="example"><a name="d0e38429"></a><h3 class="title">例&nbsp;17.17.&nbsp;<tt class="filename">plural6.py</tt></h3><pre class="programlisting"><span class='pykeyword'>
+import</span> re
+
+<span class='pykeyword'>def</span><span class='pyclass'> rules</span>(language):                                                                 
+    <span class='pykeyword'>for</span> line <span class='pykeyword'>in</span> file(<span class='pystring'>'rules.%s'</span> % language):                                         
+        pattern, search, replace = line.split()                                      
+        <span class='pykeyword'>yield</span> <span class='pykeyword'>lambda</span> word: re.search(pattern, word) <span class='pykeyword'>and</span> re.sub(search, replace, word)
+
+<span class='pykeyword'>def</span><span class='pyclass'> plural</span>(noun, language=<span class='pystring'>'en'</span>):      
+    <span class='pykeyword'>for</span> applyRule <span class='pykeyword'>in</span> rules(language): 
+        result = applyRule(noun)      
+        <span class='pykeyword'>if</span> result: <span class='pykeyword'>return</span> result      
+</pre></div>
+         <p>这里使用了被称作生成器的技术，我不打算在你看过一个简单例子之前试图解释它。</p>
+         <div class="example"><a name="plural.introducing.generators"></a><h3 class="title">例&nbsp;17.18.&nbsp;介绍生成器</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>def</span><span class='pyclass'> make_counter</span>(x):</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> <span class='pystring'>'entering make_counter'</span></span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>while</span> 1:</span>
+<tt class="prompt">...     </tt><span class="userinput">    <span class='pykeyword'>yield</span> x</span>               <a name="plural.stage6.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput">    <span class='pykeyword'>print</span> <span class='pystring'>'incrementing x'</span></span>
+<tt class="prompt">...     </tt><span class="userinput">    x = x + 1</span>
+<tt class="prompt">...     </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">counter = make_counter(2)</span> <a name="plural.stage6.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">counter</span>                   <a name="plural.stage6.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">&lt;generator object at 0x001C9C10&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">counter.next()</span>            <a name="plural.stage6.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">entering make_counter
+2</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">counter.next()</span>            <a name="plural.stage6.2.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="computeroutput">incrementing x
+3</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">counter.next()</span>            <a name="plural.stage6.2.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12">
+<span class="computeroutput">incrementing x
+4</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">make_counter</tt> 中出现关键字 <tt class="literal">yield</tt> 意味着这不是一个普通的函数。它是一种每次生成一个值的特殊函数。你可以把它看成是一个可恢复函数。调用它会返回一个生成器，它可以返回 <tt class="varname">x</tt> 的连续值。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">想要创建一个 <tt class="function">make_counter</tt> 生成器的实例，只要像其它函数一样调用。注意这并没有真正执行函数代码。你可以分辨出这一点，因为 <tt class="function">make_counter</tt> 的第一行是 <tt class="function">print</tt> 语句，然而没有任何内容输出。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">make_counter</tt> 函数返回一个生成器对象。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你第一次调用生成器对象的 <tt class="function">next()</tt> 方法，将执行 <tt class="function">make_counter</tt> 中的代码执行到第一个 <tt class="literal">yield</tt> 语句，然后返回生产 (yield) 出来的值。在本例中，这个值是 <tt class="literal">2</tt>，因为你是通过 <tt class="function">make_counter(2)</tt> 来创建最初的生成器的。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.2.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">不断调用生成器对象的 <tt class="function">next()</tt> <span class="emphasis"><em>将从你上次离开的位置重新开始</em></span> 并继续下去直到你又一次遇到 <tt class="literal">yield</tt> 语句。接下来执行 <tt class="function">print</tt> 语句来打印 <tt class="literal">incrementing x</tt>，然后执行 <tt class="literal">x = x + 1</tt> 语句来真正地增加。然后你进入 <tt class="literal">while</tt> 的又一次循环，你所做的第一件事是 <tt class="literal">yield x</tt>，返回目前的 <tt class="varname">x</tt> 值 (现在是3)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.2.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">第二次你调用 <tt class="function">counter.next()</tt> 时，你又做一遍相同的事情，但是这次 <tt class="varname">x</tt> 是
+                         <tt class="literal">4</tt>。如此继续。因为 <tt class="function">make_counter</tt> 设置的是一个无限循环，理论上你可以永远这样继续下去，不断地递增并弹出 <tt class="varname">x</tt> 值。现在让我们看看生成器更具意义的应用。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="plural.fib.example"></a><h3 class="title">例&nbsp;17.19.&nbsp;使用生成器替代递归</h3><pre class="programlisting"><span class='pykeyword'>
+def</span> fibonacci(max):
+    a, b = 0, 1       <a name="plural.stage6.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>while</span> a &lt; max:
+        <span class='pykeyword'>yield</span> a       <a name="plural.stage6.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        a, b = b, a+b <a name="plural.stage6.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">斐波纳契数列 (Fibonacci sequence) 是每个数都是前面两个数值和的一个数列。它从 <tt class="constant">0</tt> 和 <tt class="constant">1</tt> 开始，开始增长得很慢，但越来越快。开始这个数列你需要两个变量：<tt class="varname">a</tt> 从 <tt class="constant">0</tt>开始，<tt class="varname">b</tt> 从 <tt class="constant">1</tt> 开始。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">a</tt> 是数列的当前值，弹出它。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">b</tt> 是数列的下一个数，把它赋值给 <tt class="varname">a</tt>，同时计算出 (<tt class="literal">a+b</tt>) 并赋值给 <tt class="varname">b</tt> 放在一边稍后使用。注意这是并行发生的，如果 <tt class="varname">a</tt> 是 <tt class="literal">3</tt>，<tt class="varname">b</tt> 是 <tt class="literal">5</tt>，那么 <tt class="literal">a, b = b, a+b</tt> 将会设置 <tt class="varname">a</tt> 为 <tt class="literal">5</tt> (<tt class="varname">b</tt> 的原值)，<tt class="varname">b</tt> 为 <tt class="literal">8</tt> (<tt class="varname">a</tt> 和 <tt class="varname">b</tt> 之和)。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>这样你就有了生成连续的 Fibonacci 数的函数了。当然你也可以通过递归做到，但是这里的方法更加易读。并且也与 <tt class="literal">for</tt> 工作得很好。
+         </p>
+         <div class="example"><a name="d0e38712"></a><h3 class="title">例&nbsp;17.20.&nbsp;<tt class="literal">for</tt> 循环中的生成器
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> n <span class='pykeyword'>in</span> fibonacci(1000):</span> <a name="plural.stage6.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> n,</span>              <a name="plural.stage6.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以在 <tt class="literal">for</tt> 循环中直接使用 <tt class="function">fibonacci</tt> 这样的生成器。<tt class="literal">for</tt> 循环将会创建一个生成器对象并连续调用其 <tt class="function">next()</tt> 方法获得值并赋予 <tt class="literal">for</tt> 循环变量 (<tt class="varname">n</tt>)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">每轮 <tt class="literal">for</tt> 循环 <tt class="varname">n</tt> 都从 <tt class="function">fibonacci</tt> 的 <tt class="literal">yield</tt> 语句获得一个新的值。当 <tt class="function">fibonacci</tt> 超出数字限定 (<tt class="varname">a</tt> 超过 <tt class="varname">max</tt>，你在这里限定的是 <tt class="literal">1000</tt>) 很自然地退出 <tt class="literal">for</tt> 循环。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>好了，让我们回到 <tt class="function">plural</tt> 函数看看如何可以把它用起来。
+         </p>
+         <div class="example"><a name="d0e38793"></a><h3 class="title">例&nbsp;17.21.&nbsp;生成器生成动态函数</h3><pre class="programlisting"><span class='pykeyword'>
+def</span> rules(language):                                                                 
+    <span class='pykeyword'>for</span> line <span class='pykeyword'>in</span> file(<span class='pystring'>'rules.%s'</span> % language):                                          <a name="plural.stage6.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        pattern, search, replace = line.split()                                       <a name="plural.stage6.5.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+        <span class='pykeyword'>yield</span> <span class='pykeyword'>lambda</span> word: re.search(pattern, word) <span class='pykeyword'>and</span> re.sub(search, replace, word) <a name="plural.stage6.5.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+
+<span class='pykeyword'>def</span><span class='pyclass'> plural</span>(noun, language=<span class='pystring'>'en'</span>):      
+    <span class='pykeyword'>for</span> applyRule <span class='pykeyword'>in</span> rules(language):  <a name="plural.stage6.5.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+        result = applyRule(noun)      
+        <span class='pykeyword'>if</span> result: <span class='pykeyword'>return</span> result      
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="literal">for line in file(...)</tt> 是从文件中一行行读取的通用方法，每次一行。它能正常工作是因为 <span class="emphasis"><em><tt class="function">file</tt> 实际上返回一个生成器</em></span>，它的 <tt class="function">next()</tt> 方法返回文件中的下一行。简直太酷了，光是想想就让我满头大汗。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.5.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这没有什么神奇之处。还记得规则文件的每一行都用空白分开三个值吗？所以 <tt class="literal">line.split()</tt> 返回一个三元素元组，你把这些值赋给了 3 个局部变量。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.5.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><span class="emphasis"><em>然后你不断地弹出。</em></span> 你弹出什么呢？一个使用 <tt class="literal">lambda</tt> 动态生成的函数，而这个函数实际上是一个闭合 (把本地变量 <tt class="varname">pattern</tt>，<tt class="varname">search</tt> 和 <tt class="varname">replace</tt> 作为常量)。换句话说，<tt class="function">rules</tt> 是一个弹出规则函数的生成器。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage6.5.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">既然 <tt class="function">rules</tt> 是一个生成器，你就可以在 <tt class="literal">for</tt> 循环中直接使用它。<tt class="literal">for</tt> 循环的第一轮你调用 <tt class="function">rules</tt> 函数，打开规则文件，读取第一行，动态构建一个根据规则文件第一行匹配并应用规则的函数。<tt class="literal">for</tt> 循环的第二轮将会从上一轮 <tt class="function">rules</tt> 中停下的位置 (<tt class="literal">for line in file(...)</tt> 循环内部) 读取规则文件的第二行，动态构建根据规则文件第二行匹配并应用规则的另一个函数。如此继续下去。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>你在<a href="stage5.html" title="17.6.&nbsp;plural.py, 第 5 阶段">第 5 阶段</a>得到的是什么？第 5 阶段中，你读取整个规则文件并在使用第一条规则之前构建一个所有规则组成的列表。现在有了生成器，你可以更舒适地做到这一切：你打开并读取第一条规则，根据它创建函数并使用之，如果它适用则根本不去读取规则文件剩下的内容，也不去建立另外的函数。
+         </p>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li><a href="http://www.python.org/peps/pep-0255.html">PEP 255</a> 定义生成器。
+               </li>
+               <li><a href="http://www.activestate.com/ASPN/Python/Cookbook/" title="growing archive of annotated code samples"><span class="application">Python</span> Cookbook</a> 有<a href="http://www.google.com/search?q=generators+cookbook+site:aspn.activestate.com">生成器的例子</a>。
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="stage5.html">&lt;&lt;&nbsp;plural.py, 第 5 阶段</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#plural.divein" title="17.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="stage1.html" title="17.2.&nbsp;plural.py, 第 1 阶段">2</a> <span class="divider">|</span> <a href="stage2.html" title="17.3.&nbsp;plural.py, 第 2 阶段">3</a> <span class="divider">|</span> <a href="stage3.html" title="17.4.&nbsp;plural.py, 第 3 阶段">4</a> <span class="divider">|</span> <a href="stage4.html" title="17.5.&nbsp;plural.py, 第 4 阶段">5</a> <span class="divider">|</span> <a href="stage5.html" title="17.6.&nbsp;plural.py, 第 5 阶段">6</a> <span class="divider">|</span> <span class="thispage">7</span> <span class="divider">|</span> <a href="summary.html" title="17.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

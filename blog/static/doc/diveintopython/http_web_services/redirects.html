@@ -1,0 +1,336 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>11.7.&nbsp;处理重定向</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务">
+      <link rel="previous" href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">
+      <link rel="next" href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTTP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">处理重定向</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="etags.html" title="上一页: “处理 Last-Modified 和 ETag”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="gzip_compression.html" title="下一页: “处理压缩数据”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="oa.redirect"></a>11.7.&nbsp;处理重定向
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>你可以使用两种不同的自定义 URL 处理器来处理永久重定向和临时重定向。</p>
+         </div>
+         <p>首先，让我们来看看重定向处理的必要性。</p>
+         <div class="example"><a name="d0e28926"></a><h3 class="title">例&nbsp;11.10.&nbsp;没有重定向处理的情况下，访问 web 服务 </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> urllib2, httplib</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">httplib.HTTPConnection.debuglevel = 1</span>           <a name="oa.redirect.1.0"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request = urllib2.Request(</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pystring'>'http://diveintomark.org/redir/example301.xml'</span>)</span> <a name="oa.redirect.1.1"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">opener = urllib2.build_opener()</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f = opener.open(request)</span>
+<span class="computeroutput">connect: (diveintomark.org, 80)
+send: '
+GET /redir/example301.xml HTTP/1.0
+Host: diveintomark.org
+User-agent: Python-urllib/2.1
+'
+reply: 'HTTP/1.1 301 Moved Permanently\r\n'</span>             <a name="oa.redirect.1.2"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">header: Date: Thu, 15 Apr 2004 22:06:25 GMT
+header: Server: Apache/2.0.49 (Debian GNU/Linux)
+header: Location: http://diveintomark.org/xml/atom.xml</span>  <a name="oa.redirect.1.3"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">header: Content-Length: 338
+header: Connection: close
+header: Content-Type: text/html; charset=iso-8859-1
+connect: (diveintomark.org, 80)
+send: '
+GET /xml/atom.xml HTTP/1.0</span>                              <a name="oa.redirect.1.4"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="computeroutput">Host: diveintomark.org
+User-agent: Python-urllib/2.1
+'
+reply: 'HTTP/1.1 200 OK\r\n'
+header: Date: Thu, 15 Apr 2004 22:06:25 GMT
+header: Server: Apache/2.0.49 (Debian GNU/Linux)
+header: Last-Modified: Thu, 15 Apr 2004 19:45:21 GMT
+header: ETag: "e842a-3e53-55d97640"
+header: Accept-Ranges: bytes
+header: Content-Length: 15955
+header: Connection: close
+header: Content-Type: application/atom+xml</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.url</span>                                               <a name="oa.redirect.1.5"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12">
+<span class="computeroutput">'http://diveintomark.org/xml/atom.xml'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.headers.dict</span>
+<span class="computeroutput">{'content-length': '15955', 
+'accept-ranges': 'bytes', 
+'server': 'Apache/2.0.49 (Debian GNU/Linux)', 
+'last-modified': 'Thu, 15 Apr 2004 19:45:21 GMT', 
+'connection': 'close', 
+'etag': '"e842a-3e53-55d97640"', 
+'date': 'Thu, 15 Apr 2004 22:06:25 GMT', 
+'content-type': 'application/atom+xml'}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.status</span>
+<span class="traceback">Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+AttributeError: addinfourl instance has no attribute 'status'</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.1.0"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你最好开启调试状态，看看发生了什么。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.1.1"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是一个我已经设置了永久重定向到我的 Atom feed <tt class="literal">http://diveintomark.org/xml/atom.xml</tt> 的 URL。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.1.2"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">毫无疑问，当你试图从那个地址下载数据时，服务器会返回 <tt class="literal">301</tt> 状态代码，告诉你你访问的资源已经被永久移动了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.1.3"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">服务器同时返回 <tt class="literal">Location:</tt> 头信息，它给出了这个数据的新地址。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.1.4"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">urllib2</tt> 注意到了重定向状态代码并会自动从<tt class="literal">Location:</tt> 头信息中给出的新地址获取数据。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.1.5"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">从 <tt class="varname">opener</tt> 返回的对象包括新的永久地址和第二次请求获得的所有头信息 (从一个新的永久地址获得)。但是状态代码不见了，因此你无从知晓重定向到底是永久重定向还是临时重定向。这是至关重要的：如果这是临时重定向，那么你应该继续使用旧地址访问数据。但是如果是永久重定向
+                        (正如本例)，你应该从现在起使用新地址访问数据。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>这不太理想，但很容易改进。实际上当 <tt class="filename">urllib2</tt> 遇到 <tt class="literal">301</tt> 或 <tt class="literal">302</tt> 时的行为并不是我们所期望的，所以让我们来覆盖这些行为。如何实现呢？用一个自定义的处理器，<a href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">正如你处理 <tt class="literal">304</tt> 代码所做的</a>。
+         </p>
+         <div class="example"><a name="d0e29062"></a><h3 class="title">例&nbsp;11.11.&nbsp;定义重定向处理器</h3>
+            <p>这个类定义在 <tt class="filename">openanything.py</tt>。
+            </p><pre class="programlisting"><span class='pykeyword'>
+class</span> SmartRedirectHandler(urllib2.HTTPRedirectHandler):     <a name="oa.redirect.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pykeyword'>def</span><span class='pyclass'> http_error_301</span>(self, req, fp, code, msg, headers):  
+        result = urllib2.HTTPRedirectHandler.http_error_301( <a name="oa.redirect.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+            self, req, fp, code, msg, headers)              
+        result.status = code                                 <a name="oa.redirect.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        <span class='pykeyword'>return</span> result                                       
+
+    <span class='pykeyword'>def</span><span class='pyclass'> http_error_302</span>(self, req, fp, code, msg, headers):   <a name="oa.redirect.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+        result = urllib2.HTTPRedirectHandler.http_error_302(
+            self, req, fp, code, msg, headers)              
+        result.status = code                                
+        <span class='pykeyword'>return</span> result                                       
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">重定向行为定义在 <tt class="filename">urllib2</tt> 的一个叫做 <tt class="classname">HTTPRedirectHandler</tt> 的类中。我们不想完全地覆盖这些行为，只想做点扩展，所以我们子类化 <tt class="classname">HTTPRedirectHandler</tt>，从而我们仍然可以调用祖先类来实现所有原来的功能。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">当从服务器获得 <tt class="literal">301</tt> 状态代码，<tt class="filename">urllib2</tt> 将搜索处理器并调用 <tt class="methodname">http_error_301</tt> 方法。我们首先要做的就是在祖先中调用 <tt class="methodname">http_error_301</tt> 方法，它将处理查找 <tt class="literal">Location:</tt> 头信息的工作并跟踪重定向到新地址。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是关键：返回之前，你存储了状态代码 (<tt class="literal">301</tt>)，所以主调程序稍后就可以访问它了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">临时重定向 (状态代码 <tt class="literal">302</tt>) 以相同的方式工作：覆盖 <tt class="literal">http_error_302</tt> 方法，调用祖先，并在返回之前保存状态代码。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>这将为我们带来什么？现在你可以用自定义重定向处理器构造一个的 URL 开启器，并且它依然能自动跟踪重定向，也能展示出重定向状态代码。</p>
+         <div class="example"><a name="d0e29128"></a><h3 class="title">例&nbsp;11.12.&nbsp;使用重定向处理器检查永久重定向</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request = urllib2.Request(<span class='pystring'>'http://diveintomark.org/redir/example301.xml'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> openanything, httplib</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">httplib.HTTPConnection.debuglevel = 1</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">opener = urllib2.build_opener(</span>
+<tt class="prompt">...     </tt><span class="userinput">openanything.SmartRedirectHandler())</span>           <a name="oa.redirect.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f = opener.open(request)</span>
+<span class="computeroutput">connect: (diveintomark.org, 80)
+send: 'GET /redir/example301.xml HTTP/1.0
+Host: diveintomark.org
+User-agent: Python-urllib/2.1
+'
+reply: 'HTTP/1.1 301 Moved Permanently\r\n'</span>            <a name="oa.redirect.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">header: Date: Thu, 15 Apr 2004 22:13:21 GMT
+header: Server: Apache/2.0.49 (Debian GNU/Linux)
+header: Location: http://diveintomark.org/xml/atom.xml
+header: Content-Length: 338
+header: Connection: close
+header: Content-Type: text/html; charset=iso-8859-1
+connect: (diveintomark.org, 80)
+send: '
+GET /xml/atom.xml HTTP/1.0
+Host: diveintomark.org
+User-agent: Python-urllib/2.1
+'
+reply: 'HTTP/1.1 200 OK\r\n'
+header: Date: Thu, 15 Apr 2004 22:13:21 GMT
+header: Server: Apache/2.0.49 (Debian GNU/Linux)
+header: Last-Modified: Thu, 15 Apr 2004 19:45:21 GMT
+header: ETag: "e842a-3e53-55d97640"
+header: Accept-Ranges: bytes
+header: Content-Length: 15955
+header: Connection: close
+header: Content-Type: application/atom+xml
+</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.status</span>                                           <a name="oa.redirect.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">301</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.url</span>
+<span class="computeroutput">'http://diveintomark.org/xml/atom.xml'</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">首先，用刚刚定义的重定向处理器创建一个 URL 开启器。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你发送了一个请求，并在响应中获得了 <tt class="literal">301</tt> 状态代码。
+                        如此一来，<tt class="methodname">http_error_301</tt> 方法就被调用了。你调用了祖先类，跟踪了重定向并且发送了一个新地址 (<tt class="literal">http://diveintomark.org/xml/atom.xml</tt>) 请求。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是决定性的一步：现在，你不仅做到了访问一个新 URL，而且获得了重定向的状态代码，所以你可以断定这是一个永久重定向。下一次你请求这个数据时，就应该使用 <tt class="varname">f.url</tt> 指定的新地址 (<tt class="literal">http://diveintomark.org/xml/atom.xml</tt>)。如果你已经在配置文件或数据库中存储了这个地址，就需要更新旧地址而不是反复地使用旧地址请求服务。现在是更新你的地址簿的时候了。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>同样的重定向处理也可以告诉你<span class="emphasis"><em>不该</em></span> 更新你的地址簿。
+         </p>
+         <div class="example"><a name="d0e29221"></a><h3 class="title">例&nbsp;11.13.&nbsp;使用重定向处理器检查临时重定向</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request = urllib2.Request(</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pystring'>'http://diveintomark.org/redir/example302.xml'</span>)</span>   <a name="oa.redirect.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f = opener.open(request)</span>
+<span class="computeroutput">connect: (diveintomark.org, 80)
+send: '
+GET /redir/example302.xml HTTP/1.0
+Host: diveintomark.org
+User-agent: Python-urllib/2.1
+'
+reply: 'HTTP/1.1 302 Found\r\n'</span>                           <a name="oa.redirect.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">header: Date: Thu, 15 Apr 2004 22:18:21 GMT
+header: Server: Apache/2.0.49 (Debian GNU/Linux)
+header: Location: http://diveintomark.org/xml/atom.xml
+header: Content-Length: 314
+header: Connection: close
+header: Content-Type: text/html; charset=iso-8859-1
+connect: (diveintomark.org, 80)
+send: '
+GET /xml/atom.xml HTTP/1.0</span>                                <a name="oa.redirect.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">Host: diveintomark.org
+User-agent: Python-urllib/2.1
+'
+reply: 'HTTP/1.1 200 OK\r\n'
+header: Date: Thu, 15 Apr 2004 22:18:21 GMT
+header: Server: Apache/2.0.49 (Debian GNU/Linux)
+header: Last-Modified: Thu, 15 Apr 2004 19:45:21 GMT
+header: ETag: "e842a-3e53-55d97640"
+header: Accept-Ranges: bytes
+header: Content-Length: 15955
+header: Connection: close
+header: Content-Type: application/atom+xml</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.status</span>                                              <a name="oa.redirect.4.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">302</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">f.url</span>
+<span class="computeroutput">http://diveintomark.org/xml/atom.xml</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是一个 URL，我已经设置了它，让它告诉客户端<span class="emphasis"><em>临时</em></span> 重定向到 <tt class="literal">http://diveintomark.org/xml/atom.xml</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">服务器返回 <tt class="literal">302</tt> 状态代码，标识出一个临时重定向。数据的临时新地址在 <tt class="literal">Location:</tt> 头信息中给出。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">urllib2</tt> 调用你的 <tt class="methodname">http_error_302</tt> 方法，它调用了 <tt class="classname">urllib2.HTTPRedirectHandler</tt> 中的同名的祖先方法，跟踪重定向到一个新地址。然后你的 <tt class="methodname">http_error_302</tt> 方法存储状态代码 (<tt class="literal">302</tt>) 使主调程序在稍后可以获得它。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.redirect.4.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">此时，已经成功追踪重定向到 <tt class="literal">http://diveintomark.org/xml/atom.xml</tt>。<tt class="varname">f.status</tt> 告诉你这是一个临时重定向，这意味着你应该继续使用原来的地址 (<tt class="literal">http://diveintomark.org/redir/example302.xml</tt>) 请求数据。也许下一次它仍然被重定向，也许不会。也许会重定向到不同的地址。这也不好说。服务器说这个重定向仅仅是临时的，你应该尊重它。并且现在你获得了能使主调程序尊重它的充分信息。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="etags.html">&lt;&lt;&nbsp;处理 Last-Modified 和 ETag</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#oa.divein" title="11.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">2</a> <span class="divider">|</span> <a href="http_features.html" title="11.3.&nbsp;HTTP 的特性">3</a> <span class="divider">|</span> <a href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">4</a> <span class="divider">|</span> <a href="user_agent.html" title="11.5.&nbsp;设置 User-Agent">5</a> <span class="divider">|</span> <a href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">6</a> <span class="divider">|</span> <span class="thispage">7</span> <span class="divider">|</span> <a href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">8</a> <span class="divider">|</span> <a href="alltogether.html" title="11.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="11.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="gzip_compression.html">处理压缩数据&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,196 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>3.4.&nbsp;变量声明</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;3&nbsp;章&nbsp;内置数据类型">
+      <link rel="previous" href="tuples.html" title="3.3.&nbsp;Tuple 介绍">
+      <link rel="next" href="formatting_strings.html" title="3.5.&nbsp;格式化字符串">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">内置数据类型</a>&nbsp;&gt;&nbsp;<span class="thispage">变量声明</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="tuples.html" title="上一页: “Tuple 介绍”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="formatting_strings.html" title="下一页: “格式化字符串”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="odbchelper.vardef"></a>3.4.&nbsp;变量声明
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="toc">
+            <ul>
+               <li><span class="section"><a href="declaring_variables.html#d0e7017">3.4.1. 变量引用</a></span></li>
+               <li><span class="section"><a href="declaring_variables.html#odbchelper.multiassign">3.4.2. 一次赋多值</a></span></li>
+            </ul>
+         </div>
+         <p>现在您已经了解了有关 dictionary、tuple、和 list 的相关知识 (哦，我的老天！)，让我们回到 <a href="../getting_to_know_python/index.html">第 2 章</a> 的例子程序 <tt class="filename">odbchelper.py</tt>。
+         </p>
+         <div class="abstract">
+            <p><span class="application">Python</span> 与大多数其它语言一样有局部变量和全局变量之分，但是它没有明显的变量声明。变量通过首次赋值产生，当超出作用范围时自动消亡。
+            </p>
+         </div>
+         <div class="example"><a name="myparamsdef"></a><h3 class="title">例&nbsp;3.17.&nbsp;定义 <tt class="varname">myParams</tt> 变量
+            </h3><pre class="programlisting"><span class='pykeyword'>
+if</span> __name__ == <span class='pystring'>"__main__"</span>:
+    myParams = {<span class='pystring'>"server"</span>:<span class='pystring'>"mpilgrim"</span>, \
+                <span class='pystring'>"database"</span>:<span class='pystring'>"master"</span>, \
+                <span class='pystring'>"uid"</span>:<span class='pystring'>"sa"</span>, \
+                <span class='pystring'>"pwd"</span>:<span class='pystring'>"secret"</span> \
+                }</pre></div>
+         <p>首先注意缩进。<tt class="literal">if</tt> 语句是代码块，需要像函数一样缩进。
+         </p>
+         <p>其次，变量的赋值是一条被分成了多行的命令，用反斜线 (“<span class="quote"><tt class="literal">\</tt></span>”) 作为续行符。
+         </p><a name="tip.multiline"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">当一条命令用续行符 (“<span class="quote"><tt class="literal">\</tt></span>”) 分割成多行时，后续的行可以以任何方式缩进，此时 <span class="application">Python</span> 通常的严格的缩进规则无需遵守。如果您的 <span class="application">Python</span> <span class="acronym">IDE</span> 自由对后续行进行了缩进，您应该把它当成是缺省处理，除非您有特别的原因不这么做。
+               </td>
+            </tr>
+         </table>
+         <p><a name="tip.implicitmultiline"></a>严格地讲，在小括号，方括号或大括号中的表达式 (如<a href="declaring_variables.html#myparamsdef" title="例&nbsp;3.17.&nbsp;定义 myParams 变量">定义一个 dictionary</a>) 可以用或者不用续行符 (“<span class="quote"><tt class="literal">\</tt></span>”) 分割成多行。甚至在不是必需的时候，我也喜欢使用续行符，因为我认为这样会让代码读起来更容易，但那只是风格问题。
+         </p>
+         <p>第三，您从未声明过变量 <tt class="varname">myParams</tt>，您只是给它赋了一个值。这点就像是 <span class="application">VBScript</span> 没有设置 <tt class="option">option explicit</tt> 选项一样。幸运的是，与 <span class="application">VBScript</span> 不同，<span class="application">Python</span> 不允许您引用一个未被赋值的变量，试图这样做会引发一个异常。
+         </p>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="d0e7017"></a>3.4.1.&nbsp;变量引用
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <div class="example"><a name="odbchelper.unboundvariable"></a><h3 class="title">例&nbsp;3.18.&nbsp;引用未赋值的变量</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">x</span>
+<span class="traceback">Traceback (innermost last):
+  File "&lt;interactive input&gt;", line 1, in ?
+NameError: There is no variable named 'x'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">x = 1</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">x</span>
+<span class="computeroutput">1</span></pre></div>
+            <p>迟早有一天您会为此而感谢 <span class="application">Python</span> 。
+            </p>
+         </div>
+         <div class="section" lang="zh_cn">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h3 class="title"><a name="odbchelper.multiassign"></a>3.4.2.&nbsp;一次赋多值
+                     </h3>
+                  </div>
+               </div>
+               <div></div>
+            </div>
+            <p><span class="application">Python</span> 中比较 “酷” 的一种编程简写是使用序列来一次给多个变量赋值。
+            </p>
+            <div class="example"><a name="d0e7056"></a><h3 class="title">例&nbsp;3.19.&nbsp;一次赋多值</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">v = (<span class='pystring'>'a'</span>, <span class='pystring'>'b'</span>, <span class='pystring'>'e'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">(x, y, z) = v</span>     <a name="odbchelper.multiassign.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">x</span>
+<span class="computeroutput">'a'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">y</span>
+<span class="computeroutput">'b'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">z</span>
+<span class="computeroutput">'e'</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#odbchelper.multiassign.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="varname">v</tt> 是一个三元素的 tuple，并且 <tt class="literal">(x, y, z)</tt> 是一个三变量的 tuple。将一个 tuple 赋值给另一个 tuple，会按顺序将 <tt class="varname">v</tt> 的每个值赋值给每个变量。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>这种用法有许多种用途。我经常想要将一定范围的值赋给多个变量。在 <span class="application"><span class="acronym">C</span></span> 语言中，可以使用 <tt class="literal">enum</tt> 类型，手工列出每个常量和其所对应的值，当值是连续的时候这一过程让人感到特别繁琐。而在 <span class="application">Python</span> 中，您可以使用内置的 <tt class="function">range</tt> 函数和多变量赋值的方法来快速进行赋值。
+            </p>
+            <div class="example"><a name="odbchelper.multiassign.range"></a><h3 class="title">例&nbsp;3.20.&nbsp;连续值赋值</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">range(7)</span>                                                                    <a name="odbchelper.multiassign.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">[0, 1, 2, 3, 4, 5, 6]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY) = range(7)</span> <a name="odbchelper.multiassign.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">MONDAY</span>                                                                      <a name="odbchelper.multiassign.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">0</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">TUESDAY</span>
+<span class="computeroutput">1</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">SUNDAY</span>
+<span class="computeroutput">6</span></pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#odbchelper.multiassign.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">内置的 <tt class="function">range</tt> 函数返回一个元素为整数的 list。这个函数的简化调用形式是接收一个上限值，然后返回一个初始值从 0 开始的 list，它依次递增，直到但不包含上限值。(如果您愿意，您可以传入其它的参数来指定一个非 <tt class="constant">0</tt> 的初始值和非 <tt class="constant">1</tt> 的步长。也可以使用 <tt class="literal">print range.__doc__</tt> 来了解更多的细节。)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#odbchelper.multiassign.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left"><tt class="varname">MONDAY</tt>、<tt class="varname">TUESDAY</tt>、<tt class="varname">WEDNESDAY</tt>、<tt class="varname">THURSDAY</tt>、<tt class="varname">FRIDAY</tt>、<tt class="varname">SATURDAY</tt> 和 <tt class="varname">SUNDAY</tt> 是我们定义的变量。(这个例子来自 <tt class="filename">calendar</tt> 模块。它是一个很有趣的打印日历的小模块，像 <span class="acronym">UNIX</span> 的 <tt class="filename">cal</tt> 命令。这个 <tt class="filename">calendar</tt> 模块定义了一星期中每天的整数常量表示。)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="12" valign="top" align="left"><a href="#odbchelper.multiassign.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                        </td>
+                        <td valign="top" align="left">现在每个变量都拥有了自己的值：<tt class="varname">MONDAY</tt> 的值为 <tt class="constant">0</tt>，<tt class="varname">TUESDAY</tt> 的值为 <tt class="constant">1</tt>，等等。
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <p>您也可以使用多变量赋值来创建返回多个值的函数，只要返回一个包含所有值的 tuple 即可。调用者可以将其视为一个 tuple，或将值赋给独立的变量。许多标准的 <span class="application">Python</span> 库都是这样做的，包括 <tt class="filename">os</tt> 模块，我们将在 <a href="../file_handling/index.html">第 6 章</a> 中讨论。
+            </p>
+            <div class="furtherreading">
+               <h3>进一步阅读</h3>
+               <ul>
+                  <li><a href="http://www.python.org/doc/current/ref/"><i class="citetitle"><span class="application">Python</span> Reference Manual</i></a> 展示了<a href="http://www.python.org/doc/current/ref/implicit-joining.html">什么时候可以忽略续行符</a>和<a href="http://www.python.org/doc/current/ref/explicit-joining.html">什么时候您需要使用续行符</a>的例子。
+                  </li>
+                  <li><a href="http://www.ibiblio.org/obp/thinkCSpy/" title="Python book for computer science majors"><i class="citetitle">How to Think Like a Computer Scientist</i></a> 演示了如何使用多变量赋值来<a href="http://www.ibiblio.org/obp/thinkCSpy/chap09.htm">交换两个变量的值</a>。
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="tuples.html">&lt;&lt;&nbsp;Tuple 介绍</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#odbchelper.dict" title="3.1.&nbsp;Dictionary 介绍">1</a> <span class="divider">|</span> <a href="lists.html" title="3.2.&nbsp;List 介绍">2</a> <span class="divider">|</span> <a href="tuples.html" title="3.3.&nbsp;Tuple 介绍">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="formatting_strings.html" title="3.5.&nbsp;格式化字符串">5</a> <span class="divider">|</span> <a href="mapping_lists.html" title="3.6.&nbsp;映射 list">6</a> <span class="divider">|</span> <a href="joining_lists.html" title="3.7.&nbsp;连接 list 与分割字符串">7</a> <span class="divider">|</span> <a href="summary.html" title="3.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="formatting_strings.html">格式化字符串&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

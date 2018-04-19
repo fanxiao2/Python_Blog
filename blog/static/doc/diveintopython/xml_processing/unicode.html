@@ -1,0 +1,286 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>9.4.&nbsp;Unicode</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;9&nbsp;章&nbsp;XML 处理">
+      <link rel="previous" href="parsing_xml.html" title="9.3.&nbsp;XML 解析">
+      <link rel="next" href="searching.html" title="9.5.&nbsp;搜索元素">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">XML 处理</a>&nbsp;&gt;&nbsp;<span class="thispage">Unicode</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="parsing_xml.html" title="上一页: “XML 解析”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="searching.html" title="下一页: “搜索元素”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="kgp.unicode"></a>9.4.&nbsp;Unicode
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>Unicode 是一个系统，用来表示世界上所有不同语言的字符。当 <span class="application">Python</span> 解析一个 <span class="acronym">XML</span> 文档时，所有的数据都是以unicode的形式保存在内存中的。
+            </p>
+         </div>
+         <p>一会儿你就会了解，但首先，先看一些背景知识。</p>
+         <p><b>历史注解.&nbsp;</b>在 unicode 之前，对于每一种语言都存在独立的字符编码系统，每个系统都使用相同的数字(0-255)来表示这种语言的字符。一些语言 (像俄语) 对于如何表示相同的字符还有几种有冲突的标准；另一些语言 (像日语) 拥有太多的字符，需要多个字符集。在系统之间进行文档交流是困难的，因为对于一台计算机来说，没有方法可以识别出文档的作者使用了哪种编码模式；计算机看到的只是数字，并且这些数字可以表示不同的东西。接着考虑到试图将这些
+            (采用不同编码的) 文档存放到同一个地方 (比如在同一个数据库表中)；你需要在每段文本的旁边保存字符的编码，并且确保在传递文本的同时将编码也进行传递。接着考虑多语言文档，即在同一文档中使用了不同语言的字符。(比较有代表性的是使用转义符来进行模式切换；噗，我们处于俄语
+            koi8-r 模式，所以字符 241 表示这个；噗，现在我们处于 Mac 希腊语模式，所以字符 241 表示其它什么。等等。) 这些就是 unicode 被设计出来要解决的问题。
+            
+         </p>
+         <p>为了解决这些问题，unicode 用一个 2 字节数字表示每个字符，从 0 到 65535。<sup>[<a name="d0e23957" href="#ftn.d0e23957">8</a>]</sup> 每个 2 字节数字表示至少在一种世界语言中使用的一个唯一字符。(在多种语言中都使用的字符具有相同的数字码。) 这样就确保每个字符一个数字，并且每个数字一个字符。Unicode 数据永远不会模棱两可。
+         </p>
+         <p>当然，仍然还存在着所有那些遗留的编码系统的情况。例如，7 位 <span class="acronym">ASCII</span>，它可以将英文字符存诸为从 0 到 127 的数值。(65 是大写字母 “<span class="quote"><tt class="literal">A</tt></span>”，97 是小写字母 “<span class="quote"><tt class="literal">a</tt></span>”，等等。) 英语有着非常简单的字母表，所以它可以完全用 7 位 <span class="acronym">ASCII</span> 来表示。像法语、西班牙语和德语之类的西欧语言都使用叫做 ISO-8859-1 的编码系统 (也叫做“<span class="quote">latin-1</span>”)，它使用 7 位 <span class="acronym">ASCII</span> 字符表示从 0 到 127 的数字，但接着扩展到了 128-255 的范围来表示像 n 上带有一个波浪线(241)，和 u 上带有两个点(252)的字符。Unicode 在 0 到 127 上使用了同 7 位 <span class="acronym">ASCII</span> 码一样的字符表，在 128 到 255上同 ISO-8859-1 一样，接着使用剩余的数字，256 到 65535，扩展到表示其它语言的字符。
+         </p>
+         <p>在处理 unicode 数据时，在某些地方你可能需要将数据转换回这些遗留编码系统之一。例如，为了同其它一些计算机系统集成，这些系统期望它的数据使用一种特定的单字节编码模式，或将数据打印输出到一个不识别 unicode 的终端或打印机。或将数据保存到一个明确指定编码模式的
+            <span class="acronym">XML</span> 文档中。
+         </p>
+         <p>在了解这个注解之后，让我们回到 <span class="application">Python</span>上来。
+         </p>
+         <p>从 2.0 版开始，<span class="application">Python</span> 整个语言都已经支持 unicode。<span class="acronym">XML</span> 包使用 unicode 来保存所有解析了的 <span class="acronym">XML</span> 数据，而且你可以在任何地方使用 unicode。
+         </p>
+         <div class="example"><a name="d0e24013"></a><h3 class="title">例&nbsp;9.13.&nbsp;unicode 介绍</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s = u<span class='pystring'>'Dive in'</span></span>            <a name="kgp.unicode.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s</span>
+<span class="computeroutput">u'Dive in'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> s</span>                   <a name="kgp.unicode.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">Dive in</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">为了创建一个 unicode 字符串而不是通常的 <span class="acronym">ASCII</span> 字符串，要在字符串前面加上字母 “<span class="quote"><tt class="literal">u</tt></span>”。注意这个特殊的字符串没有任何非 <span class="acronym">ASCII</span> 的字符。这样很好；unicode 是 <span class="acronym">ASCII</span> 的一个超集 (一个非常大的超集)，所以任何正常的 <span class="acronym">ASCII</span> 都可以以 unicode 形式保存起来。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在打印字符串时，<span class="application">Python</span> 试图将字符串转换为你的默认编码，通常是 <span class="acronym">ASCII</span> 。(过会儿有更详细的说明。) 因为组成这个 unicode 字符串的字符都是 <span class="acronym">ASCII</span> 字符，打印结果与打印正常的 <span class="acronym">ASCII</span> 字符串是一样的；转换是无缝的，而且如果你没有注意到 <tt class="varname">s</tt> 是一个 unicode 字符串的话，你永远也不会注意到两者之间的差别。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e24080"></a><h3 class="title">例&nbsp;9.14.&nbsp;存储非 <span class="acronym">ASCII</span> 字符
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s = u<span class='pystring'>'La Pe\xf1a'</span></span>         <a name="kgp.unicode.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> s</span>                   <a name="kgp.unicode.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="traceback">Traceback (innermost last):
+  File "&lt;interactive input&gt;", line 1, in ?
+UnicodeError: ASCII encoding error: ordinal not in range(128)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> s.encode(<span class='pystring'>'latin-1'</span>)</span> <a name="kgp.unicode.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">La Peña</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">unicode 真正的优势，理所当然的是它保存非 <span class="acronym">ASCII</span> 字符的能力，例如西班牙语的 “<span class="quote"><tt class="literal">ñ</tt></span>”(<tt class="literal">n</tt> 上带有一个波浪线)。用来表示波浪线 n 的 unicode 字符编码是十六进制的 <tt class="literal">0xf1</tt> (十进制的241)，你可以像这样输入：<tt class="literal">\xf1</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">还记得我说过 <tt class="function">print</tt> 函数会尝试将 unicode 字符串转换为 <span class="acronym">ASCII</span> 从而打印它吗？嗯，在这里将不会起作用，因为你的 unicode 字符串包含非 <span class="acronym">ASCII</span> 字符，所以 <span class="application">Python</span> 会引发 <tt class="errorname">UnicodeError</tt> 异常。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这儿就是将 unicode 转换为其它编码模式起作用的地方。<tt class="varname">s</tt> 是一个 unicode 字符串，但 <tt class="function">print</tt> 只能打印正常的字符串。为了解决这个问题，我们调用 <tt class="function">encode</tt> 方法 (它可以用于每个 unicode 字符串) 将 unicode 字符串转换为指定编码模式的正常字符串。我们向此函数传入一个参数。在本例中，我们使用 <tt class="literal">latin-1</tt> (也叫 <tt class="literal">iso-8859-1</tt>)，它包括带波浪线的 n (然而缺省的 <span class="acronym">ASCII</span> 编码模式不包括，因为它只包含数值从 0 到 127 的字符)。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>还记得我说过：需要从一个 unicode 得到一个正常字符串时，<span class="application">Python</span> 通常默认将 unicode 转换成 <span class="acronym">ASCII</span> 吗？嗯，这个默认编码模式是一个可以定制的选项。
+         </p>
+         <div class="example"><a name="d0e24181"></a><h3 class="title">例&nbsp;9.15.&nbsp;<tt class="filename">sitecustomize.py</tt></h3><pre class="programlisting">
+<span class='pycomment'># sitecustomize.py                   </span><a name="kgp.unicode.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class='pycomment'># this file can be anywhere in your Python path,</span>
+<span class='pycomment'># but it usually goes in ${pythondir}/lib/site-packages/</span>
+<span class='pykeyword'>import</span> sys
+sys.setdefaultencoding(<span class='pystring'>'iso-8859-1'</span>) <a name="kgp.unicode.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="filename">sitecustomize.py</tt> 是一个特殊的脚本；<span class="application">Python</span> 会在启动的时候导入它，所以在其中的任何代码都将自动运行。就像注解中提到的那样，它可以放在任何地方 (只要 <tt class="literal">import</tt> 能够找到它)，但是通常它位于 <span class="application">Python</span> 的<tt class="filename">lib</tt> 目录的 <tt class="filename">site-packages</tt> 目录中。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">嗯，<tt class="function">setdefaultencoding</tt> 函数设置默认编码。<span class="application">Python</span> 会在任何需要将 unicode 字符串自动转换为正规字符串的地方，使用这个编码模式。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e24221"></a><h3 class="title">例&nbsp;9.16.&nbsp;设置默认编码的效果</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> sys</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">sys.getdefaultencoding()</span> <a name="kgp.unicode.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">'iso-8859-1'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">s = u<span class='pystring'>'La Pe\xf1a'</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> s</span>                  <a name="kgp.unicode.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">La Peña</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个例子假设你已经按前一个例子中的改动对 <tt class="filename">sitecustomize.py</tt> 文件做了修改，并且已经重启了 <span class="application">Python</span>。如果你的默认编码还是 <tt class="literal">'ascii'</tt>，可能你就没有正确设置 <tt class="filename">sitecustomize.py</tt> 文件，或者是没有重新启动 <span class="application">Python</span>。默认的编码只能在 <span class="application">Python</span> 启动的时候改变；之后就不能改变了。(由于一些我们现在不会仔细研究的古怪的编程技巧，你甚至不能在 <span class="application">Python</span> 启动之后调用 <tt class="function">sys.setdefaultencoding</tt> 函数。仔细研究 <tt class="filename">site.py</tt>，并搜索 “<span class="quote"><tt class="literal">setdefaultencoding</tt></span>” 去发现为什么吧。)
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">现在默认的编码模式已经包含了你在字符串中使用的所有字符，<span class="application">Python</span> 对字符串的自动强制转换和打印就不存在问题了。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e24296"></a><h3 class="title">例&nbsp;9.17.&nbsp;指定<tt class="filename">.py</tt>文件的编码
+            </h3>
+            <p>如果你打算在你的 <span class="application">Python</span> 代码中保存非 <span class="acronym">ASCII</span> 字符串，你需要在每个文件的顶端加入编码声明来指定每个 <tt class="filename">.py</tt> 文件的编码。这个声明定义了 <tt class="filename">.py</tt> 文件的编码为 UTF-8：
+            </p><pre class="programlisting">
+<span class='pycomment'>#!/usr/bin/env python</span>
+<span class='pycomment'># -*- coding: UTF-8 -*-</span>
+</pre></div>
+         <p>现在，想想 <span class="acronym">XML</span> 中的编码应该是怎样的呢？不错，每一个 <span class="acronym">XML</span> 文档都有指定的编码。重复一下，ISO-8859-1 是西欧语言存放数据的流行编码方式。KOI8-R 是俄语流行的编码方式。编码――如果指定了的话――都在 <span class="acronym">XML</span> 文档的首部。
+         </p>
+         <div class="example"><a name="d0e24329"></a><h3 class="title">例&nbsp;9.18.&nbsp;<tt class="filename">russiansample.xml</tt></h3><pre class="screen"><span class="computeroutput">
+&lt;?xml version="1.0" encoding="koi8-r"?&gt;       </span><a name="kgp.unicode.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"><span class="computeroutput">
+&lt;preface&gt;
+&lt;title&gt;Предисловие&lt;/title&gt;                    </span><a name="kgp.unicode.5.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"><span class="computeroutput">
+&lt;/preface&gt;</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这是从一个真实的俄语 <span class="acronym">XML</span> 文档中提取出来的示例；它就是这本书俄语翻译版的一部分。注意，编码 <tt class="literal">koi8-r</tt> 是在首部指定的。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.5.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这些是古代斯拉夫语的字符，就我所知，它们用来拼写俄语单词“<span class="quote">Preface</span>”。如果你在一个正常文本编辑器中打开这个文件，这些字符非常像乱码，因为它们使用了 <tt class="literal">koi8-r</tt> 编码模式进行编码，但是却以 <tt class="literal">iso-8859-1</tt> 编码模式进行显示。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e24364"></a><h3 class="title">例&nbsp;9.19.&nbsp;解析 <tt class="filename">russiansample.xml</tt></h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> xml.dom <span class='pykeyword'>import</span> minidom</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">xmldoc = minidom.parse(<span class='pystring'>'russiansample.xml'</span>)</span> <a name="kgp.unicode.6.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">title = xmldoc.getElementsByTagName(<span class='pystring'>'title'</span>)[0].firstChild.data</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">title</span>                                       <a name="kgp.unicode.6.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">u'\u041f\u0440\u0435\u0434\u0438\u0441\u043b\u043e\u0432\u0438\u0435'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> title</span>                                 <a name="kgp.unicode.6.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="traceback">Traceback (innermost last):
+  File "&lt;interactive input&gt;", line 1, in ?
+UnicodeError: ASCII encoding error: ordinal not in range(128)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">convertedtitle = title.encode(<span class='pystring'>'koi8-r'</span>)</span>     <a name="kgp.unicode.6.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">convertedtitle</span>
+<span class="computeroutput">'\xf0\xd2\xc5\xc4\xc9\xd3\xcc\xcf\xd7\xc9\xc5'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>print</span> convertedtitle</span>                        <a name="kgp.unicode.6.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+<span class="computeroutput">Предисловие</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.6.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我假设在这里你将前一个例子以 <tt class="filename">russiansample.xml</tt> 为名保存在当前目录中。也出于完整性的考虑，我假设你已经删除了 <tt class="filename">sitecustomize.py</tt> 文件，将缺省编码改回到 <tt class="literal">'ascii'</tt>，或至少将 <tt class="function">setdefaultencoding</tt> 一行注释起来了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.6.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">注意 <tt class="sgmltag-element">title</tt> 标记 (现在在 <tt class="varname">title</tt> 变量中，上面那一长串 <span class="application">Python</span> 函数我们暂且跳过，下一节再解释)――在 <span class="acronym">XML</span> 文档的 <tt class="sgmltag-element">title</tt> 元素中的文本数据是以 unicode 保存的。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.6.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">直接打印 title 是不可能的，因为这个 unicode 字符串包含了非 <span class="acronym">ASCII</span> 字符，所以 <span class="application">Python</span> 不能把它转换为 <span class="acronym">ASCII</span>，因为它无法理解。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.6.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">但是，你能够显式地将它转换为 <tt class="literal">koi8-r</tt>，在本例中，我们得到一个 (正常，非 unicode) 单字节字符的字符串 (<tt class="literal">f0</tt>, <tt class="literal">d2</tt>, <tt class="literal">c5</tt>，等等)，它是初始unicode字符串中字符 <tt class="literal">koi8-r</tt> 编码的版本。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#kgp.unicode.6.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">打印 <tt class="literal">koi8-r</tt> 编码的字符串有可能会在你的屏幕上显示为乱码，因为你的 <span class="application">Python</span> <span class="acronym">IDE</span> 将这些字符作为 <tt class="literal">iso-8859-1</tt> 的编码进行解析，而不是 <tt class="literal">koi8-r</tt> 编码。但是，至少它们能打印。 (并且，如果你仔细看，当在一个不支持 unicode 的文本编辑器中打开最初的 <span class="acronym">XML</span> 文档时，会看到相同的乱码。<span class="application">Python</span> 在解析 <span class="acronym">XML</span> 文档时，将它从 <tt class="literal">koi8-r</tt> 转换到了unicode，你只不过是将它转换回来。)
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>总结一下，如果你以前从没有看到过 unicode，倒是有些唬人，但是在 <span class="application">Python</span> 处理 unicode 数据真是非常容易。如果你的 <span class="acronym">XML</span> 文档都是 7 位的 <span class="acronym">ASCII</span> (像本章中的例子)，你差不多永远都不用考虑 unicode。<span class="application">Python</span> 在进行解析时会将 <span class="acronym">XML</span> 文档中的 <span class="acronym">ASCII</span> 数据转换为 unicode，在任何需要的时候强制转换回为 <span class="acronym">ASCII</span>，你甚至永远都不用注意。但是如果你要处理其它语言的数据，<span class="application">Python</span> 已经准备好了。
+         </p>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li><a href="http://www.unicode.org/">Unicode.org</a> 是 unicode 标准的主页，包含了一个简要的<a href="http://www.unicode.org/standard/principles.html">技术简介</a>。
+               </li>
+               <li><a href="http://www.reportlab.com/i18n/python_unicode_tutorial.html">Unicode 教程</a>有更多关于如何使用 <span class="application">Python</span> unicode 函数的例子，包括甚至在并不真的需要时如何将 unicode 强制转换为 <span class="acronym">ASCII</span>。
+               </li>
+               <li><a href="http://www.python.org/peps/pep-0263.html">PEP 263</a> 涉及了何时、如何在你的<tt class="filename">.py</tt>文件中定义字符编码的更多细节。
+               </li>
+            </ul>
+         </div>
+         <div class="footnotes">
+            <h3 class="footnotetitle">Footnotes</h3>
+            <div class="footnote">
+               <p><sup>[<a name="ftn.d0e23957" href="#d0e23957">8</a>] </sup>这一点，很不幸<span class="emphasis"><em>仍然</em></span> 过分简单了。现在 unicode 已经扩展用来处理古老的汉字、韩文和日文文本，它们有太多不同的字符，以至于 2 字节的 unicode 系统不能全部表示。但当前 <span class="application">Python</span> 不支持超出范围的编码，并且我不知道是否有正在计划进行解决的项目。对不起，你已经到了我经验的极限了。
+               </p>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="parsing_xml.html">&lt;&lt;&nbsp;XML 解析</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#kgp.divein" title="9.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="packages.html" title="9.2.&nbsp;包">2</a> <span class="divider">|</span> <a href="parsing_xml.html" title="9.3.&nbsp;XML 解析">3</a> <span class="divider">|</span> <span class="thispage">4</span> <span class="divider">|</span> <a href="searching.html" title="9.5.&nbsp;搜索元素">5</a> <span class="divider">|</span> <a href="attributes.html" title="9.6.&nbsp;访问元素属性">6</a> <span class="divider">|</span> <a href="summary.html" title="9.7.&nbsp;Segue ">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="searching.html">搜索元素&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,204 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>17.5.&nbsp;plural.py, 第 4 阶段</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;17&nbsp;章&nbsp;动态函数">
+      <link rel="previous" href="stage3.html" title="17.4.&nbsp;plural.py, 第 3 阶段">
+      <link rel="next" href="stage5.html" title="17.6.&nbsp;plural.py, 第 5 阶段">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">动态函数</a>&nbsp;&gt;&nbsp;<span class="thispage">plural.py, 第 4 阶段</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="stage3.html" title="上一页: “plural.py, 第 3 阶段”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="stage5.html" title="下一页: “plural.py, 第 5 阶段”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="plural.stage4"></a>17.5.&nbsp;<tt class="filename">plural.py</tt>, 第 4 阶段
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>让我们精炼出代码中的重复之处，以便更容易地定义新规则。</p>
+         </div>
+         <div class="example"><a name="plural.stage4.example.1"></a><h3 class="title">例&nbsp;17.9.&nbsp;<tt class="filename">plural4.py</tt></h3><pre class="programlisting"><span class='pykeyword'>
+import</span> re
+
+<span class='pykeyword'>def</span><span class='pyclass'> buildMatchAndApplyFunctions</span>((pattern, search, replace)):  
+    matchFunction = <span class='pykeyword'>lambda</span> word: re.search(pattern, word)      <a name="plural.stage4.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    applyFunction = <span class='pykeyword'>lambda</span> word: re.sub(search, replace, word) <a name="plural.stage4.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    <span class='pykeyword'>return</span> (matchFunction, applyFunction)                      <a name="plural.stage4.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage4.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">buildMatchAndApplyFunctions</tt> 是一个动态生成其它函数的函数。它将 <tt class="varname">pattern</tt>，<tt class="varname">search</tt> 和 <tt class="varname">replace</tt> (实际上是一个元组，我们很快就会提到这一点)，通过使用 <tt class="literal">lambda</tt> 语法构建一个接受单参数 (<tt class="varname">word</tt>) 并以传递给 <tt class="function">buildMatchAndApplyFunctions</tt> 的 <tt class="varname">pattern</tt> 和传递给新函数的 <tt class="varname">word</tt> 调用 <tt class="function">re.search</tt> 的匹配函数！哇塞！
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage4.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">构建应用规则函数的方法相同。应用规则函数是一个接受单参数并以传递给 <tt class="function">buildMatchAndApplyFunctions</tt> 的 <tt class="varname">search</tt> 和 <tt class="varname">replace</tt> 以及传递给这个应用规则函数的 <tt class="varname">word</tt> 调用 <tt class="function">re.sub</tt> 的函数。在一个动态函数中应用外部参数值的技术被称作<span class="emphasis"><em>闭合 (closures)</em></span>。你实际上是在应用规则函数中定义常量：它只接受一个参数 (<tt class="varname">word</tt>)，但用到了定义时设置的两个值 (<tt class="varname">search</tt> 和 <tt class="varname">replace</tt>)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage4.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">最终，<tt class="function">buildMatchAndApplyFunctions</tt> 函数返回一个包含两个值的元组：你刚刚创建的两个函数。你在这些函数中定义的常量 (<tt class="varname">matchFunction</tt> 中的 <tt class="varname">pattern</tt> 以及 <tt class="varname">applyFunction</tt> 中的 <tt class="varname">search</tt> 和 <tt class="varname">replace</tt>) 保留在这些函数中，由 <tt class="function">buildMatchAndApplyFunctions</tt> 一同返回。这简直太酷了。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>如果这太费解 (它应该是这样，这是个怪异的东西)，可能需要通过了解它的使用来搞明白。</p>
+         <div class="example"><a name="d0e38085"></a><h3 class="title">例&nbsp;17.10.&nbsp;<tt class="filename">plural4.py</tt> 继续
+            </h3><pre class="programlisting">
+patterns = \
+  (
+    (<span class='pystring'>'[sxz]$'</span>, <span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>),
+    (<span class='pystring'>'[^aeioudgkprt]h$'</span>, <span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>),
+    (<span class='pystring'>'(qu|[^aeiou])y$'</span>, <span class='pystring'>'y$'</span>, <span class='pystring'>'ies'</span>),
+    (<span class='pystring'>'$'</span>, <span class='pystring'>'$'</span>, <span class='pystring'>'s'</span>)
+  )                                                 <a name="plural.stage4.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+rules = map(buildMatchAndApplyFunctions, patterns)  <a name="plural.stage4.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage4.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我们的复数化规则现在被定义成一组字符串 (不是函数)。第一个字符串是你在调用 <tt class="function">re.search</tt> 时使用的正则表达式；第二个和第三个字符串是你在通过调用 <tt class="function">re.sub</tt> 来应用规则将名词变为复数时使用的搜索和替换表达式。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage4.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这很神奇。把传进去的 <tt class="varname">patterns</tt> 字符串转换为传回来的函数。如何做到的呢？将这些字符串映射给 <tt class="function">buildMatchAndApplyFunctions</tt> 函数之后，三个字符串参数转换成了两个函数组成的元组。这意味着 <tt class="varname">rules</tt> 被转换成了前面范例中相同的内容：由许多调用 <tt class="function">re.search</tt> 函数的匹配函数和调用 <tt class="function">re.sub</tt> 的规则应用函数构成的函数组组成的一个元组。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>我发誓这不是我信口雌黄：<tt class="varname">rules</tt> 被转换成了前面范例中相同的内容。剖析 <tt class="varname">rules</tt> 的定义，你看到的是：
+         </p>
+         <div class="example"><a name="d0e38132"></a><h3 class="title">例&nbsp;17.11.&nbsp;剖析规则定义</h3><pre class="programlisting">
+rules = \
+  (
+    (
+     <span class='pykeyword'>lambda</span> word: re.search(<span class='pystring'>'[sxz]$'</span>, word),
+     <span class='pykeyword'>lambda</span> word: re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, word)
+    ),
+    (
+     <span class='pykeyword'>lambda</span> word: re.search(<span class='pystring'>'[^aeioudgkprt]h$'</span>, word),
+     <span class='pykeyword'>lambda</span> word: re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'es'</span>, word)
+    ),
+    (
+     <span class='pykeyword'>lambda</span> word: re.search(<span class='pystring'>'[^aeiou]y$'</span>, word),
+     <span class='pykeyword'>lambda</span> word: re.sub(<span class='pystring'>'y$'</span>, <span class='pystring'>'ies'</span>, word)
+    ),
+    (
+     <span class='pykeyword'>lambda</span> word: re.search(<span class='pystring'>'$'</span>, word),
+     <span class='pykeyword'>lambda</span> word: re.sub(<span class='pystring'>'$'</span>, <span class='pystring'>'s'</span>, word)
+    )
+   )                                          
+</pre></div>
+         <div class="example"><a name="plural.finishing.up"></a><h3 class="title">例&nbsp;17.12.&nbsp;<tt class="filename">plural4.py</tt> 的完成
+            </h3><pre class="programlisting"><span class='pykeyword'>
+def</span> plural(noun):                                  
+    <span class='pykeyword'>for</span> matchesRule, applyRule <span class='pykeyword'>in</span> rules:            <a name="plural.stage4.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        <span class='pykeyword'>if</span> matchesRule(noun):                      
+            <span class='pykeyword'>return</span> applyRule(noun)                 
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage4.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">由于 <tt class="varname">rules</tt> 列表和前面的范例是相同的，<tt class="function">plural</tt> 函数没有变化也就不令人诧异了。记住，这没什么特别的，按照顺序调用一系列函数。不必在意规则是如何定义的。在<a href="stage2.html" title="17.3.&nbsp;plural.py, 第 2 阶段">第 2 阶段</a>，它们被定义为各具名称的函数。在<a href="stage3.html" title="17.4.&nbsp;plural.py, 第 3 阶段">第 3 阶段</a>，他们被定义为匿名的 <tt class="literal">lambda</tt> 函数。现在第 4 阶段，它们通过 <tt class="function">buildMatchAndApplyFunctions</tt> 映射原始的字符串列表被动态创建。无所谓，<tt class="function">plural</tt> 函数的工作方法没有变。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>还不够兴奋吧！我必须承认，在定义 <tt class="function">buildMatchAndApplyFunctions</tt> 时我跳过了一个微妙之处。让我们回过头再看一下。
+         </p>
+         <div class="example"><a name="d0e38176"></a><h3 class="title">例&nbsp;17.13.&nbsp;回头看 <tt class="function">buildMatchAndApplyFunctions</tt></h3><pre class="programlisting"><span class='pykeyword'>
+def</span> buildMatchAndApplyFunctions((pattern, search, replace)):   <a name="plural.stage4.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage4.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">注意到双括号了吗？这个函数并不是真的接受三个参数，实际上只接受一个参数：一个三元素元组。但是在函数被调用时元组被展开了，元组的三个元素也被赋予了不同的变量：<tt class="varname">pattern</tt>, <tt class="varname">search</tt> 和 <tt class="varname">replace</tt>。乱吗？让我们在使用中理解。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e38198"></a><h3 class="title">例&nbsp;17.14.&nbsp;调用函数时展开元组</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>def</span><span class='pyclass'> foo</span>((a, b, c)):</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> c</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> b</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> a</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">parameters = (<span class='pystring'>'apple'</span>, <span class='pystring'>'bear'</span>, <span class='pystring'>'catnap'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">foo(parameters)</span> <a name="plural.stage4.5.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">catnap</span>
+<span class="computeroutput">bear</span>
+<span class="computeroutput">apple</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#plural.stage4.5.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">调用 <tt class="function">foo</tt> 的正确方法是使用一个三元素元组。函数被调用时，元素被分别赋予 <tt class="function">foo</tt> 中的多个局部变量。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <p>现在，让我们回过头看一看这个元组自动展开技巧的必要性。<tt class="varname">patterns</tt> 是一个元组列表，并且每个元组都有三个元素。调用 <tt class="literal">map(buildMatchAndApplyFunctions, patterns)</tt>，这并<span class="emphasis"><em>不</em></span> 意味着是以三个参数调用 <tt class="function">buildMatchAndApplyFunctions</tt>。使用 <tt class="function">map</tt> 映射一个列表到函数时，通常使用单参数：列表中的每个元素。就 <tt class="varname">patterns</tt> 而言，列表的每个元素都是一个元组，所以 <tt class="function">buildMatchAndApplyFunctions</tt> 总是是以元组来调用，在 <tt class="function">buildMatchAndApplyFunctions</tt> 中使用元组自动展开技巧将元素赋值给可以被使用的变量。
+            </p>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="stage3.html">&lt;&lt;&nbsp;plural.py, 第 3 阶段</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#plural.divein" title="17.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="stage1.html" title="17.2.&nbsp;plural.py, 第 1 阶段">2</a> <span class="divider">|</span> <a href="stage2.html" title="17.3.&nbsp;plural.py, 第 2 阶段">3</a> <span class="divider">|</span> <a href="stage3.html" title="17.4.&nbsp;plural.py, 第 3 阶段">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="stage5.html" title="17.6.&nbsp;plural.py, 第 5 阶段">6</a> <span class="divider">|</span> <a href="stage6.html" title="17.7.&nbsp;plural.py, 第 6 阶段">7</a> <span class="divider">|</span> <a href="summary.html" title="17.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="stage5.html">plural.py, 第 5 阶段&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

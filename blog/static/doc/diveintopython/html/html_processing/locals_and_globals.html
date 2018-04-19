@@ -1,0 +1,258 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>8.5.&nbsp;locals 和 globals</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;8&nbsp;章&nbsp;HTML 处理">
+      <link rel="previous" href="basehtmlprocessor.html" title="8.4.&nbsp;BaseHTMLProcessor.py 介绍">
+      <link rel="next" href="dictionary_based_string_formatting.html" title="8.6.&nbsp;基于 dictionary 的字符串格式化">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTML 处理</a>&nbsp;&gt;&nbsp;<span class="thispage">locals 和 globals</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="basehtmlprocessor.html" title="上一页: “BaseHTMLProcessor.py 介绍”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="dictionary_based_string_formatting.html" title="下一页: “基于 dictionary 的字符串格式化”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="dialect.locals"></a>8.5.&nbsp;<tt class="function">locals</tt> 和 <tt class="function">globals</tt></h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>我们先偏离一下 <span class="acronym">HTML</span> 处理的主题，讨论一下 <span class="application">Python</span> 如何处理变量。<span class="application">Python</span> 有两个内置的函数，<tt class="function">locals</tt> 和 <tt class="function">globals</tt>，它们提供了基于 dictionary 的访问局部和全局变量的方式。
+            </p>
+         </div>
+         <p>还记得 <tt class="function">locals</tt> 吗？您第一次是在这里看到的：
+         </p>
+         <div class="informalexample"><pre class="programlisting">
+    <span class='pykeyword'>def</span><span class='pyclass'> unknown_starttag</span>(self, tag, attrs):
+        strattrs = <span class='pystring'>""</span>.join([<span class='pystring'>' %s="%s"'</span> % (key, value) <span class='pykeyword'>for</span> key, value <span class='pykeyword'>in</span> attrs])
+        self.pieces.append(<span class='pystring'>"&lt;%(tag)s%(strattrs)s&gt;"</span> % locals())
+</pre></div>
+         <p>不，等等，此时您还不能理解 <tt class="function">locals</tt> 。首先，您需要学习关于命名空间的知识。这很枯燥，但是很重要，因此要要耐心些。
+         </p>
+         <p><span class="application">Python</span> 使用叫做名字空间的东西来记录变量的轨迹。名字空间只是一个 dictionary ，它的键字就是变量名，它的值就是那些变量的值。实际上，名字空间可以像 <span class="application">Python</span> 的 dictionary 一样进行访问，一会儿我们就会看到。
+         </p>
+         <p>在一个 <span class="application">Python</span> 程序中的任何一个地方，都存在几个可用的名字空间。每个函数都有着自已的名字空间，叫做局部名字空间，它记录了函数的变量，包括函数的参数和局部定义的变量。每个模块拥有它自已的名字空间，叫做全局名字空间，它记录了模块的变量，包括函数、类、其它导入的模块、模块级的变量和常量。还有就是内置名字空间，任何模块均可访问它，它存放着内置的函数和异常。
+         </p>
+         <p>当一行代码要使用变量 <tt class="varname">x</tt> 的值时，<span class="application">Python</span> 会到所有可用的名字空间去查找变量，按照如下顺序：
+         </p>
+         <div class="orderedlist">
+            <ol type="1">
+               <li>局部名字空间――特指当前函数或类的方法。如果函数定义了一个局部变量 <tt class="varname">x</tt>，或一个参数 <tt class="varname">x</tt>，<span class="application">Python</span> 将使用它，然后停止搜索。
+               </li>
+               <li>全局名字空间――特指当前的模块。如果模块定义了一个名为 <tt class="varname">x</tt> 的变量，函数或类，<span class="application">Python</span> 将使用它然后停止搜索。
+               </li>
+               <li>内置名字空间――对每个模块都是全局的。作为最后的尝试，<span class="application">Python</span> 将假设 <tt class="varname">x</tt> 是内置函数或变量。
+               </li>
+            </ol>
+         </div>
+         <p>如果 <span class="application">Python</span> 在这些名字空间找不到 <tt class="varname">x</tt>，它将放弃查找并引发一个 <tt class="errorcode">NameError</tt> 异常，同时传递 <tt class="errorname">There is no variable named 'x'</tt> 这样一条信息，回到 <a href="../native_data_types/declaring_variables.html#odbchelper.unboundvariable" title="例&nbsp;3.18.&nbsp;引用未赋值的变量">例&nbsp;3.18 “引用未赋值的变量”</a>，您会看到一路上都有这样的信息。但是您并没有体会到 <span class="application">Python</span> 在给出这样的错误之前做了多少的努力。
+         </p><a name="d0e21228"></a><table class="important" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/important.png" alt="重要" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%"><span class="application">Python</span> 2.2 引入了一种略有不同但重要的改变，它会影响名字空间的搜索顺序：嵌套的作用域。
+                  
+                  在 <span class="application">Python</span> 2.2 版本之前，当您在一个<a href="../file_handling/all_together.html#fileinfo.nested" title="例&nbsp;6.21.&nbsp;listDirectory">嵌套函数</a>或 <a href="../power_of_introspection/lambda_functions.html" title="4.7.&nbsp;使用 lambda 函数"><tt class="literal">lambda</tt> 函数</a>中引用一个变量时，<span class="application">Python</span> 会在当前 (嵌套的或 <tt class="literal">lambda</tt>) 函数的名字空间中搜索，然后在模块的名字空间。<span class="application">Python</span> 2.2 将只在当前 (嵌套的或 <tt class="literal">lambda</tt>) 函数的名字空间中搜索，<span class="emphasis"><em>然后是在父函数的名字空间</em></span> 中搜索，接着是模块的名字空间中搜索。<span class="application">Python</span> 2.1 可 以两种方式工作，缺省地，按 <span class="application">Python</span> 2.0 的方式工作。但是您可以把下面一行代码增加到您的模块头部，使您的模块工作起来像 <span class="application">Python</span> 2.2 的方式：<pre class="programlisting"><span class='pykeyword'>
+from</span> __future__ <span class='pykeyword'>import</span> nested_scopes</pre></td>
+            </tr>
+         </table>
+         <p>您是否为此而感到困惑？不要灰心！我敢说这一点非常酷。像 <span class="application">Python</span> 中的许多事情一样，名字空间<span class="emphasis"><em>在运行时直接可以访问</em></span>。怎么样？不错吧，局部名字空间可以通过内置的 <tt class="function">locals</tt> 函数来访问。全局 (模块级别) 名字空间可以通过内置的 <tt class="function">globals</tt> 函数来访问。
+         </p>
+         <div class="example"><a name="d0e21286"></a><h3 class="title">例&nbsp;8.10.&nbsp;<tt class="function">locals</tt> 介绍
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>def</span><span class='pyclass'> foo</span>(arg):</span> <a name="dialect.locals.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput">x = 1</span>
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> locals()</span>
+<tt class="prompt">...     </tt>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">foo(7)</span>        <a name="dialect.locals.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">{'arg': 7, 'x': 1}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">foo(<span class='pystring'>'bar'</span>)</span>    <a name="dialect.locals.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">{'arg': 'bar', 'x': 1}</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">函数 <tt class="function">foo</tt> 在它的局部名字空间中有两个变量：<tt class="varname">arg</tt> (它的值是被传入函数的) 和 <tt class="varname">x</tt> (它是在函数里定义的)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">locals</tt> 返回一个名字/值对的 dictionary。这个 dictionary 的键字是字符串形式的变量名字，dictionary 的值是变量的实际值。所以用 <tt class="literal">7</tt> 来调用 <tt class="function">foo</tt>，会打印出包含函数两个局部变量的 dictionary：<tt class="varname">arg</tt> (<tt class="literal">7</tt>) 和 <tt class="varname">x</tt> (<tt class="constant">1</tt>)。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">回想一下，<span class="application">Python</span> 有动态数据类型，所以您可以非常容易地传递给 <tt class="varname">arg</tt> 一个字符串，这个函数 (和对 <tt class="function">locals</tt> 的调用) 将仍然很好的工作。<tt class="function">locals</tt> 可以用于所有类型的变量。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p><tt class="function">locals</tt> 对局部 (函数) 名字空间做了些什么，<tt class="function">globals</tt> 就对全局 (模块) 名字空间做了什么。然而 <tt class="function">globals</tt> 更令人兴奋，因为一个模块的名字空间是更令人兴奋的。<sup>[<a name="d0e21392" href="#ftn.d0e21392">6</a>]</sup> 模块的名字空间不仅仅包含了模块级的变量和常量，还包括了所有在模块中定义的函数和类。除此以外，它还包括了任何被导入到模块中的东西。
+         </p>
+         <p>回想一下 <a href="../object_oriented_framework/importing_modules.html" title="5.2.&nbsp;使用 from module import 导入模块"><tt class="literal">from <i class="replaceable">module</i> import</tt></a> 和 <a href="../getting_to_know_python/everything_is_an_object.html#odbchelper.import" title="例&nbsp;2.3.&nbsp;访问 buildConnectionString 函数的 doc string"><tt class="literal">import <i class="replaceable">module</i></tt></a> 之间的不同。使用 <tt class="literal">import <i class="replaceable">module</i></tt>，模块自身被导入，但是它保持着自已的名字空间，这就是为什么您需要使用模块名来访问它的函数或属性：<tt class="literal"><i class="replaceable">module</i>.<i class="replaceable">function</i></tt> 的原因。但是使用 <tt class="literal">from <i class="replaceable">module</i> import</tt>，实际上是从另一个模块中将指定的函数和属性导入到您自己的名字空间，这就是为什么您可以直接访问它们却不需要引用它们所来源的模块。使用 <tt class="function">globals</tt> 函数，您会真切地看到这一切的发生。
+         </p>
+         <div class="example"><a name="dialect.globals.example"></a><h3 class="title">例&nbsp;8.11.&nbsp;<tt class="function">globals</tt> 介绍
+            </h3>
+            <p>看看下面列出的在文件 <tt class="filename">BaseHTMLProcessor.py</tt> 尾部的代码块：
+            </p><pre class="programlisting"><span class='pykeyword'>
+if</span> __name__ == <span class='pystring'>"__main__"</span>:
+    <span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> globals().items():             <a name="dialect.locals.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+        <span class='pykeyword'>print</span> k, <span class='pystring'>"="</span>, v</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">不要被吓坏了，想想以前您已经全部都看到过了。<tt class="function">globals</tt> 函数返回一个 dictionary，我们使用 <tt class="function">items</tt> 方法和<a href="../native_data_types/declaring_variables.html#odbchelper.multiassign" title="3.4.2.&nbsp;一次赋多值">多变量赋值</a>来<a href="../file_handling/for_loops.html#dictionaryiter.example" title="例&nbsp;6.10.&nbsp;遍历 dictionary">遍历 dictionary</a>。在这里唯一的新东西就是 <tt class="function">globals</tt>  函数。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <p>现在从命令行运行这个脚本，会得到下面的输出 (注意您的输出可能有略微的不同，这依赖于您的系统平台和所安装的 <span class="application">Python</span> 版本)：
+            </p><pre class="screen"><tt class="prompt">c:\docbook\dip\py&gt;</tt> <span class="userinput">python BaseHTMLProcessor.py</span></pre><pre class="programlisting">
+SGMLParser = sgmllib.SGMLParser                <a name="dialect.locals.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+htmlentitydefs = &lt;module <span class='pystring'>'htmlentitydefs'</span> <span class='pykeyword'>from</span> <span class='pystring'>'C:\Python23\lib\htmlentitydefs.py'</span>&gt; <a name="dialect.locals.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+BaseHTMLProcessor = __main__.BaseHTMLProcessor <a name="dialect.locals.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+__name__ = __main__                            <a name="dialect.locals.3.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+... rest of output omitted <span class='pykeyword'>for</span> brevity...</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">我们使用了 <tt class="literal">from <i class="replaceable">module</i> import</tt> 把 <tt class="classname">SGMLParser</tt> 从 <tt class="filename">sgmllib</tt> 中导入。也就是说它被直接导入到我们的模块名字空间了，就是这样。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">把上面的例子和 <tt class="filename">htmlentitydefs</tt> 对比一下，它是用 <tt class="literal">import</tt> 被导入的。也就是说 <tt class="filename">htmlentitydefs</tt> 模块本身被导入了名字空间，但是定义在 <tt class="filename">htmlentitydefs</tt> 之中的 <tt class="varname">entitydefs</tt> 变量却没有。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个模块只定义一个类，<tt class="classname">BaseHTMLProcessor</tt>，不错。注意这儿的值就是<a href="../object_oriented_framework/class_attributes.html#fileinfo.classattributes.intro" title="例&nbsp;5.17.&nbsp;类属性介绍">类本身</a>，不是一个特别的类实例。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.3.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">记得 <a href="../getting_to_know_python/testing_modules.html#odbchelper.ifnametrick"><tt class="literal">if <span class="literal">__name__</span></tt> 技巧</a>吗？当运行一个模块时 (相对于从另外一个模块中导入而言)，内置的 <tt class="literal">__name__</tt> 是一个特殊值 <tt class="literal">__main__</tt>。因为我们是把这个模块当作脚本从命令来运行的，故 <tt class="literal">__name__</tt> 值为 <tt class="literal">__main__</tt>，这就是为什么我们这段简单地打印 <tt class="function">globals</tt> 的代码可以执行的原因。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div><a name="tip.localsbyname"></a><table class="note" border="0" summary="">
+            <tr>
+               <td rowspan="2" align="center" valign="top" width="1%"><img src="../images/note.png" alt="注意" title="" width="24" height="24"></td>
+            </tr>
+            <tr>
+               <td colspan="2" align="left" valign="top" width="99%">使用 <tt class="function">locals</tt> 和 <tt class="function">globals</tt> 函数，通过提供变量的字符串名字您可以动态地得到任何变量的值。这种方法提供了这样的功能：<a href="../power_of_introspection/getattr.html" title="4.4.&nbsp;通过 getattr 获取对象引用"><tt class="function">getattr</tt></a> 函数允许您通过提供函数的字符串名来动态地访问任意的函数。
+               </td>
+            </tr>
+         </table>
+         <p>在 <tt class="function">locals</tt> 与 <tt class="function">globals</tt> 之间有另外一个重要的区别，您应该在它困扰您之前就了解它。它无论如何都会困扰您的，但至少您还会记得曾经学习过它。
+         </p>
+         <div class="example"><a name="dialect.locals.readonly.example"></a><h3 class="title">例&nbsp;8.12.&nbsp;<tt class="function">locals</tt> 是只读的，<tt class="function">globals</tt> 不是
+            </h3><pre class="programlisting"><span class='pykeyword'>
+def</span> foo(arg):
+    x = 1
+    <span class='pykeyword'>print</span> locals()    <a name="dialect.locals.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    locals()[<span class='pystring'>"x"</span>] = 2 <a name="dialect.locals.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    <span class='pykeyword'>print</span> <span class='pystring'>"x="</span>,x      <a name="dialect.locals.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+
+z = 7
+<span class='pykeyword'>print</span> <span class='pystring'>"z="</span>,z
+foo(3)
+globals()[<span class='pystring'>"z"</span>] = 8    <a name="dialect.locals.4.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"><span class='pykeyword'>
+print</span> <span class='pystring'>"z="</span>,z          <a name="dialect.locals.4.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">因为使用 <tt class="literal">3</tt> 来调用 <tt class="function">foo</tt>，会打印出 <tt class="literal">{'arg': 3, 'x': 1}</tt>。这个应该没什么奇怪的。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">locals</tt> 是一个返回 dictionary 的函数，这里您在 dictionary 中设置了一个值。您可能认为这样会改变局部变量 <tt class="varname">x</tt> 的值为 <tt class="literal">2</tt>，但并不会。<tt class="function">locals</tt> 实际上没有返回局部名字空间，它返回的是一个拷贝。所以对它进行改变对局部名字空间中的变量值并无影响。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这样会打印出 <tt class="literal">x= 1</tt>，而不是 <tt class="literal">x= 2</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.4.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在有了对 <tt class="function">locals</tt> 的经验之后，您可能认为这样<span class="emphasis"><em>不会</em></span> 改变 <tt class="varname">z</tt> 的值，但是可以。由于 <span class="application">Python</span> 在实现过程中内部有所区别 (关于这些区别我宁可不去研究，因为我自已还没有完全理解) ，<tt class="function">globals</tt> 返回实际的全局名字空间，而不是一个拷贝：与 <tt class="function">locals</tt> 的行为完全相反。所以对 <tt class="function">globals</tt> 所返回的 dictionary 的任何的改动都会直接影响到全局变量。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#dialect.locals.4.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这样会打印出 <tt class="literal">z= 8</tt>，而不是 <tt class="literal">z= 7</tt>。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="footnotes">
+            <h3 class="footnotetitle">Footnotes</h3>
+            <div class="footnote">
+               <p><sup>[<a name="ftn.d0e21392" href="#d0e21392">6</a>] </sup>我没有说得太多吧。
+               </p>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="basehtmlprocessor.html">&lt;&lt;&nbsp;BaseHTMLProcessor.py 介绍</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#dialect.divein" title="8.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="introducing_sgmllib.html" title="8.2.&nbsp;sgmllib.py 介绍">2</a> <span class="divider">|</span> <a href="extracting_data.html" title="8.3.&nbsp;从 HTML 文档中提取数据">3</a> <span class="divider">|</span> <a href="basehtmlprocessor.html" title="8.4.&nbsp;BaseHTMLProcessor.py 介绍">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="dictionary_based_string_formatting.html" title="8.6.&nbsp;基于 dictionary 的字符串格式化">6</a> <span class="divider">|</span> <a href="quoting_attribute_values.html" title="8.7.&nbsp;给属性值加引号">7</a> <span class="divider">|</span> <a href="dialect.html" title="8.8.&nbsp;dialect.py 介绍">8</a> <span class="divider">|</span> <a href="all_together.html" title="8.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="8.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="dictionary_based_string_formatting.html">基于 dictionary 的字符串格式化&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

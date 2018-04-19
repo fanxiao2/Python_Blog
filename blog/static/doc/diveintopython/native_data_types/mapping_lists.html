@@ -1,0 +1,177 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>3.6.&nbsp;映射 list</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;3&nbsp;章&nbsp;内置数据类型">
+      <link rel="previous" href="formatting_strings.html" title="3.5.&nbsp;格式化字符串">
+      <link rel="next" href="joining_lists.html" title="3.7.&nbsp;连接 list 与分割字符串">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">内置数据类型</a>&nbsp;&gt;&nbsp;<span class="thispage">映射 list</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="formatting_strings.html" title="上一页: “格式化字符串”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="joining_lists.html" title="下一页: “连接 list 与分割字符串”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="odbchelper.map"></a>3.6.&nbsp;映射 list
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p><span class="application">Python</span> 的强大特性之一是其对 list 的解析，它提供一种紧凑的方法，可以通过对 list 中的每个元素应用一个函数，从而将一个 list 映射为另一个 list。
+            </p>
+         </div>
+         <div class="example"><a name="d0e7553"></a><h3 class="title">例&nbsp;3.24.&nbsp;List 解析介绍</h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = [1, 9, 8, 4]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[elem*2 <span class='pykeyword'>for</span> elem <span class='pykeyword'>in</span> li]</span>      <a name="odbchelper.map.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">[2, 18, 16, 8]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li</span>                           <a name="odbchelper.map.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">[1, 9, 8, 4]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li = [elem*2 <span class='pykeyword'>for</span> elem <span class='pykeyword'>in</span> li]</span> <a name="odbchelper.map.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">li</span>
+<span class="computeroutput">[2, 18, 16, 8]</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.map.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">为了便于理解它，让我们从右向左看。<tt class="varname">li</tt> 是一个将要映射的 list。<span class="application">Python</span> 循环遍历 <tt class="varname">li</tt> 中的每个元素。对每个元素均执行如下操作：首先临时将其值赋给变量 <tt class="varname">elem</tt>，然后 <span class="application">Python</span> 应用函数 <tt class="literal"><tt class="varname">elem</tt>*2</tt> 进行计算，最后将计算结果追加到要返回的 list 中。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.map.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">需要注意是，对 list 的解析并不改变原始的 list。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.map.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">将一个 list 的解析结果赋值给对其映射的变量是安全的。不用担心存在竞争情况或任何古怪事情的发生。<span class="application">Python</span> 会在内存中创建新的 list，当对 list 的解析完成时，<span class="application">Python</span> 将结果赋给变量。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="informalexample">
+            <p>让我们回过头来看看位于 <a href="../getting_to_know_python/index.html">第 2 章</a> 的函数 <tt class="function">buildConnectionString</tt> 对 list 的解析：
+            </p><pre class="programlisting">
+[<span class='pystring'>"%s=%s"</span> % (k, v) <span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> params.items()]</pre></div>
+         <p>首先，注意到你调用了dictionary <tt class="varname">params</tt> 的 <tt class="function">items</tt>  函数。这个函数返回一个 dictionary 中所有数据的 tuple 的 list。
+         </p>
+         <div class="example"><a name="odbchelper.items"></a><h3 class="title">例&nbsp;3.25.&nbsp;<tt class="function">keys</tt>, <tt class="function">values</tt> 和 <tt class="function">items</tt> 函数
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params = {<span class='pystring'>"server"</span>:<span class='pystring'>"mpilgrim"</span>, <span class='pystring'>"database"</span>:<span class='pystring'>"master"</span>, <span class='pystring'>"uid"</span>:<span class='pystring'>"sa"</span>, <span class='pystring'>"pwd"</span>:<span class='pystring'>"secret"</span>}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params.keys()</span>   <a name="odbchelper.map.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">['server', 'uid', 'database', 'pwd']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params.values()</span> <a name="odbchelper.map.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">['mpilgrim', 'sa', 'master', 'secret']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params.items()</span>  <a name="odbchelper.map.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">[('server', 'mpilgrim'), ('uid', 'sa'), ('database', 'master'), ('pwd', 'secret')]</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.map.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">Dictionary 的 <tt class="function">keys</tt> 方法返回一个包含所有键的 list。这个 list 没按 dictionary 定义的顺序输出 (记住，元素在 dictionary 中是无序的)，但它是一个 list。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.map.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">values</tt> 方法返回一个包含所有值的 list。它同 <tt class="function">keys</tt> 方法返回的 list 输出顺序相同，所以对于所有的 <tt class="varname">n</tt>，<tt class="literal">params.values()[n] == params[params.keys()[n]]</tt> 。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.map.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">items</tt> 方法返回一个由形如 <tt class="literal">(<i class="replaceable">key</i>，<i class="replaceable">value</i>)</tt> 组成的 tuple 的 list。这个 list 包括 dictionary 中所有的数据。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>现在让我们看一看 <tt class="function">buildConnectionString</tt> 做了些什么。它接收一个 list，<tt class="literal"><tt class="varname">params</tt>.<tt class="function">items</tt>()</tt>，通过对每个元素应用字符串格式化将其映射为一个新 list。这个新 list 将与 <tt class="literal"><tt class="varname">params</tt>.<tt class="function">items</tt>()</tt> 一一对应：新 list 中的每个元素都是 dictionary <tt class="varname">params</tt> 中的一个键-值对构成的的字符串。
+         </p>
+         <div class="example"><a name="d0e7756"></a><h3 class="title">例&nbsp;3.26.&nbsp;<tt class="function">buildConnectionString</tt> 中的 list 解析
+            </h3><pre class="screen"><tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params = {<span class='pystring'>"server"</span>:<span class='pystring'>"mpilgrim"</span>, <span class='pystring'>"database"</span>:<span class='pystring'>"master"</span>, <span class='pystring'>"uid"</span>:<span class='pystring'>"sa"</span>, <span class='pystring'>"pwd"</span>:<span class='pystring'>"secret"</span>}</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">params.items()</span>
+<span class="computeroutput">[('server', 'mpilgrim'), ('uid', 'sa'), ('database', 'master'), ('pwd', 'secret')]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[k <span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> params.items()]</span>                <a name="odbchelper.map.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">['server', 'uid', 'database', 'pwd']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[v <span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> params.items()]</span>                <a name="odbchelper.map.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">['mpilgrim', 'sa', 'master', 'secret']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[<span class='pystring'>"%s=%s"</span> % (k, v) <span class='pykeyword'>for</span> k, v <span class='pykeyword'>in</span> params.items()]</span> <a name="odbchelper.map.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">['server=mpilgrim', 'uid=sa', 'database=master', 'pwd=secret']</span></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.map.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">请注意我们正在使用两个变量对 list <tt class="literal">params.items()</tt> 进行遍历。这是<a href="declaring_variables.html#odbchelper.multiassign" title="3.4.2.&nbsp;一次赋多值">多变量赋值</a>的另一种用法。<tt class="literal">params.items()</tt> 的第一个元素是 <tt class="literal">('server', 'mpilgrim')</tt>，所以在 list 解析的第一次遍历中，<tt class="varname">k</tt> 将为 <tt class="literal">'server'</tt>，<tt class="varname">v</tt> 将为 <tt class="literal">'mpilgrim'</tt>。在本例中，我们忽略了返回 list 中 <tt class="varname">v</tt> 的值，而只包含了 <tt class="varname">k</tt> 的值，所以这个 list 解析最后等于 <tt class="literal"><tt class="varname">params</tt>.<tt class="function">keys</tt>()</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.map.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这里我们做着相同的事情，但是忽略了 <tt class="varname">k</tt> 的值，所以这个 list 解析最后等于 <tt class="literal"><tt class="varname">params</tt>.<tt class="function">values</tt>()</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#odbchelper.map.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">用一些简单的 <a href="formatting_strings.html" title="3.5.&nbsp;格式化字符串">字符串格式化</a>将前面两个例子合并起来 ，我们就得到一个包括了 dictionary 中每个元素的 key-value 对的 list。这个看上去有点像程序的<a href="../getting_to_know_python/index.html#odbchelper.output">输出结果</a>，剩下的就只是将这个 list 中的元素接起来形成一个字符串了。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="furtherreading">
+            <h3>进一步阅读</h3>
+            <ul>
+               <li><a href="http://www.python.org/doc/current/tut/tut.html"><i class="citetitle"><span class="application">Python</span> Tutorial</i></a> 讨论了另一种方法来映射 list：<a href="http://www.python.org/doc/current/tut/node7.html#SECTION007130000000000000000">使用内置的 <tt class="function">map</tt> 函数</a>。
+               </li>
+               <li><a href="http://www.python.org/doc/current/tut/tut.html"><i class="citetitle"><span class="application">Python</span> Tutorial</i></a> 展示了如何<a href="http://www.python.org/doc/current/tut/node7.html#SECTION007140000000000000000">对嵌套 list 的 list 进行解析</a>。
+               </li>
+            </ul>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="formatting_strings.html">&lt;&lt;&nbsp;格式化字符串</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#odbchelper.dict" title="3.1.&nbsp;Dictionary 介绍">1</a> <span class="divider">|</span> <a href="lists.html" title="3.2.&nbsp;List 介绍">2</a> <span class="divider">|</span> <a href="tuples.html" title="3.3.&nbsp;Tuple 介绍">3</a> <span class="divider">|</span> <a href="declaring_variables.html" title="3.4.&nbsp;变量声明">4</a> <span class="divider">|</span> <a href="formatting_strings.html" title="3.5.&nbsp;格式化字符串">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="joining_lists.html" title="3.7.&nbsp;连接 list 与分割字符串">7</a> <span class="divider">|</span> <a href="summary.html" title="3.8.&nbsp;小结">8</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="joining_lists.html">连接 list 与分割字符串&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

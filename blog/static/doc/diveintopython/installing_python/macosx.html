@@ -1,0 +1,171 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>1.3.&nbsp;Mac OS X 上的 Python </title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;1&nbsp;章&nbsp;安装 Python">
+      <link rel="previous" href="windows.html" title="1.2.&nbsp;Windows 上的 Python">
+      <link rel="next" href="macos9.html" title="1.4.&nbsp;Mac OS 9 上的 Python ">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">安装 Python</a>&nbsp;&gt;&nbsp;<span class="thispage">Mac OS X 上的 Python </span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="windows.html" title="上一页: “Windows 上的 Python”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="macos9.html" title="下一页: “Mac OS 9 上的 Python ”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="install.macosx"></a>1.3.&nbsp;<span class="abbrev">Mac</span> <span class="acronym">OS</span> X 上的 <span class="application">Python</span> 
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>在 <span class="abbrev">Mac</span> <span class="acronym">OS</span> X 上，对于安装 <span class="application">Python</span> 有两种选择：安装或不安装。您可能想要安装它。
+            </p>
+         </div>
+         <p><span class="abbrev">Mac</span> <span class="acronym">OS</span> X 10.2 及其后续版本已经预装了一个 <span class="application">Python</span> 的命令行版本。如果您习惯使用命令行，那么您可以使用它学完本书的三分之一。然而，预安装的版本不带 <span class="acronym">XML</span> 解析器，所以当您学到 <span class="acronym">XML</span> 的章节时，您会需要安装完整版。
+         </p>
+         <p>您还可以安装优于预装版本的最新的包含图形界面 Shell 的完整版本。</p>
+         <div class="procedure">
+            <h3 class="title">过程&nbsp;1.3.&nbsp;在 <span class="abbrev">Mac</span> <span class="acronym">OS</span> X 上运行预装版本的 <span class="application">Python</span> 
+            </h3>
+            <p>使用预装的 <span class="application">Python</span> 版本的步骤：
+            </p>
+            <ol type="1">
+               <li>
+                  <p>打开 <tt class="filename">/Applications</tt> 文件夹。
+                  </p>
+               </li>
+               <li>
+                  <p>打开 <tt class="filename">Utilities</tt> 文件夹。
+                  </p>
+               </li>
+               <li>
+                  <p>双击 <tt class="filename">Terminal</tt> 打开一个终端进入命令行窗口。
+                  </p>
+               </li>
+               <li>
+                  <p>在提示符下键入 <b class="userinput"><tt>python</tt></b>。
+                  </p>
+               </li>
+            </ol>
+         </div>
+         <p>试验:</p>
+         <div class="informalexample"><pre class="screen">
+<span class="computeroutput">Welcome to Darwin!</span>
+<tt class="prompt">[localhost:~] you% </tt><span class="userinput">python</span>
+<span class="computeroutput">Python 2.2 (#1, 07/14/02, 23:25:09)
+[GCC Apple cpp-precomp 6.14] on darwin
+Type "help", "copyright", "credits", or "license" for more information.</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[press Ctrl+D to get back to the command prompt]</span>
+<tt class="prompt">[localhost:~] you% </tt>
+</pre></div>
+         <div class="procedure">
+            <h3 class="title">过程&nbsp;1.4.&nbsp;在 <span class="abbrev">Mac</span> <span class="acronym">OS</span> X 上安装最新版的 <span class="application">Python</span> 
+            </h3>
+            <p>下面介绍下载并安装 <span class="application">Python</span> 最新版本的过程:
+            </p>
+            <ol type="1">
+               <li>
+                  <p>从 <a href="http://homepages.cwi.nl/~jack/macpython/download.html">http://homepages.cwi.nl/~jack/macpython/download.html</a> 下载 <tt class="filename">MacPython-OSX</tt> 磁盘镜像 。
+                  </p>
+               </li>
+               <li>
+                  <p>下载完毕，双击 <tt class="filename">MacPython-OSX-2.3-1.dmg</tt> 将磁盘镜像挂载到桌面。
+                  </p>
+               </li>
+               <li>
+                  <p>双击安装程序 <tt class="filename">MacPython-OSX.pkg</tt>.
+                  </p>
+               </li>
+               <li>
+                  <p>安装程序将提示要求您的管理员用户名和口令。</p>
+               </li>
+               <li>
+                  <p>按照安装程序的提示一步步执行。</p>
+               </li>
+               <li>
+                  <p>安装完毕后，关闭安装程序，打开 <tt class="filename">/Applications</tt> 文件夹。
+                  </p>
+               </li>
+               <li>
+                  <p>打开 <tt class="filename">MacPython-2.3</tt> 文件夹。
+                  </p>
+               </li>
+               <li>
+                  <p>双击 <tt class="filename">PythonIDE</tt> 来运行 <span class="application">Python</span> 。
+                  </p>
+               </li>
+            </ol>
+         </div>
+         <p><span class="application">MacPython</span> <span class="acronym">IDE</span> 将显示启动画面将您带进交互 shell。如果交互 shell 没有出现，选择 <span class="guimenu">Window</span>-&gt;<span class="guimenuitem">Python Interactive</span> (<span><b class="shortcut"><span><b class="keycap">Cmd</b></span>-<span class="keysym">0</span></b></span>)。您将看到类似如下的信息:
+         </p>
+         <div class="informalexample"><pre class="screen">
+<span class="computeroutput">Python 2.3 (#2, Jul 30 2003, 11:45:28)
+[GCC 3.1 20020420 (prerelease)]
+Type "copyright", "credits" or "license" for more information.
+MacPython IDE 1.0.1</span>
+<tt class="prompt">&gt;&gt;&gt; </tt>
+</pre></div>
+         <p>
+            请注意，安装完最新版本后，预装版本仍然存在。如果您从命令行运行脚本，那您需要知道正在使用的是哪一个版本的 <span class="application">Python</span> 。
+            
+         </p>
+         <div class="example"><a name="d0e3460"></a><h3 class="title">例&nbsp;1.1.&nbsp;两个 <span class="application">Python</span> 版本
+            </h3><pre class="screen">
+<tt class="prompt">[localhost:~] you% </tt><span class="userinput">python</span>
+<span class="computeroutput">Python 2.2 (#1, 07/14/02, 23:25:09)
+[GCC Apple cpp-precomp 6.14] on darwin
+Type "help", "copyright", "credits", or "license" for more information.</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[press Ctrl+D to get back to the command prompt]</span>
+<tt class="prompt">[localhost:~] you% </tt><span class="userinput">/usr/local/bin/python</span>
+<span class="computeroutput">Python 2.3 (#2, Jul 30 2003, 11:45:28)
+[GCC 3.1 20020420 (prerelease)] on darwin
+Type "help", "copyright", "credits", or "license" for more information.</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">[press Ctrl+D to get back to the command prompt]</span>
+<tt class="prompt">[localhost:~] you% </tt>
+</pre></div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="windows.html">&lt;&lt;&nbsp;Windows 上的 Python</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#install.choosing" title="1.1.&nbsp;哪一种 Python 适合您？">1</a> <span class="divider">|</span> <a href="windows.html" title="1.2.&nbsp;Windows 上的 Python">2</a> <span class="divider">|</span> <span class="thispage">3</span> <span class="divider">|</span> <a href="macos9.html" title="1.4.&nbsp;Mac OS 9 上的 Python ">4</a> <span class="divider">|</span> <a href="redhat.html" title="1.5.&nbsp;RedHat Linux 上的 Python ">5</a> <span class="divider">|</span> <a href="debian.html" title="1.6.&nbsp;Debian GNU/Linux 上的 Python ">6</a> <span class="divider">|</span> <a href="source.html" title="1.7.&nbsp;从源代码安装 Python ">7</a> <span class="divider">|</span> <a href="shell.html" title="1.8.&nbsp;使用 Python 的交互 Shell">8</a> <span class="divider">|</span> <a href="summary.html" title="1.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="macos9.html">Mac OS 9 上的 Python &nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,123 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>6.6.&nbsp;全部放在一起</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;6&nbsp;章&nbsp;异常和文件处理">
+      <link rel="previous" href="os_module.html" title="6.5.&nbsp;与目录共事">
+      <link rel="next" href="summary.html" title="6.7.&nbsp;小结">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">异常和文件处理</a>&nbsp;&gt;&nbsp;<span class="thispage">全部放在一起</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="os_module.html" title="上一页: “与目录共事”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="summary.html" title="下一页: “小结”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="fileinfo.alltogether"></a>6.6.&nbsp;全部放在一起
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>再一次，所有的多米诺骨牌都放好了。我们已经看过每行代码是如何工作的了。现在往回走一步，看一下放在一起是怎么样的。</p>
+         </div>
+         <div class="example"><a name="fileinfo.nested"></a><h3 class="title">例&nbsp;6.21.&nbsp;<tt class="function">listDirectory</tt></h3><pre class="programlisting"><span class='pykeyword'>
+def</span> listDirectory(directory, fileExtList):                                         <a name="fileinfo.alltogether.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+    <span class='pystring'>"get list of file info objects for files of particular extensions"</span>
+    fileList = [os.path.normcase(f)
+                <span class='pykeyword'>for</span> f <span class='pykeyword'>in</span> os.listdir(directory)]           
+    fileList = [os.path.join(directory, f) 
+               <span class='pykeyword'>for</span> f <span class='pykeyword'>in</span> fileList
+                <span class='pykeyword'>if</span> os.path.splitext(f)[1] <span class='pykeyword'>in</span> fileExtList]                          <a name="fileinfo.alltogether.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+    <span class='pykeyword'>def</span><span class='pyclass'> getFileInfoClass</span>(filename, module=sys.modules[FileInfo.__module__]):       <a name="fileinfo.alltogether.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+        <span class='pystring'>"get file info class from filename extension"</span>                             
+        subclass = <span class='pystring'>"%sFileInfo"</span> % os.path.splitext(filename)[1].upper()[1:]        <a name="fileinfo.alltogether.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+        <span class='pykeyword'>return</span> hasattr(module, subclass) <span class='pykeyword'>and</span> getattr(module, subclass) <span class='pykeyword'>or</span> FileInfo <a name="fileinfo.alltogether.1.5"></a><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12">
+    <span class='pykeyword'>return</span> [getFileInfoClass(f)(f) <span class='pykeyword'>for</span> f <span class='pykeyword'>in</span> fileList]                              <a name="fileinfo.alltogether.1.6"></a><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.alltogether.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">listDirectory</tt> 是整个模块主要的有趣之处。它接收一个 dictionary (在我的例子中如 <tt class="filename">c:\music\_singles\</tt>) 和一个感兴趣的文件扩展名列表 (如 <tt class="literal">['.mp3']</tt>)，接着它返回一个类实例的 list ，这些类实例的行为像 dictionary，包含了在目录中每个感兴趣文件的元数据。并且实现起来只用了几行直观的代码。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.alltogether.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">正如在<a href="os_module.html" title="6.5.&nbsp;与目录共事">前一节</a>我们所看到的，这行代码得到一个全路径名的列表，它的元素是在 <tt class="varname">directory</tt> 中有着我们感兴趣的文件后缀 (由 <tt class="varname">fileExtList</tt> 所指定的) 的所有文件的路径名。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.alltogether.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">老学校出身的 <span class="application">Pascal</span> 程序员可能对嵌套函数感到熟悉，但大部分人，当我告诉他们 <span class="application">Python</span> 支持嵌套函数时，都茫然地看着我。<span class="emphasis"><em>嵌套函数</em></span>，从字面理解，是定义在函数内的函数。嵌套函数 <tt class="function">getFileInfoClass</tt> 只能在定义它的函数 <tt class="function">listDirectory</tt> 内进行调用。正如任何其它的函数一样，不需要一个接口声明或奇怪的什么东西，只要定义函数，开始编码就行了。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.alltogether.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">既然你已经看过 <a href="os_module.html" title="6.5.&nbsp;与目录共事"><tt class="filename">os</tt></a> 模块了，这一行应该能理解了。它得到文件的扩展名 (<tt class="literal">os.path.splitext(filename)[1]</tt>)，将其转换为大写字母 (<tt class="literal">.upper()</tt>)，从圆点处进行分片 (<tt class="literal">[1:]</tt>)，使用字符串格式化从其中生成一个类名。所以 <tt class="filename">c:\music\ap\mahadeva.mp3</tt> 变成 <tt class="literal">.mp3</tt> 再变成 <tt class="literal">MP3</tt> 再变成 <tt class="literal">MP3FileInfo</tt>。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.alltogether.1.5"><img src="../images/callouts/5.png" alt="5" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在生成完处理这个文件的处理类的名字之后，我们查阅在这个模块中是否存在这个处理类。如果存在，我们返回这个类，否则我们返回基类 <tt class="classname">FileInfo</tt>。这一点很重要：<span class="emphasis"><em>这个函数返回一个类</em></span>。不是类的实例，而是类本身。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#fileinfo.alltogether.1.6"><img src="../images/callouts/6.png" alt="6" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">对每个属于我们 “<span class="quote">感兴趣文件</span>” 列表 (<tt class="varname">fileList</tt>)中的文件，我们用文件名 (<tt class="varname">f</tt>) 来调用 <tt class="function">getFileInfoClass</tt>。调用 <tt class="literal">getFileInfoClass(f)</tt> 返回一个类；我们并不知道确切是哪一个类，但是我们并不关心。接着我们创建这个类 (不管它是什么) 的一个实例，传入文件名 (又是 <tt class="varname">f</tt>) 给 <tt class="function">__init__</tt> 方法。正如我们在<a href="../object_oriented_framework/special_class_methods.html#fileinfo.specialmethods.setname" title="例&nbsp;5.15.&nbsp;设置 MP3FileInfo 的 name">本章的前面</a>所看到的，<tt class="classname">FileInfo</tt> 的 <tt class="function">__init__</tt> 方法设置了 <tt class="literal">self["name"]</tt>，它将引发 <tt class="function">__setitem__</tt> 的调用，而 <tt class="function">__setitem__</tt> 在子类 (<tt class="classname">MP3FileInfo</tt>) 中被覆盖掉了，用来适当地对文件进行分析，取出文件的元数据。我们对所有感兴趣的文件进行处理，返回结果实例的一个 list。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>请注意 <tt class="function">listDirectory</tt> 完全是通用的。它事先不知道将得到哪种类型的文件，也不知道哪些定义好的类能够处理这些文件。它检查目录中要进行处理的文件，然后反观本身模块，了解定义了什么特别的处理类 (像 <tt class="classname">MP3FileInfo</tt>)。你可以对这个程序进行扩充，对其它类型的文件进行处理，只要用适合的名字定义类：<tt class="classname">HTMLFileInfo</tt> 用于 <span class="acronym">HTML</span> 文件，<tt class="classname">DOCFileInfo</tt> 用于 <span class="application">Word</span> <tt class="literal">.doc</tt> 文件，等等。不需要改动函数本身， <tt class="function">listDirectory</tt> 将会对它们都进行处理，将工作交给适当的类，接着收集结果。
+         </p>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="os_module.html">&lt;&lt;&nbsp;与目录共事</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#fileinfo.exception" title="6.1.&nbsp;异常处理">1</a> <span class="divider">|</span> <a href="file_objects.html" title="6.2.&nbsp;与文件对象共事">2</a> <span class="divider">|</span> <a href="for_loops.html" title="6.3.&nbsp;for 循环">3</a> <span class="divider">|</span> <a href="more_on_modules.html" title="6.4.&nbsp;使用 sys.modules">4</a> <span class="divider">|</span> <a href="os_module.html" title="6.5.&nbsp;与目录共事">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="summary.html" title="6.7.&nbsp;小结">7</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="summary.html">小结&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

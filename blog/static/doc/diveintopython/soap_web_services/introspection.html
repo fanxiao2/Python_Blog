@@ -1,0 +1,231 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>12.6.&nbsp;以 WSDL 进行 SOAP 内省</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;12&nbsp;章&nbsp;SOAP Web 服务">
+      <link rel="previous" href="wsdl.html" title="12.5.&nbsp;WSDL 介绍">
+      <link rel="next" href="google.html" title="12.7.&nbsp;搜索 Google">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">SOAP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">以 WSDL 进行 SOAP 内省</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="wsdl.html" title="上一页: “WSDL 介绍”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="google.html" title="下一页: “搜索 Google”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="soap.introspection"></a>12.6.&nbsp;以 <span class="acronym">WSDL</span> 进行 <span class="acronym">SOAP</span> 内省
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>就像网络服务舞台上的所有事物，<span class="acronym">WSDL</span> 也经历了一个充满明争暗斗而且漫长多变的历史。我不打算讲述这段令我伤心的历史。还有一些其他的标准提供相同的支持，但 <span class="acronym">WSDL</span> 还是胜出，所以我们还是来学习一下如何使用它。
+            </p>
+         </div>
+         <p><span class="acronym">WSDL</span> 最基本的功能便是让你揭示 <span class="acronym">SOAP</span> 服务器所提供的有效方法。
+         </p>
+         <div class="example"><a name="d0e30935"></a><h3 class="title">例&nbsp;12.8.&nbsp;揭示有效方法</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> SOAPpy <span class='pykeyword'>import</span> WSDL</span>          <a name="soap.introspection.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">wsdlFile = <span class='pystring'>'http://www.xmethods.net/sd/2001/TemperatureService.wsdl'</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">server = WSDL.Proxy(wsdlFile)</span>    <a name="soap.introspection.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">server.methods.keys()</span>            <a name="soap.introspection.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">[u'getTemp']</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><span class="application">SOAPpy</span> 包含一个 <span class="acronym">WSDL</span> 解析器。在本书写作之时，它被标示为开发的初级阶段，但我从来没有在解析任何 <span class="acronym">WSDL</span> 文件时遇到问题。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用一个 <span class="acronym">WSDL</span> 文件，你还是要用到一个 proxy 类：<tt class="classname">WSDL.Proxy</tt>，它只需一个参数：<span class="acronym">WSDL</span> 文件。我指定的是存储在远程服务器上的 <span class="acronym">WSDL</span> 的 <span class="acronym">URL</span>，但是这个 proxy 类对于本地的 <span class="acronym">WSDL</span> 副本工作同样出色。创建 <span class="acronym">WSDL</span> proxy 将会下载 <span class="acronym">WSDL</span> 文件并解析它，所以如果 <span class="acronym">WSDL</span> 文件有任何问题 (或者由于网络问题不能获得) 你会立刻知道。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><span class="acronym">WSDL</span> proxy 类通过 <span class="application">Python</span> 字典 <tt class="varname">server.methods</tt> 揭示有效函数。所以列出有效方法只需调用字典方法 <tt class="methodname">keys()</tt>。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>好的，你知道这个 <span class="acronym">SOAP</span> 服务器提供一个方法：<tt class="methodname">getTemp</tt>。但是如何去调用它呢？<span class="acronym">WSDL</span> 也在这方面提供信息。
+         </p>
+         <div class="example"><a name="d0e31036"></a><h3 class="title">例&nbsp;12.9.&nbsp;揭示一个方法的参数</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">callInfo = server.methods[<span class='pystring'>'getTemp'</span>]</span>  <a name="soap.introspection.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">callInfo.inparams</span>                     <a name="soap.introspection.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">[&lt;SOAPpy.wstools.WSDLTools.ParameterInfo instance at 0x00CF3AD0&gt;]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">callInfo.inparams[0].name</span>             <a name="soap.introspection.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">u'zipcode'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">callInfo.inparams[0].type</span>             <a name="soap.introspection.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">(u'http://www.w3.org/2001/XMLSchema', u'string')</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"> <tt class="varname">server.methods</tt> 字典中记录一个 <span class="application">SOAPpy</span> 的特别结构，被称为 <tt class="classname">CallInfo</tt>。<tt class="classname">CallInfo</tt> 对象中包含着特定函数和函数参数的信息。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">函数参数信息存储在 <tt class="varname">callInfo.inparams</tt> 中，这是一个记录每一个参数信息的 <tt class="classname">ParameterInfo</tt> 对象的 <span class="application">Python</span> 列表。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">每个 <tt class="classname">ParameterInfo</tt> 对象包含一个 <tt class="varname">name</tt> 属性，这便是参数名。在通过 <span class="acronym">SOAP</span> 调用函数时，你不需要知道参数名，但 <span class="acronym">SOAP</span> 支持在调用函数时使用参数名 (类似于 <span class="application">Python</span>)。如果使用参数名，<tt class="classname">WSDL.Proxy</tt> 将会正确地把这些参数关联到远程函数。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">每个参数都是都是显式类型的，使用的是在 XML Schema 定义的数据类型。你可以在上一节中发现这一点：XML Schema 命名空间是我让你忽略的模版的一部分。就目前而言，你还是可以继续忽略它。<tt class="varname">zipcode</tt> 参数是一个字符串，如果你向 <tt class="classname">WSDL.Proxy</tt> 对象传递一个 <span class="application">Python</span> 字符串，它会被正确地关联和传递到服务器。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p><span class="acronym">WSDL</span> 还允许你自省函数的返回值。
+         </p>
+         <div class="example"><a name="d0e31143"></a><h3 class="title">例&nbsp;12.10.&nbsp;揭示方法返回值</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">callInfo.outparams</span>            <a name="soap.introspection.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">[&lt;SOAPpy.wstools.WSDLTools.ParameterInfo instance at 0x00CF3AF8&gt;]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">callInfo.outparams[0].name</span>    <a name="soap.introspection.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">u'return'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">callInfo.outparams[0].type</span>
+<span class="computeroutput">(u'http://www.w3.org/2001/XMLSchema', u'float')</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">与揭示函数参数的 <tt class="varname">callInfo.inparams</tt> 对应的是揭示返回值的 <tt class="varname">callInfo.outparams</tt>。它也同样是一个列表，因为通过 <span class="acronym">SOAP</span> 调用函数时可以返回多个值，就像 <span class="application">Python</span> 函数一样。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"> <tt class="classname">ParameterInfo</tt> 对象包含 <tt class="varname">name</tt> 和 <tt class="varname">type</tt>。这个函数返回一个浮点值，它的名字是 <tt class="varname">return</tt>。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>让我们整合一下，通过 <span class="acronym">WSDL</span> proxy 调用一个 <span class="acronym">SOAP</span> 网络服务。
+         </p>
+         <div class="example"><a name="d0e31215"></a><h3 class="title">例&nbsp;12.11.&nbsp;通过 <span class="acronym">WSDL</span> proxy 调用一个 <span class="acronym">SOAP</span> 网络服务
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> SOAPpy <span class='pykeyword'>import</span> WSDL</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">wsdlFile = <span class='pystring'>'http://www.xmethods.net/sd/2001/TemperatureService.wsdl'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">server = WSDL.Proxy(wsdlFile)</span>               <a name="soap.introspection.4.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">server.getTemp(<span class='pystring'>'90210'</span>)</span>                     <a name="soap.introspection.4.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">66.0</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">server.soapproxy.config.dumpSOAPOut = 1</span>     <a name="soap.introspection.4.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">server.soapproxy.config.dumpSOAPIn = 1</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">temperature = server.getTemp(<span class='pystring'>'90210'</span>)</span>
+<span class="computeroutput">*** Outgoing SOAP ******************************************************
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:xsd="http://www.w3.org/1999/XMLSchema"&gt;
+&lt;SOAP-ENV:Body&gt;
+&lt;ns1:getTemp xmlns:ns1="urn:xmethods-Temperature" SOAP-ENC:root="1"&gt;
+&lt;v1 xsi:type="xsd:string"&gt;90210&lt;/v1&gt;
+&lt;/ns1:getTemp&gt;
+&lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;
+************************************************************************
+*** Incoming SOAP ******************************************************
+&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+&lt;SOAP-ENV:Body&gt;
+&lt;ns1:getTempResponse xmlns:ns1="urn:xmethods-Temperature"
+  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"&gt;
+&lt;return xsi:type="xsd:float"&gt;66.0&lt;/return&gt;
+&lt;/ns1:getTempResponse&gt;
+
+&lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;
+************************************************************************
+</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">temperature</span>
+<span class="computeroutput">66.0</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.4.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这比直接调用 <span class="acronym">SOAP</span> 服务时的设置简单，因为在 <span class="acronym">WSDL</span> 文件中包含着调用服务所需要的服务 <span class="acronym">URL</span> 和命名空间。创建 <tt class="classname">WSDL.Proxy</tt> 对象将会下载 <span class="acronym">WSDL</span> 文件，解析之，并设置一个用以调用实际的 <span class="acronym">SOAP</span> 网络服务的 <tt class="classname">SOAPProxy</tt> 对象。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.4.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">只要创建了 <tt class="classname">WSDL.Proxy</tt> 对象，你就可以像调用 <tt class="classname">SOAPProxy</tt> 对象一样简单地调用一个函数。这并不奇怪，<tt class="classname">WSDL.Proxy</tt> 就是一个具有自省方法的 <tt class="classname">SOAPProxy</tt> 封装套件，所以调用函数的语法也是一样的。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.introspection.4.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">你可以通过 <tt class="varname">server.soapproxy</tt> 访问 <tt class="classname">WSDL.Proxy</tt> 的 <tt class="classname">SOAPProxy</tt>。这对于打开查错模式很重要，这样一来当你通过 <span class="acronym">WSDL</span> proxy 调用函数时，它的 <tt class="classname">SOAPProxy</tt> 将会把线路上来往的 XML 文档甩下来。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="wsdl.html">&lt;&lt;&nbsp;WSDL 介绍</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#soap.divein" title="12.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="install.html" title="12.2.&nbsp;安装 SOAP 库">2</a> <span class="divider">|</span> <a href="first_steps.html" title="12.3.&nbsp;步入 SOAP">3</a> <span class="divider">|</span> <a href="debugging.html" title="12.4.&nbsp; SOAP 网络服务查错">4</a> <span class="divider">|</span> <a href="wsdl.html" title="12.5.&nbsp;WSDL 介绍">5</a> <span class="divider">|</span> <span class="thispage">6</span> <span class="divider">|</span> <a href="google.html" title="12.7.&nbsp;搜索 Google">7</a> <span class="divider">|</span> <a href="troubleshooting.html" title="12.8.&nbsp; SOAP 网络服务故障排除">8</a> <span class="divider">|</span> <a href="summary.html" title="12.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="google.html">搜索 Google&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

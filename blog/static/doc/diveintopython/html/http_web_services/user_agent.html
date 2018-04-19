@@ -1,0 +1,173 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>11.5.&nbsp;设置 User-Agent</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;11&nbsp;章&nbsp;HTTP Web 服务">
+      <link rel="previous" href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">
+      <link rel="next" href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">HTTP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">设置 User-Agent</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="debugging.html" title="上一页: “调试 HTTP web 服务”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="etags.html" title="下一页: “处理 Last-Modified 和 ETag”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="oa.useragent"></a>11.5.&nbsp;设置 <tt class="literal">User-Agent</tt></h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>改善你的 HTTP web 服务客户端的第一步就是用 <tt class="literal">User-Agent</tt> 适当地鉴别你自己。为了做到这一点，你需要远离基本的 <tt class="filename">urllib</tt> 而深入到 <tt class="filename">urllib2</tt>。
+            </p>
+         </div>
+         <div class="example"><a name="d0e28175"></a><h3 class="title">例&nbsp;11.4.&nbsp;<tt class="filename">urllib2</tt> 介绍
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> httplib</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">httplib.HTTPConnection.debuglevel = 1</span>                             <a name="oa.useragent.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>import</span> urllib2</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request = urllib2.Request(<span class='pystring'>'http://diveintomark.org/xml/atom.xml'</span>)</span> <a name="oa.useragent.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">opener = urllib2.build_opener()</span>                                   <a name="oa.useragent.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">feeddata = opener.open(request).read()</span>                            <a name="oa.useragent.1.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">connect: (diveintomark.org, 80)</span>
+<span class="computeroutput">send: '</span>
+<span class="computeroutput">GET /xml/atom.xml HTTP/1.0</span>
+<span class="computeroutput">Host: diveintomark.org</span>
+<span class="computeroutput">User-agent: Python-urllib/2.1</span>
+<span class="computeroutput">'</span>
+<span class="computeroutput">reply: 'HTTP/1.1 200 OK\r\n'</span>
+<span class="computeroutput">header: Date: Wed, 14 Apr 2004 23:23:12 GMT</span>
+<span class="computeroutput">header: Server: Apache/2.0.49 (Debian GNU/Linux)</span>
+<span class="computeroutput">header: Content-Type: application/atom+xml</span>
+<span class="computeroutput">header: Last-Modified: Wed, 14 Apr 2004 22:14:38 GMT</span>
+<span class="computeroutput">header: ETag: "e8284-68e0-4de30f80"</span>
+<span class="computeroutput">header: Accept-Ranges: bytes</span>
+<span class="computeroutput">header: Content-Length: 26848</span>
+<span class="computeroutput">header: Connection: close</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.useragent.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">如果你的 <span class="application">Python</span> <span class="acronym">IDE</span> 仍旧为上一节的例子而打开着，你可以略过这一步，在开启 <a href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">HTTP 调试</a>时你能看到网络线路上的实际传输过程。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.useragent.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用 <tt class="filename">urllib2</tt> 获取 HTTP 资源包括三个处理步骤，这会有助于你理解这一过程。
+                        第一步是创建 <tt class="classname">Request</tt> 对象，它接受一个你最终想要获取资源的 URL。注意这一步实际上还不能获取任何东西。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.useragent.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">第二步是创建一个 URL 开启器 (opener)。它可以接受任何数量的处理器来控制响应的处理。但你也可以创建一个没有任何自定义处理器的开启器，在这儿你就是这么做的。你将在本章后面探究重定向的部分看到如何定义和使用自定义处理器的内容。</td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.useragent.1.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">最后一个步骤是，使用你创建的 <tt class="classname">Request</tt> 对象告诉开启器打开 URL。因为你能从获得的信息中看到所有调试信息，这个步骤实际上获得了资源并且把返回数据存储在了 <tt class="varname">feeddata</tt> 中。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="example"><a name="d0e28299"></a><h3 class="title">例&nbsp;11.5.&nbsp;给 <tt class="classname">Request</tt> 添加头信息
+            </h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request</span>                                                <a name="oa.useragent.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">&lt;urllib2.Request instance at 0x00250AA8&gt;</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request.get_full_url()</span>
+<span class="computeroutput">http://diveintomark.org/xml/atom.xml</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">request.add_header(<span class='pystring'>'User-Agent'</span>,
+<tt class="prompt">...     </tt><span class='pystring'>'OpenAnything/1.0 +http://diveintopython.org/'</span>)</span>    <a name="oa.useragent.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">feeddata = opener.open(request).read()</span>                 <a name="oa.useragent.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">connect: (diveintomark.org, 80)</span>
+<span class="computeroutput">send: '</span>
+<span class="computeroutput">GET /xml/atom.xml HTTP/1.0</span>
+<span class="computeroutput">Host: diveintomark.org</span>
+<span class="computeroutput">User-agent: OpenAnything/1.0 +http://diveintopython.org/</span>   <a name="oa.useragent.2.4"></a><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12">
+<span class="computeroutput">'</span>
+<span class="computeroutput">reply: 'HTTP/1.1 200 OK\r\n'</span>
+<span class="computeroutput">header: Date: Wed, 14 Apr 2004 23:45:17 GMT</span>
+<span class="computeroutput">header: Server: Apache/2.0.49 (Debian GNU/Linux)</span>
+<span class="computeroutput">header: Content-Type: application/atom+xml</span>
+<span class="computeroutput">header: Last-Modified: Wed, 14 Apr 2004 22:14:38 GMT</span>
+<span class="computeroutput">header: ETag: "e8284-68e0-4de30f80"</span>
+<span class="computeroutput">header: Accept-Ranges: bytes</span>
+<span class="computeroutput">header: Content-Length: 26848</span>
+<span class="computeroutput">header: Connection: close</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.useragent.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">继续前面的例子；你已经用你要访问的 URL 创建了 <tt class="classname">Request</tt> 。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.useragent.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">使用<tt class="classname">Request</tt> 对象的 <tt class="function">add_header</tt> 方法，你能向请求中添加任意的 HTTP 头信息。第一个参数是头信息，第二个参数是头信息的值。<tt class="literal">User-Agent</tt> 的约定格式是：应用名，跟一个斜线，跟版本号。剩下的是自由的格式，你将看到许多疯狂的变化，但通常这里应该包含你的应用的 URL。和你的请求的其他信息一样，<tt class="literal">User-Agent</tt> 会被服务器纪录下来，其中包含你的应用的 URL。如果发生错误，服务器管理员就能通过查看他们的访问日志与你联系。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.useragent.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">之前你创建的<tt class="varname">opener</tt> 对象也可以再生，且它将再次获得相同的 feed，但这次使用了你自定义的 <tt class="literal">User-Agent</tt> 头信息。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#oa.useragent.2.4"><img src="../images/callouts/4.png" alt="4" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这就是你发送的自定义的 <tt class="literal">User-Agent</tt>，代替了 <span class="application">Python</span> 默认发送的一般的 <tt class="literal">User-Agent</tt>。若你继续看，会注意到你定义的是 <tt class="literal">User-Agent</tt> 头信息，但实际上发送的是 <tt class="literal">User-agent</tt> 头信息。看看有何不同？<tt class="filename">urllib2</tt> 改变了大小写所以只有首字母是大写的。这没问题，因为 HTTP 规定头信息的字段名是大小写无关的。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="debugging.html">&lt;&lt;&nbsp;调试 HTTP web 服务</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#oa.divein" title="11.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="review.html" title="11.2.&nbsp;避免通过 HTTP 重复地获取数据">2</a> <span class="divider">|</span> <a href="http_features.html" title="11.3.&nbsp;HTTP 的特性">3</a> <span class="divider">|</span> <a href="debugging.html" title="11.4.&nbsp;调试 HTTP web 服务">4</a> <span class="divider">|</span> <span class="thispage">5</span> <span class="divider">|</span> <a href="etags.html" title="11.6.&nbsp;处理 Last-Modified 和 ETag">6</a> <span class="divider">|</span> <a href="redirects.html" title="11.7.&nbsp;处理重定向">7</a> <span class="divider">|</span> <a href="gzip_compression.html" title="11.8.&nbsp;处理压缩数据">8</a> <span class="divider">|</span> <a href="alltogether.html" title="11.9.&nbsp;全部放在一起">9</a> <span class="divider">|</span> <a href="summary.html" title="11.10.&nbsp;小结">10</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="etags.html">处理 Last-Modified 和 ETag&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,226 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>12.7.&nbsp;搜索 Google</title>
+      <link rel="stylesheet" href="../diveintopython.css" type="text/css">
+      <link rev="made" href="mailto:f8dy@diveintopython.org">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.52.2">
+      <meta name="keywords" content="Python, Dive Into Python, tutorial, object-oriented, programming, documentation, book, free">
+      <meta name="description" content="Python from novice to pro">
+      <link rel="home" href="../toc/index.html" title="Dive Into Python">
+      <link rel="up" href="index.html" title="第&nbsp;12&nbsp;章&nbsp;SOAP Web 服务">
+      <link rel="previous" href="introspection.html" title="12.6.&nbsp;以 WSDL 进行 SOAP 内省">
+      <link rel="next" href="troubleshooting.html" title="12.8.&nbsp; SOAP 网络服务故障排除">
+   </head>
+   <body>
+      <table id="Header" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td id="breadcrumb" colspan="5" align="left" valign="top">导航：<a href="../index.html">起始页</a>&nbsp;&gt;&nbsp;<a href="../toc/index.html">Dive Into Python</a>&nbsp;&gt;&nbsp;<a href="index.html">SOAP Web 服务</a>&nbsp;&gt;&nbsp;<span class="thispage">搜索 Google</span></td>
+            <td id="navigation" align="right" valign="top">&nbsp;&nbsp;&nbsp;<a href="introspection.html" title="上一页: “以 WSDL 进行 SOAP 内省”">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;<a href="troubleshooting.html" title="下一页: “ SOAP 网络服务故障排除”">&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3" id="logocontainer">
+               <h1 id="logo"><a href="../index.html" accesskey="1">深入 Python :Dive Into Python 中文版</a></h1>
+               <p id="tagline">Python 从新手到专家 [Dip_5.4b_CPyUG_Release]</p>
+            </td>
+            <td colspan="3" align="right">
+               <form id="search" method="GET" action="http://www.google.com/custom">
+                  <p><label for="q" accesskey="4">Find:&nbsp;</label><input type="text" id="q" name="q" size="20" maxlength="255" value=""> <input type="submit" value="搜索"><input type="hidden" name="domains" value="woodpecker.org.cn/diveintopython"><input type="hidden" name="sitesearch" value="www.woodpecker.org.cn/diveintopython"></p>
+               </form>
+            </td>
+         </tr>
+      </table>
+      <!--#include virtual="/inc/ads" -->
+      <div class="section" lang="zh_cn">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="soap.google"></a>12.7.&nbsp;搜索 Google
+                  </h2>
+               </div>
+            </div>
+            <div></div>
+         </div>
+         <div class="abstract">
+            <p>让我们回到这章开始时你看到的那段代码，获得比当前气温更有价值和令人振奋的信息。</p>
+         </div>
+         <p>Google 提供了一个 <span class="acronym">SOAP</span> <span class="acronym">API</span>，以便通过程序进行 Google 搜索。使用它的前提是，你注册了 Google 网络服务。
+         </p>
+         <div class="procedure">
+            <h3 class="title">过程&nbsp;12.4.&nbsp;注册 Google 网络服务</h3>
+            <ol type="1">
+               <li>
+                  <p>访问 <a href="http://www.google.com/apis/">http://www.google.com/apis/</a> 并创建一个账号。唯一的需要是提供一个 E-mail 地址。注册之后，你将通过 E-mail 收到你的 Google API 许可证 (license key)。你需要在调用 Google 搜索函数时使用这个许可证。
+                  </p>
+               </li>
+               <li>
+                  <p>还是在 <a href="http://www.google.com/apis/">http://www.google.com/apis/</a> 上，下载 Google 网络 APIs 开发工具包 (Google Web APIs developer kit)。它包含着包括 <span class="application">Python</span> 在内的多种语言的样例代码，更重要的是它包含着 <span class="acronym">WSDL</span> 文件。
+                  </p>
+               </li>
+               <li>
+                  <p>解压这个开发工具包并找到 <tt class="filename">GoogleSearch.wsdl</tt>。将这个文件拷贝到你本地驱动器的一个永久地址。在本章后面位置你会用到它。
+                  </p>
+               </li>
+            </ol>
+         </div>
+         <p>你有了开发许可证和 Google <span class="acronym">WSDL</span> 文件之后就可以和 Google 网络服务打交道了。
+         </p>
+         <div class="example"><a name="d0e31385"></a><h3 class="title">例&nbsp;12.12.&nbsp;内省 Google 网络服务</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> SOAPpy <span class='pykeyword'>import</span> WSDL</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">server = WSDL.Proxy(<span class='pystring'>'/path/to/your/GoogleSearch.wsdl'</span>)</span> <a name="soap.google.1.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">server.methods.keys()</span>                                  <a name="soap.google.1.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">[u'doGoogleSearch', u'doGetCachedPage', u'doSpellingSuggestion']</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">callInfo = server.methods[<span class='pystring'>'doGoogleSearch'</span>]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>for</span> arg <span class='pykeyword'>in</span> callInfo.inparams:</span>                          <a name="soap.google.1.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<tt class="prompt">...     </tt><span class="userinput"><span class='pykeyword'>print</span> arg.name.ljust(15), arg.type</span>
+<span class="computeroutput">key             (u'http://www.w3.org/2001/XMLSchema', u'string')
+q               (u'http://www.w3.org/2001/XMLSchema', u'string')
+start           (u'http://www.w3.org/2001/XMLSchema', u'int')
+maxResults      (u'http://www.w3.org/2001/XMLSchema', u'int')
+filter          (u'http://www.w3.org/2001/XMLSchema', u'boolean')
+restrict        (u'http://www.w3.org/2001/XMLSchema', u'string')
+safeSearch      (u'http://www.w3.org/2001/XMLSchema', u'boolean')
+lr              (u'http://www.w3.org/2001/XMLSchema', u'string')
+ie              (u'http://www.w3.org/2001/XMLSchema', u'string')
+oe              (u'http://www.w3.org/2001/XMLSchema', u'string')</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.google.1.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">步入 Google 网络服务很简单：建立一个 <tt class="classname">WSDL.Proxy</tt> 对象并指向到你复制到本地的 Google <span class="acronym">WSDL</span> 文件。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.google.1.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">由 <span class="acronym">WSDL</span> 文件可知，Google 提供三个函数：<tt class="function">doGoogleSearch</tt>、<tt class="function">doGetCachedPage</tt> 和 <tt class="function">doSpellingSuggestion</tt>。顾名思义，执行 Google 搜索并返回结果；获得 Google 最后一次扫描该页时获得的缓存；基于常见拼写错误提出单词拼写建议。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.google.1.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="function">doGoogleSearch</tt> 函数需要一系列不同类型的参数。注意：<span class="acronym">WSDL</span> 文件可以告诉你有哪些参数和他们的参数类型，但不能告诉你它们的含义和使用方法。在参数值有限定的情况下，理论上它能够告诉你参数的取值范围，但 Google 的 <span class="acronym">WSDL</span> 没有那么细化。<tt class="classname">WSDL.Proxy</tt> 不会变魔术，它只能给你 <span class="acronym">WSDL</span> 文件中提供的信息。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p>这里简要地列出了 <tt class="function">doGoogleSearch</tt> 函数的所有参数：
+         </p>
+         <div class="itemizedlist">
+            <ul>
+               <li><tt class="varname">key</tt>――你注册 Google 网络服务时获得的 Google API 许可证。
+               </li>
+               <li><tt class="varname">q</tt>――你要搜索的词或词组。其语法与 Google 的网站表单处完全相同，你所知道的高级搜索语法和技巧这里完全适用。
+               </li>
+               <li><tt class="varname">start</tt>――起始的结果编号。与使用 Google 网页交互搜索时相同，这个函数每次返回 10 个结果。如果你需要查看 “<span class="quote">第二</span>” 页结果则需要将 <tt class="varname">start</tt> 设置为 10。
+               </li>
+               <li><tt class="varname">maxResults</tt>――返回的结果个数。目前的值是 10，当然如果你只对少数返回结果感兴趣或者希望节省网络带宽，也可以定义为返回更少的结果。
+               </li>
+               <li><tt class="varname">filter</tt>――如果设置为 <tt class="constant">True</tt>，Google 将会过滤结果中重复的页面。
+               </li>
+               <li><tt class="varname">restrict</tt>――这里设置 <tt class="literal">country</tt> 并跟上一个国家代码可以限定只返回特定国家的结果。例如：<tt class="literal">countryUK</tt> 用于在英国搜索页面。你也可以设定 <tt class="literal">linux</tt>，<tt class="literal">mac</tt> 或者 <tt class="literal">bsd</tt> 以便搜索 Google 定义的技术站点组，或者设为 <tt class="literal">unclesam</tt> 来搜索美国政府站点。
+               </li>
+               <li><tt class="varname">safeSearch</tt>――如果设置为 <tt class="constant">True</tt>，Google 将会过滤掉色情站点。
+               </li>
+               <li><tt class="varname">lr</tt> (“<span class="quote">language restrict</span>”，语言限制)――这里设置语言限定值返回特定语言的站点。
+               </li>
+               <li><tt class="varname">ie</tt> 和 <tt class="varname">oe</tt> (“<span class="quote">input encoding</span>”，输入编码和 “<span class="quote">output encoding</span>”，输出编码)――不赞成使用，都应该是 <tt class="literal">utf-8</tt>。
+               </li>
+            </ul>
+         </div>
+         <div class="example"><a name="d0e31570"></a><h3 class="title">例&nbsp;12.13.&nbsp;搜索 Google</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput"><span class='pykeyword'>from</span> SOAPpy <span class='pykeyword'>import</span> WSDL</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">server = WSDL.Proxy(<span class='pystring'>'/path/to/your/GoogleSearch.wsdl'</span>)</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">key = <span class='pystring'>'YOUR_GOOGLE_API_KEY'</span></span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">results = server.doGoogleSearch(key, <span class='pystring'>'mark'</span>, 0, 10, False, <span class='pystring'>""</span>,</span>
+<tt class="prompt">...     </tt><span class="userinput">False, <span class='pystring'>""</span>, <span class='pystring'>"utf-8"</span>, <span class='pystring'>"utf-8"</span>)</span>             <a name="soap.google.2.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">len(results.resultElements)</span>                  <a name="soap.google.2.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">10</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">results.resultElements[0].URL</span>                <a name="soap.google.2.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">'http://diveintomark.org/'</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">results.resultElements[0].title</span>
+<span class="computeroutput">'dive into &lt;b&gt;mark&lt;/b&gt;'</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.google.2.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">在设置好 <tt class="classname">WSDL.Proxy</tt> 对象之后，你可以使用十个参数来调用 <tt class="function">server.doGoogleSearch</tt>。记住要使用你注册 Google 网络服务时授权给你自己的 Google API 许可证。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.google.2.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">有很多的返回信息，但我们还是先来看一下实际的返回结果。它们被存储于 <tt class="varname">results.resultElements</tt> 之中，你可以像使用普通的 <span class="application">Python</span> 列表那样来调用它。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.google.2.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left"><tt class="varname">resultElements</tt> 中的每个元素都是一个包含 <tt class="varname">URL</tt>、<tt class="varname">title</tt>、<tt class="varname">snippet</tt> 以及其他属性的对象。基于这一点，你可以使用诸如 <b class="userinput"><tt>dir(results.resultElements[0])</tt></b> 的普通 <span class="application">Python</span> 自省技术来查看有效属性，或者通过 <span class="acronym">WSDL</span> proxy 对象查看函数的 <tt class="varname">outparams</tt>。不同的方法能带给你相同的结果。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <p> <tt class="varname">results</tt> 对象中所加载的不仅仅是实际的搜索结果。它也含有搜索行为自身的信息，比如耗时和总结果数等 (尽管只返回了10条结果)。Google 网页界面中显示了这些信息，通过程序你也同样能获得它们。
+         </p>
+         <div class="example"><a name="d0e31680"></a><h3 class="title">例&nbsp;12.14.&nbsp;从Google获得次要信息</h3><pre class="screen">
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">results.searchTime</span>                     <a name="soap.google.3.1"></a><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12">
+<span class="computeroutput">0.224919</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">results.estimatedTotalResultsCount</span>     <a name="soap.google.3.2"></a><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12">
+<span class="computeroutput">29800000</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">results.directoryCategories</span>            <a name="soap.google.3.3"></a><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12">
+<span class="computeroutput">[&lt;SOAPpy.Types.structType item at 14367400&gt;:
+ {'fullViewableName':
+  'Top/Arts/Literature/World_Literature/American/19th_Century/Twain,_Mark',
+  'specialEncoding': ''}]</span>
+<tt class="prompt">&gt;&gt;&gt; </tt><span class="userinput">results.directoryCategories[0].fullViewableName</span>
+<span class="computeroutput">'Top/Arts/Literature/World_Literature/American/19th_Century/Twain,_Mark'</span>
+</pre><div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.google.3.1"><img src="../images/callouts/1.png" alt="1" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">这个搜索耗时 0.224919 秒。这不包括用于发送和接收 <span class="acronym">SOAP</span> XML 文档的时间，仅仅是 Google 在接到搜索请求后执行搜索所花费的时间。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.google.3.2"><img src="../images/callouts/2.png" alt="2" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">总共有接近 30,000,000 个结果信息。通过让 <tt class="varname">start</tt> 参数以 10 递增来重复调用 <tt class="function">server.doGoogleSearch</tt>，你能够获得全部的结果。
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="12" valign="top" align="left"><a href="#soap.google.3.3"><img src="../images/callouts/3.png" alt="3" border="0" width="12" height="12"></a> 
+                     </td>
+                     <td valign="top" align="left">对于有些请求，Google 还返回一个 <a href="http://directory.google.com/">Google Directory</a> 中的类别列表。你可以用这些 URLs 到 <a href="http://directory.google.com/">http://directory.google.com/</a> 建立到 directory category 页面的链接。
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <table class="Footer" width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+         <tr>
+            <td width="35%" align="left"><br><a class="NavigationArrow" href="introspection.html">&lt;&lt;&nbsp;以 WSDL 进行 SOAP 内省</a></td>
+            <td width="30%" align="center"><br>&nbsp;<span class="divider">|</span>&nbsp;<a href="index.html#soap.divein" title="12.1.&nbsp;概览">1</a> <span class="divider">|</span> <a href="install.html" title="12.2.&nbsp;安装 SOAP 库">2</a> <span class="divider">|</span> <a href="first_steps.html" title="12.3.&nbsp;步入 SOAP">3</a> <span class="divider">|</span> <a href="debugging.html" title="12.4.&nbsp; SOAP 网络服务查错">4</a> <span class="divider">|</span> <a href="wsdl.html" title="12.5.&nbsp;WSDL 介绍">5</a> <span class="divider">|</span> <a href="introspection.html" title="12.6.&nbsp;以 WSDL 进行 SOAP 内省">6</a> <span class="divider">|</span> <span class="thispage">7</span> <span class="divider">|</span> <a href="troubleshooting.html" title="12.8.&nbsp; SOAP 网络服务故障排除">8</a> <span class="divider">|</span> <a href="summary.html" title="12.9.&nbsp;小结">9</a>&nbsp;<span class="divider">|</span>&nbsp;
+            </td>
+            <td width="35%" align="right"><br><a class="NavigationArrow" href="troubleshooting.html"> SOAP 网络服务故障排除&nbsp;&gt;&gt;</a></td>
+         </tr>
+         <tr>
+            <td colspan="3"><br></td>
+         </tr>
+      </table>
+      <div class="Footer">
+         <p class="copyright">Copyright © 2000, 2001, 2002, 2003, 2004 <a href="mailto:mark@diveintopython.org">Mark Pilgrim</a></p>
+         <p class="copyright">Copyright © 2001, 2002, 2003, 2004, 2005, 2006, 2007 <a href="mailto:python-cn@googlegroups.com">CPyUG (邮件列表)</a></p>
+      </div>
+   </body>
+</html>
