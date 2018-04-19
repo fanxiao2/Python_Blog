@@ -4,7 +4,7 @@
         <head>
       <meta charset="utf-8"/>
       <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-      <title>JavaChen Blog</title>
+      <title>Fjun Blog</title>
       <meta name="author" content="JavaChen"/>
       <meta name="keywords" content="java,spring,spring mvc,spring boot,mybatis,hibernate,jdbc,hadoop,hive,mapreduce,hbase,hdfs,spark,yarn,impala,presto,impala,sentry,zookeeper,pentaho,kettle,solr,scala,python,javascript,angular,jquery,postgresql"/>
       <meta name="description" content="Rumblings by a coder on Java、Web、BigData、BI、Python and so on">
@@ -48,7 +48,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">JavaChen Blog</a>
+          <a class="navbar-brand" href="/">Fjun Blog</a>
         </div>
         <div class="navbar-collapse collapse">
             <form id="search-form" class="form-group navbar-form navbar-right" role="search">
@@ -89,7 +89,7 @@
           <a href="/2016/04/21/mybatis-sqlSession-source-code.html">
               <strong>{{ article.title }}</strong>
           </a>
-              <small>2016.04.21</small>
+              <small>{{ article.create_at }}</small>
         </h4>
         <div id="home-post-text">
            {{ article.content }}
@@ -104,14 +104,14 @@
 
     <!-- Pagination links -->
     <div class="pagination pull-right">
-      <li><a href="/">Home</a></li>
+      <li><a href="/">首页</a></li>
 
-        <li class="disabled"><a><i class="fa fa-angle-double-left"></i> Prev</a></li>
+        <li class="disabled"><a><i class="fa fa-angle-double-left"></i> 上一页</a></li>
 
-      <li><a>Page: 1 of 16</a></li>
+      <li><a>1 of 16</a></li>
 
-      <li class="next"><a  href="/page2/">Next <i class="fa fa-angle-double-right"></i></a></li>
-      <li><a  href="/page16/">Last</a></li>
+      <li class="next"><a  href="/page2/">下一页 <i class="fa fa-angle-double-right"></i></a></li>
+      <li><a  href="/page16/">尾页</a></li>
 
     </div>
 </div>
@@ -121,91 +121,43 @@
 
 
 <section>
-  <h3>Categories</h3>
+  <h3>分类</h3>
   <ul>
-
-
-    <li><a href="/categories.html#database">database</a>  (9)</li>
-
-
-    <li><a href="/categories.html#devops">devops</a>  (36)</li>
-
-
-    <li><a href="/categories.html#hadoop">hadoop</a>  (44)</li>
-
-
-    <li><a href="/categories.html#hbase">hbase</a>  (13)</li>
-
-
-    <li><a href="/categories.html#hive">hive</a>  (12)</li>
-
-
-    <li><a href="/categories.html#impala">impala</a>  (6)</li>
-
-
-    <li><a href="/categories.html#java">java</a>  (35)</li>
-
-
-    <li><a href="/categories.html#mahout">mahout</a>  (3)</li>
-
-
-    <li><a href="/categories.html#pentaho">pentaho</a>  (12)</li>
-
 
     <li><a href="/categories.html#python">python</a>  (12)</li>
 
 
-    <li><a href="/categories.html#scala">scala</a>  (7)</li>
+    <li><a href="/categories.html#scala">java</a>  (7)</li>
 
 
-    <li><a href="/categories.html#search-engine">search-engine</a>  (9)</li>
+    <li><a href="/categories.html#search-engine">laravel</a>  (9)</li>
 
 
-    <li><a href="/categories.html#spark">spark</a>  (13)</li>
+    <li><a href="/categories.html#spark">php</a>  (13)</li>
 
 
-    <li><a href="/categories.html#web">web</a>  (14)</li>
+    <li><a href="/categories.html#web">mysql</a>  (14)</li>
 
 
-    <li><a href="/categories.html#work">work</a>  (7)</li>
+    <li><a href="/categories.html#work">ruby</a>  (7)</li>
 
   </ul>
 </section>
 
   <section>
-  <h3>Recently Posts</h3>
+  <h3>最新文章</h3>
   <ul>
 
-    <li><a href="/2016/04/21/mybatis-sqlSession-source-code.html" title="MyBatis源码分析：SqlSession">MyBatis源码分析：SqlSession</a></li>
+    <li><a href="/2016/04/21/mybatis-sqlSession-source-code.html" title="这是第一篇测试文章">这是第一篇测试文章</a></li>
 
-    <li><a href="/2016/04/21/how-to-parse-mybatis-configuration.html" title="MyBatis源码分析：如何解析配置文件">MyBatis源码分析：如何解析配置文件</a></li>
-
-    <li><a href="/2016/04/01/uml-class-realation.html" title="UML类之间关系">UML类之间关系</a></li>
-
-    <li><a href="/2016/02/29/plantuml-install-and-usage.html" title="PlantUML安装和使用">PlantUML安装和使用</a></li>
-
-    <li><a href="/2016/02/29/plantuml-class-diagram.html" title="PlantUML类图">PlantUML类图</a></li>
-
-    <li><a href="/2016/02/26/source-code-analytic-of-mybatis-configuration.html" title="MyBatis源码分析：Configuration">MyBatis源码分析：Configuration</a></li>
-
-    <li><a href="/2016/02/22/profile-usage-in-spring-boot.html" title="Spring Boot Profile使用">Spring Boot Profile使用</a></li>
-
-    <li><a href="/2016/02/22/devtools-in-spring-boot.html" title="DevTools in Spring Boot">DevTools in Spring Boot</a></li>
-
-    <li><a href="/2016/02/19/spring-boot-auto-configuration.html" title="Spring Boot自动配置">Spring Boot自动配置</a></li>
-
-    <li><a href="/2016/01/23/scala-reading-list.html" title="Scala Reading List">Scala Reading List</a></li>
-
-    <li><a href="/2015/07/09/bash-internal-variables.html" title="Bash内部变量">Bash内部变量</a></li>
-
-    <li><a href="/2015/07/08/bash-if-else.html" title="Bash条件判断">Bash条件判断</a></li>
+    <li><a href="/2016/04/21/how-to-parse-mybatis-configuration.html" title="这是第二篇测试文章">这是第二篇测试文章</a></li>
 
   </ul>
 </section>
 
 
 <section>
-  <h3>Recently Comments</h3>
+  <h3>标签</h3>
   <ul class="ds-recent-comments" data-num-items="8" data-show-avatars="0" data-show-time="0" data-show-title="0" data-show-admin="0" data-excerpt-length="12"></ul>
 </section>
 
@@ -215,17 +167,11 @@
 <h4>Blogroll</h3>
 <ul>
 
-  <li><a href="http://blog.javachen.com/" title="JavaChen Blog">JavaChen Blog</a></li>
+  <li><a href="http://blog.javachen.com/" title="JavaChen Blog">Python</a></li>
 
-  <li><a href="/sitemap.xml" title="JavaChen Sitemap">JavaChen Sitemap</a></li>
+  <li><a href="/sitemap.xml" title="JavaChen Sitemap">PHP</a></li>
 
-  <li><a href="http://blog.jassassin.com/" title="Eagle's Blog">Eagle's Blog</a></li>
-
-  <li><a href="http://blog.boluotou.com/" title="圆木菠萝罐">圆木菠萝罐</a></li>
-
-  <li><a href="http://cn.soulmachine.me/" title="灵魂机器">灵魂机器</a></li>
-
-  <li><a href="http://liujiacai.net/" title="Keep Writing Codes">Keep Writing Codes</a></li>
+  <li><a href="http://blog.jassassin.com/" title="Eagle's Blog">Java</a></li>
 
 </ul>
 </section>
@@ -237,7 +183,7 @@
       </div>
       <div id="footer">
           <div class="container hidden-print">
-              <p class="text-center"><i class="fa fa-copyright"></i> 2016 JavaChen Blog. Theme designed by <a href="/about.html" target="_blank" title="Rumblings by a coder on Java、Web、BigData、BI、Python and so on">JavaChen</a> with <a href="https://github.com/mojombo/jekyll/">Jekyll</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>.
+              <p class="text-center"><i class="fa fa-copyright"></i> 2018 Fjun Blog. by <a href="/about.html" target="_blank" title="Rumblings by a coder on Java、Web、BigData、BI、Python and so on">小二江湖</a> and <a href="http://fortawesome.github.com/Font-Awesome/">范小二</a>.
 
 
 
