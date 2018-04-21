@@ -1,0 +1,17 @@
+{% extends "public.html" %}
+  {% block main %}
+
+        <div class="container">
+                 <div class="col-md-12 page" >
+             <div class="page-header">
+        	   <h1> {{ article.title }} </h1>
+            </div>
+
+          <p>{{article.content}}</p>
+        </div>
+
+          </div>
+
+          <a href="#" class="btn back-to-top btn-dark btn-fixed-bottom hidden-print"><i class="fa fa-chevron-up"></i></a>
+
+  {% endblock %}

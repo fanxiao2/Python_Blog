@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse # 引入reverse函数
 from django.utils.six import python_2_unicode_compatible
 # Create your models here.
 
@@ -38,3 +39,7 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+    # 自定义get_absolute_url 方法
+    def get_absolute_url(self):
+        return reverse('blog:detail', kwargs={'pk':self.pk})
