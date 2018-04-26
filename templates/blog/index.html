@@ -12,7 +12,7 @@
               <small>{{ article.create_at }}</small>
         </h4>
         <div id="home-post-text">
-           {{ article.content }}
+           {{ article.abstract | safe}}
         </div>
         <p><a href="{{ article.get_absolute_url }}">阅读全文</a></p>
       </div>
