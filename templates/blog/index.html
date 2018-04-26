@@ -1,4 +1,5 @@
 {% extends "public.html" %}
+{% load blog_tags %}
   {% block main %}
           <div class="container">
            <div class="col-md-9">
@@ -38,61 +39,58 @@
 </div>
 <div class="col-md-3 visible-lg visible-md">
 
+<section>
+  <h3>最新文章</h3>
+  {% get_recent_articles as recent_article_list %}
+  <ul>
+    {% for article in recent_article_list %}
+    <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
 
-
+    {% empty %}
+    暂无文章
+    {% endfor %}
+  </ul>
+</section>
 
 <section>
   <h3>分类</h3>
+  {% get_categories as category_list %}
   <ul>
-
-    <li><a href="/categories.html#python">python</a>  (12)</li>
-
-
-    <li><a href="/categories.html#scala">java</a>  (7)</li>
-
-
-    <li><a href="/categories.html#search-engine">laravel</a>  (9)</li>
-
-
-    <li><a href="/categories.html#spark">php</a>  (13)</li>
-
-
-    <li><a href="/categories.html#web">mysql</a>  (14)</li>
-
-
-    <li><a href="/categories.html#work">ruby</a>  (7)</li>
-
+    {% for category in category_list %}
+        <li><a href="{% url 'blog:category' category.pk %}">{{ category.name }}</a>(12)</li>
+        {% empty %}
+        暂无分类
+    {% endfor %}
   </ul>
 </section>
 
-  <section>
-  <h3>最新文章</h3>
+<section>
+  <h3>归档</h3>
+  {% archive as date_list %}
   <ul>
-
-    <li><a href="/2016/04/21/mybatis-sqlSession-source-code.html" title="这是第一篇测试文章">这是第一篇测试文章</a></li>
-
-    <li><a href="/2016/04/21/how-to-parse-mybatis-configuration.html" title="这是第二篇测试文章">这是第二篇测试文章</a></li>
-
+    {% for date in date_list %}
+      <li>
+        <a href="{% url 'blog:archives' date.year date.month %}">{{ date.year }}年{{ date.month }}</a>
+      </li>
+      {% empty %}
+      暂无归档
+    {% endfor %}
   </ul>
 </section>
-
 
 <section>
   <h3>标签</h3>
   <ul class="ds-recent-comments" data-num-items="8" data-show-avatars="0" data-show-time="0" data-show-title="0" data-show-admin="0" data-excerpt-length="12"></ul>
 </section>
 
-
-
 <section>
-<h4>Blogroll</h3>
 <ul>
 
-  <li><a href="http://blog.javachen.com/" title="JavaChen Blog">Python</a></li>
+  <li><a href="#" title="JavaChen Blog">Python</a></li>
 
-  <li><a href="/sitemap.xml" title="JavaChen Sitemap">PHP</a></li>
+  <li><a href="#" title="JavaChen Sitemap">PHP</a></li>
 
-  <li><a href="http://blog.jassassin.com/" title="Eagle's Blog">Java</a></li>
+  <li><a href="#" title="Eagle's Blog">Java</a></li>
 
 </ul>
 </section>
