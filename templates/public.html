@@ -15,6 +15,7 @@
       <link rel="stylesheet" href="{% static 'css/pygments.css' %}" media="all" />
       <link rel="stylesheet" href="{% static 'contrib/font-awesome/css/font-awesome.min.css' %}" media="all" />
       <link rel="stylesheet" type="text/css" href="{% static 'contrib/showup/showup.css' %}" />
+      <link rel="stylesheet" href="{% static 'css/custom.css' %}">
       <link rel="stylesheet" href="{% static 'css/markdown/github.css' %}" />
         <!-- fav and touch icons  -->
         <!-- Update these with your own images
@@ -47,7 +48,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Fjun Blog</a>
+          <a class="navbar-brand" href="{% url 'blog:index' %}">Fjun Blog</a>
         </div>
         <div class="navbar-collapse collapse">
             <form id="search-form" class="form-group navbar-form navbar-right" role="search">

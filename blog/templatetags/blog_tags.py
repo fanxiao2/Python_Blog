@@ -5,7 +5,7 @@ register = template.Library()
 
 # 获取数据库中前3篇文章
 @register.simple_tag
-def get_recent_articles(num=5):
+def get_recent_articles(num=8):
     return Article.objects.all().order_by('-create_at')[:num]
 
 # 归档

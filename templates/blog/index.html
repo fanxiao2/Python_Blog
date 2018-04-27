@@ -8,14 +8,15 @@
       <div id="home-post article-{{ article.pk }}">
         <h4>
           <a href="{{ article.get_absolute_url }}">
-              <strong>{{ article.title }}</strong>
+              <strong style="color:#003300;font-size:18px;">{{ article.title }}</strong>
           </a>
-              <small>{{ article.create_at }}</small>
+              <small>{{ article.create_at }} || {{ article.reading }}阅读</small>
         </h4>
-        <div id="home-post-text">
-           {{ article.abstract | safe}}
+        <div id="home-post-text" style="margin-top:16px">
+           <p>{{ article.abstract | safe}} ... ... </p>
         </div>
-        <p><a href="{{ article.get_absolute_url }}">阅读全文</a></p>
+        <p><a href="{{ article.get_absolute_url }}" style="color:#336699">阅读全文</a></p>
+        <br>
       </div>
       {% empty %}
       <div class="no-post">
