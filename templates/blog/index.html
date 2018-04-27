@@ -26,17 +26,17 @@
 
 
     <!-- Pagination links -->
+    {% if is_paginated %}
     <div class="pagination pull-right">
-      <li><a href="/">首页</a></li>
-
-        <li class="disabled"><a><i class="fa fa-angle-double-left"></i> 上一页</a></li>
-
-      <li><a>1 of 16</a></li>
-
-      <li class="next"><a  href="/page2/">下一页 <i class="fa fa-angle-double-right"></i></a></li>
-      <li><a  href="/page16/">尾页</a></li>
-
+        {% if page_obj.has_previous %}
+            <li class="disabled"><a href="?page={{ page_obj.previous_page_number }}"><i class="fa fa-angle-double-left"></i> 上一页</a></li>
+        {% endif %}
+            <li><a>第{{ page_obj.number }}页 / 共 {{ paginator.num_pages }} 页</a></li>
+        {% if page_obj.has_next %}
+            <li class="next"><a  href="?page={{ page_obj.next_page_number }}">下一页 <i class="fa fa-angle-double-right"></i></a></li>
+        {% endif %}
     </div>
+    {% endif %}
 </div>
 <div class="col-md-3 visible-lg visible-md">
 
@@ -58,7 +58,7 @@
   {% get_categories as category_list %}
   <ul>
     {% for category in category_list %}
-        <li><a href="{% url 'blog:category' category.pk %}">{{ category.name }}</a>(12)</li>
+        <li><a href="{% url 'blog:category' category.pk %}">{{ category.name }}</a>【{{ category.num_articles }}】篇</li>
         {% empty %}
         暂无分类
     {% endfor %}
@@ -71,7 +71,7 @@
   <ul>
     {% for date in date_list %}
       <li>
-        <a href="{% url 'blog:archives' date.year date.month %}">{{ date.year }}年{{ date.month }}</a>
+        <a href="{% url 'blog:archives' date.year date.month %}">{{ date.year }}年{{ date.month }} </a>
       </li>
       {% empty %}
       暂无归档
@@ -81,19 +81,15 @@
 
 <section>
   <h3>标签</h3>
+  {% get_tags as tag_list %}
   <ul class="ds-recent-comments" data-num-items="8" data-show-avatars="0" data-show-time="0" data-show-title="0" data-show-admin="0" data-excerpt-length="12"></ul>
-</section>
-
-<section>
-<ul>
-
-  <li><a href="#" title="JavaChen Blog">Python</a></li>
-
-  <li><a href="#" title="JavaChen Sitemap">PHP</a></li>
-
-  <li><a href="#" title="Eagle's Blog">Java</a></li>
-
-</ul>
+  <ul>
+    {% for tag in tag_list %}
+        <li><a href="{% url 'blog:tag' tag.pk %}" title="JavaChen Blog">{{ tag.name }}</a>【{{ tag.num_articles }}】篇</li>
+        {% empty %}
+        暂无标签
+    {% endfor %}
+  </ul>
 </section>
 
 </div>

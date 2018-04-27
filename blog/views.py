@@ -3,13 +3,15 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse # 导入HttpResponse函数
 from comments.forms import CommentForm #导入评论
-from .models import Article, Category
+from .models import Article, Category, Tag
+
 # Create your views here.
 
 class IndexView(ListView):
     model = Article
     template_name = 'blog/index.html'
     context_object_name = 'article_list'
+    paginate_by = 8
 
 # 实现detail 视图
 
@@ -52,19 +54,32 @@ class ArchivesView(ListView):
     model = Article
     template_name = 'blog/index.html'
     context_object_name = 'article_list'
+    paginate_by = 8
 
     def get_queryset(self):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
-        return super(ArchivesView, self).get_queryset().filter(create_at__year, create_at__month)
+        return super(ArchivesView, self).get_queryset().filter(create_at__year=year, create_at__month=month)
 
-        
+
 # 分类
 class CategoryView(ListView):
     model = Article
     template_name = 'blog/index.html'
     context_object_name = 'article_list'
+    paginate_by = 8
 
     def get_queryset(self):
         cate = get_object_or_404(Category, pk=self.kwargs.get('pk'))
         return super(CategoryView, self).get_queryset().filter(category=cate)
+
+# 标签
+class TagView(ListView):
+    model = Article
+    template_name = 'blog/index.html'
+    context_object_name = 'article_list'
+    paginate_by = 8
+
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, pk=self.kwargs.get('pk'))
+        return super(TagView,self).get_queryset().filter(tags=tag)
