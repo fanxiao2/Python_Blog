@@ -27,7 +27,7 @@
 /**
  * 2.0 - General Elements
  */
-
+/*
 * {
     outline: none;
 }
@@ -97,13 +97,13 @@ img {
 
 .height-40px {
     margin-bottom: 40px;
-}
+} */
 
 /**
  * 3.0 - Site Header
  */
 
-#site-header {
+/* #site-header {
     background-color: #FFF;
     padding: 25px 20px;
     margin-bottom: 40px;
@@ -116,12 +116,12 @@ img {
     line-height: 0;
     font-size: 0;
     overflow: hidden;
-}
+} */
 
  /* * 3.1 - Logo */
 
 
-.logo h1 a {
+/* .logo h1 a {
     color: #000;
 }
 
@@ -134,13 +134,13 @@ img {
     margin: 0;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
-}
+} */
 
 
  /* 3.2 - Main Navigation*/
 
 
-.main-nav {
+/* .main-nav {
     margin-top: 11px;
     max-width: 95%;
 }
@@ -171,12 +171,13 @@ img {
 .navbar-toggle span {
     font-size: 2em;
     color: #000;
-}
+} */
 
 /**
  * 3.2.1 - Main Nav CSS 3 Hover Effect
  */
 
+/*
 .cl-effect-11 a {
     padding: 10px 0;
     color: #0972b4;
@@ -207,7 +208,7 @@ img {
 /**
  * 4.0 - Home/Blog
  */
-
+/*
 .content-body {
     padding-bottom: 4em;
 }
@@ -250,7 +251,7 @@ img {
 /**
  * 4.1 - Read More Button CSS 3 style
  */
-
+/*
 .read-more {
     font-family: 'Ubuntu', sans-serif;
     font-weight: 400;
@@ -328,12 +329,12 @@ img {
     -webkit-transform: rotate(0deg) translateX(50%);
     -moz-transform: rotate(0deg) translateX(50%);
     transform: rotate(0deg) translateX(50%);
-}
+} */
 
 /**
  * 5.0 - Widget
  */
-
+/*
 .widget {
     background: #fff;
     padding: 30px 0 0;
@@ -447,13 +448,13 @@ img {
 
 .rss a {
     color: #444;
-}
+} */
 
 /**
  * 6.0 - Footer
  */
 
-#site-footer {
+/* #site-footer {
     padding-top: 10px;
     padding: 0 0 1.5em 0;
 }
@@ -464,12 +465,12 @@ img {
     margin: 0;
     border-top: 1px solid #eee;
     color: #666;
-}
+} */
 
 /**
  * 7.0 - Header Search Bar
  */
-
+/*
 #header-search-box {
     position: absolute;
     right: 38px;
@@ -523,13 +524,13 @@ img {
     line-height: 0;
     position: relative;
     top: -6px;
-}
+} */
 
 /**
  * 8.0 - Mobile Menu
  */
 
-.overlay {
+/* .overlay {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -629,13 +630,13 @@ img {
 .overlay-hugeinc.close nav ul {
     -webkit-transform: translateY(25%) rotateX(-35deg);
     transform: translateY(25%) rotateX(-35deg);
-}
+} */
 
 /**
  * 9.0 - Contact Page Social
  */
 
-.social {
+/* .social {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -674,12 +675,12 @@ img {
 
 .tumblr a {
     padding: 12px 20px;
-}
+} */
 
 /**
  * 10.0 - Contact Form
  */
-
+/*
 .contact-form input, .comment-form input {
     border: 1px solid #aaa;
     margin-bottom: 15px;
@@ -770,12 +771,12 @@ img {
 
 .btn-5b:hover:before {
     left: 0;
-}
+} */
 
 /**
  * 11.0 - Media Query
  */
-
+/*
 @media (max-width: 991px) {
     .main-nav a {
         margin-right: 20px;
@@ -832,7 +833,7 @@ img {
     .overlay ul li {
         min-height: 34px;
     }
-}
+} */
 
 /**
  * 12.0 - Comment
@@ -884,7 +885,7 @@ img {
 /**
  * 13.0 - Pagination
  */
-.pagination-simple {
+/*.pagination-simple {
     padding-left: 30px;
     font-size: 16px;
 }
